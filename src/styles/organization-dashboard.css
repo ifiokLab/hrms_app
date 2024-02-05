@@ -97,6 +97,10 @@
     align-items: center;
     justify-content: space-between;
 }
+.organization-body .table-description{
+    max-width: 200px;
+    word-break: break-all;
+}
 .organization-body .timesheet .time-btn{
     background-color: #2196F3;
     color: white;
@@ -104,11 +108,39 @@
     font-size: .7rem;
     cursor: pointer;
 }
+.body-title-wrapper{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.body-title-wrapper .tabs{
+    text-decoration:underline;
+    font-size: .8rem;
+    cursor: pointer;
+}
+.organization-body .submit-payroll-wrapper{
+    display:flex;
+    justify-content: flex-end;
+}
+.organization-body .total-salary{
+    display: flex;
+    justify-content: flex-end;
+   
+}
+.organization-body .submit-payroll-wrapper .btn{
+    background-color: #03192e;
+    margin-top: 30px;
+    padding: 8px 20px;
+    font-size: .8rem;
+    color: white;
+    cursor: pointer;
+    display: flex;
+}
 .organization-body table .status-modal{
     position: absolute;
     background-color: white;
     z-index: 100;
-    left: -10px;
+    left: -40px;
     top: 20px;
     width: 150px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);

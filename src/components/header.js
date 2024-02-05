@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
+import apiUrl from '../components/api-url';
 import axios from 'axios';
 import { Swiper, SwiperSlide, } from 'swiper/react';
 import { Autoplay,Pagination,Navigation } from 'swiper/modules';
@@ -10,13 +11,39 @@ import hero1 from '../images/designer1.svg';
 import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
 import logo from '../images/logo192.png';
+import { useSelector } from 'react-redux';
 //import hero1 from '../styles/hero1.jpg';
 
 const Header = ()=>{
     const [sidebarOpen,setSideBarOpen] = useState(false);
+    const [profile,setProfile] = useState('');
+    const navigate = useNavigate();
+    const user = useSelector(state => state.user.user);
     const toggleSideBar = ()=>{
         setSideBarOpen(!sidebarOpen);
     };
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/user/profile/fetch/`,{
+                    headers: {
+                        Authorization: `Token ${user?.auth_token}`,
+                    },
+                });
+                if(response.data.success){
+                    setProfile(response.data.data)
+                 }else{
+                    setProfile(response.data.data)
+                };
+            
+            } catch (error) {
+                //navigate('/access-denied/');
+             
+            }   
+        };
+
+      fetchProfile();
+    }, [user,navigate]);
     return(
         <div className ='header-wrapper'>
             <div className = 'logo' >
@@ -30,7 +57,13 @@ const Header = ()=>{
                     <i className="fa-solid fa-circle-question"></i>
                 </Link>
                 <div className='profile-card'>
-                    <img src={logo} alt='profile' />
+                    {profile.exist ? (
+                        <img src={logo} alt='profile' />
+                    )
+                : (
+                    <i class="fa-solid fa-circle-xmark"></i>
+                )}
+                    
                 </div>
             </div>
             <div className={`header-sidebar ${sidebarOpen ? 'show' : ''}` }>

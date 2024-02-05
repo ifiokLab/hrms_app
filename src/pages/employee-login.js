@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link,useNavigate,useParams } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Swiper, SwiperSlide, } from 'swiper/react';
 import { Autoplay,Pagination,Navigation } from 'swiper/modules';
@@ -13,27 +13,20 @@ import logo from '../images/logo192.png';
 import apiUrl from '../components/api-url';
 import { useDispatch} from 'react-redux';
 import { setUser, setLoading } from '../actions/user-action'; // Import setUser and setLoading actions
-
-
-
 //import hero1 from '../styles/hero1.jpg';
 
-const  EmployeeSignup = ()=>{
+const EmployeLogin = ()=>{
     const dispatch = useDispatch();
-    const [fname, setFname] = useState('');
-    const [lname, setLname] = useState('');
-    const [ConfirmPassword, setConfirmPassword] = useState('');
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const { invitation_code } = useParams();
 
-    
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -41,24 +34,21 @@ const  EmployeeSignup = ()=>{
 
         try {
            
-            const response = await axios.post(`${apiUrl}/register-via-link/${invitation_code}/`, {
-                first_name: fname,
-                last_name: lname,
-                email,
-                password,
-                ConfirmPassword,
+            const response = await axios.post(`${apiUrl}/employee/login/`, {
+            email,
+            password,
             });
 
             if (response.data.success) {
-                dispatch(setUser(response.data.data));
+                dispatch(setUser(response.data.user));
 
                 // Redirect to the home page
                 setTimeout(() => {
-                    navigate('/employee/dashboard/'); // Change '/' to the actual path of your home page
+                   
+                    navigate('/employee/dashboard/');
                 }, 2000); // 2000 milliseconds (2 seconds) delay
             } else {
-                console.error('Signup failed:',response.data.message);
-                setErrorMessage(response.data.message);
+                console.error('Signup failed:',response.data.errors);
                
             
             // Handle failed signup, e.g., show error messages to the user
@@ -77,30 +67,12 @@ const  EmployeeSignup = ()=>{
         }
     };
 
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
-    };
-    const toggleConfirmPasswordVisibility = () => {
-        setShowConfirmPassword(!showConfirmPassword);
-    };
-   
-    const handleFnameChange = (event) => {
-        setFname(event.target.value);
-    };
-    
-    const handleLnameChange = (event) => {
-        setLname(event.target.value);
-    };
-
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
     };
     
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
-    };
-    const handleConfirmPasswordChange = (event) => {
-        setConfirmPassword(event.target.value);
     };
     const slides = [
         hero1,
@@ -158,18 +130,10 @@ const  EmployeeSignup = ()=>{
                             </div>
                             <div className='form-header'>
                                
-                                <span>Employee Signup</span>
+                                <span>Login</span>
                                 
                             </div>
                             {errorMessage && <div className="error-message">{errorMessage}</div>}
-                            <div className={`form-group ${fname ? 'active' : ''}`}>
-                                <input type="text" id="fname" value={fname} onChange = {handleFnameChange} required />
-                                <label htmlFor="fname">First name</label>
-                            </div>
-                            <div className={`form-group ${lname ? 'active' : ''}`}>
-                                <input type="text" id="lname" value={lname} onChange = {handleLnameChange} required />
-                                <label htmlFor="lname">last name</label>
-                            </div>
                             <div className={`form-group ${email ? 'active' : ''}`}>
                                 <input type="text" id="email" value={email} onChange = {handleEmailChange} required />
                                 <label htmlFor="email">Email</label>
@@ -181,19 +145,11 @@ const  EmployeeSignup = ()=>{
                                     <i class={`fa-solid ${showPassword ? 'fa-eye-slash' : 'fa-eye' }`}></i>
                                 </div>
                             </div>
-                            <div className={`form-group ${ConfirmPassword ? 'active' : ''}`}>
-                                <input  type={showConfirmPassword ? 'text' : 'password'} id="confirm-password" value={ConfirmPassword} onChange = {handleConfirmPasswordChange} required />
-                                <label htmlFor="password">Confirm Password</label>
-                                <div className='eye-icon' onClick={toggleConfirmPasswordVisibility}>
-                                    <i class={`fa-solid ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye' }`}></i>
-                                </div>
-                            </div>
-
                             
 
                             <div className='btn-wrapper'>
                                 <button type="submit">
-                                    signup
+                                    Login
                                     {isLoading ? <div className="loader"></div> : '' }
                                     
                                 </button>
@@ -206,4 +162,4 @@ const  EmployeeSignup = ()=>{
     );
 };
 
-export default EmployeeSignup;
+export default EmployeLogin;

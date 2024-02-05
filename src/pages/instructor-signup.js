@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link,useNavigate,useParams } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Swiper, SwiperSlide, } from 'swiper/react';
 import { Autoplay,Pagination,Navigation } from 'swiper/modules';
@@ -18,7 +18,7 @@ import { setUser, setLoading } from '../actions/user-action'; // Import setUser 
 
 //import hero1 from '../styles/hero1.jpg';
 
-const  EmployeeSignup = ()=>{
+const  InstructorSignup = ()=>{
     const dispatch = useDispatch();
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
@@ -31,7 +31,6 @@ const  EmployeeSignup = ()=>{
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const { invitation_code } = useParams();
 
     
 
@@ -41,7 +40,7 @@ const  EmployeeSignup = ()=>{
 
         try {
            
-            const response = await axios.post(`${apiUrl}/register-via-link/${invitation_code}/`, {
+            const response = await axios.post(`${apiUrl}/instructor/signup/`, {
                 first_name: fname,
                 last_name: lname,
                 email,
@@ -50,15 +49,15 @@ const  EmployeeSignup = ()=>{
             });
 
             if (response.data.success) {
-                dispatch(setUser(response.data.data));
+                dispatch(setUser(response.data.user));
 
                 // Redirect to the home page
                 setTimeout(() => {
-                    navigate('/employee/dashboard/'); // Change '/' to the actual path of your home page
+                    console.log('hello');
+                    navigate('/employer-dashboard/'); // Change '/' to the actual path of your home page
                 }, 2000); // 2000 milliseconds (2 seconds) delay
             } else {
-                console.error('Signup failed:',response.data.message);
-                setErrorMessage(response.data.message);
+                console.error('Signup failed:',response.data.errors);
                
             
             // Handle failed signup, e.g., show error messages to the user
@@ -158,7 +157,7 @@ const  EmployeeSignup = ()=>{
                             </div>
                             <div className='form-header'>
                                
-                                <span>Employee Signup</span>
+                                <span>Instructor Signup</span>
                                 
                             </div>
                             {errorMessage && <div className="error-message">{errorMessage}</div>}
@@ -206,4 +205,4 @@ const  EmployeeSignup = ()=>{
     );
 };
 
-export default EmployeeSignup;
+export default InstructorSignup;

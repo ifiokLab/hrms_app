@@ -12,6 +12,7 @@ import hero1 from '../images/designer1.svg';
 import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
 import logo from '../images/logo192.png';
+
 //import hero1 from '../styles/hero1.jpg';
 
 const EmployerDashboard = ()=>{
@@ -26,7 +27,7 @@ const EmployerDashboard = ()=>{
                             <i class="fa-solid fa-building"></i>
                             <span className = 'title'>{user.user.first_name} {user.user.last_name}</span>
                         </div>
-                        <Link className = 'card'>
+                        <Link to='/employer-dashboard/' className = 'card'>
                             <span className="material-symbols-outlined">
                                 apps
                             </span>
@@ -35,6 +36,10 @@ const EmployerDashboard = ()=>{
                         <Link to='/organizations/' className = 'card'>
                             <i class="fa-solid fa-users"></i>
                             <span className = 'title'>Organization & users</span>
+                        </Link>
+                        <Link to='/organization/courses/' className = 'card'>
+                             <i class="fa-solid fa-chalkboard"></i>
+                            <span className = 'title'>Your Courses</span>
                         </Link>
                         <Link className = 'card'>
                             <i className="fa-solid fa-gear"></i>
@@ -65,7 +70,7 @@ const EmployerDashboard = ()=>{
                                     <p>Human Resource management System</p>
                                 </div>
                             </Link>
-                            <Link className='cards'>
+                            <Link to='/elearning/' className='cards'>
                                 <div className='icon e-icon'>
                                 <i class="fa-solid fa-graduation-cap"></i>
                                 </div>
@@ -99,6 +104,15 @@ const EmployerDashboard = ()=>{
                                 <div className='text-wrapper'>
                                     <div className='title-header'>TimeSheet</div>
                                     <p>Seamless payment & invoice system</p>
+                                </div>
+                            </Link>
+                            <Link to='/organization/courses/' className='cards'>
+                                <div className='icon p-icon'>
+                                    <i class="fa-solid fa-chalkboard"></i>
+                                </div>
+                                <div className='text-wrapper'>
+                                    <div className='title-header'>Your Courses</div>
+                                    <p>Monitor employee performance</p>
                                 </div>
                             </Link>
                         </div>

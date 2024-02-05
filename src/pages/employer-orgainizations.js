@@ -9,6 +9,7 @@ import { Autoplay,Pagination,Navigation } from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
 import '../styles/employer-dashboard.css';
 import '../styles/organizations.css';
+import '../styles/snackbar.css';
 import Header from '../components/header';
 import hero1 from '../images/designer1.svg';
 import hero2 from '../images/designer2.svg';
@@ -40,7 +41,9 @@ const EmployerOrganizations = ()=>{
     const [departments,setDepartments] = useState([]);
     const [department, setDepartment] = useState('');
     const [organizationId,setOrganizationId] = useState('');
-    
+    const [showSnackbar, setShowSnackbar] = useState(false);
+    const [snackbarStatus, setsnackbarStatus] = useState('');
+    const [payrollHistory,setPayrollHistory] = useState([]);
 
     const handleEllipsisClick = (event,index) => {
         event.preventDefault();
@@ -78,6 +81,8 @@ const EmployerOrganizations = ()=>{
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsLoading(!isLoading);
+       
+        setShowSnackbar(false);
         
         try {
             const formData = new FormData();
@@ -104,12 +109,18 @@ const EmployerOrganizations = ()=>{
                     setOverview('');
                     setOrgModal(!orgModal);
                     fetchOrganizations();
+                    setShowSnackbar(!showSnackbar);
                     //navigate('/');
                    
-                }, 2000);
+                }, 5000);
+                setsnackbarStatus('success');
+                setShowSnackbar(true);
+               
                 console.log('org created successfully:', response.data.course);
                 // Redirect to the home page or do any other actions
             } else {
+                setsnackbarStatus('fail');
+                setShowSnackbar(true);
                 setErrorMessage('response.data.message');
                 //console.error('Course creation failed:', response.data.message);
                 // Handle failed course creation, e.g., show error messages to the user
@@ -127,6 +138,7 @@ const EmployerOrganizations = ()=>{
     const handleEditSubmit = async (event) => {
         event.preventDefault();
         setIsLoading(!isLoading);
+        setShowSnackbar(false);
         
         try {
             const formData = new FormData();
@@ -156,12 +168,17 @@ const EmployerOrganizations = ()=>{
                     setOverview('');
                     setOrgModal(!orgModal);
                     fetchOrganizations();
+                   
                     //navigate('/');
                    
-                }, 2000);
+                }, 1000);
+                setsnackbarStatus('success');
+                setShowSnackbar(true);
                 console.log('org created successfully:', response.data.course);
                 // Redirect to the home page or do any other actions
             } else {
+                setsnackbarStatus('fail');
+                setShowSnackbar(!showSnackbar);
                 setErrorMessage(response.data.message);
                 //console.error('Course creation failed:', response.data.message);
                 // Handle failed course creation, e.g., show error messages to the user
@@ -179,6 +196,7 @@ const EmployerOrganizations = ()=>{
     const handleInviteSubmit = async (event) => {
         event.preventDefault();
         setIsLoading(!isLoading);
+        setShowSnackbar(false);
         
         try {
             const formData = new FormData();
@@ -207,8 +225,12 @@ const EmployerOrganizations = ()=>{
                    
                 }, 2000);
                 console.log('org created successfully:', response.data.course);
+                setsnackbarStatus('success');
+                setShowSnackbar(true);
                 // Redirect to the home page or do any other actions
             } else {
+                setsnackbarStatus('fail');
+                setShowSnackbar(true);
                 setErrorMessage(response.data.message);
 
                 //console.error('Course creation failed:', response.data.message);
@@ -227,6 +249,7 @@ const EmployerOrganizations = ()=>{
     const handleDelete = async (event) => {
         event.preventDefault();
         setIsLoading(!isLoading);
+        setShowSnackbar(false);
         
         try {
             const formData = new FormData();
@@ -247,9 +270,13 @@ const EmployerOrganizations = ()=>{
                     //navigate('/');
                    
                 }, 2000);
+                setsnackbarStatus('success');
+                setShowSnackbar(true);
                 console.log('org created successfully:', response.data.course);
                 // Redirect to the home page or do any other actions
             } else {
+                setsnackbarStatus('fail');
+                setShowSnackbar(true);
                 setErrorMessage(response.data.message);
                 //console.error('Course creation failed:', response.data.message);
                 // Handle failed course creation, e.g., show error messages to the user
@@ -361,21 +388,25 @@ const EmployerOrganizations = ()=>{
         <div className ='page-wrapper'>
             <Header/>
             <div className = 'wrapper' >
-                <div className='sidebar-container-1'>
+            <div className='sidebar-container-1'>
                     <div className = 'box1-wrapper'>
                         <div className = 'card organization' >
                             <i class="fa-solid fa-building"></i>
                             <span className = 'title'>{user.first_name} {user.last_name}</span>
                         </div>
-                        <Link className = 'card'>
+                        <Link to='/employer-dashboard/' className = 'card'>
                             <span className="material-symbols-outlined">
                                 apps
                             </span>
                             <span className = 'title'>Apps</span>
                         </Link>
-                        <Link className = 'card'>
+                        <Link to='/organizations/' className = 'card'>
                             <i class="fa-solid fa-users"></i>
                             <span className = 'title'>Organization & users</span>
+                        </Link>
+                        <Link to='/organization/courses/' className = 'card'>
+                             <i class="fa-solid fa-chalkboard"></i>
+                            <span className = 'title'>Your Courses</span>
                         </Link>
                         <Link className = 'card'>
                             <i className="fa-solid fa-gear"></i>
@@ -467,13 +498,14 @@ const EmployerOrganizations = ()=>{
                             name="logo"
                             ref={fileInputRef}
                             onChange={handleFileChange}
-                            required
+                           
+                            required = {actionType ==='Create organization' ? true :false}
                             />
                         </div>
 
                         <div className='btn-wrapper'>
                             <button type="submit">
-                                Create
+                            {actionType ==='Create organization' ? "Create" :"Edit"}
                                 {isLoading ? <div className="loader"></div> : '' }
                                     
                             </button>
@@ -525,6 +557,24 @@ const EmployerOrganizations = ()=>{
                     </div>
                 </div>
             </form>
+            {showSnackbar && (
+                <div className={` ${snackbarStatus==='success' ? 'snackbar-success' :'snackbar-danger'} `}>
+                    {snackbarStatus === 'success' ? (
+                        <>
+                            <i class="fa-solid fa-circle-check"></i>
+                            success!
+                        </>
+                    ):
+                    (
+                        <>
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            fail!
+                        </>
+                    )
+                }
+                    
+                </div>
+            )}
         </div>
     );
 };
