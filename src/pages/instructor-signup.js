@@ -6,6 +6,7 @@ import { Autoplay,Pagination,Navigation } from 'swiper/modules';
 //import Header from '../components/header';
 import 'swiper/swiper-bundle.css';
 import '../styles/login.css';
+import logo2 from '../images/logo.png';
 import hero1 from '../images/designer1.svg';
 import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
@@ -54,7 +55,7 @@ const  InstructorSignup = ()=>{
                 // Redirect to the home page
                 setTimeout(() => {
                     console.log('hello');
-                    navigate('/employer-dashboard/'); // Change '/' to the actual path of your home page
+                    navigate('/instructor/dashboard/'); // Change '/' to the actual path of your home page
                 }, 2000); // 2000 milliseconds (2 seconds) delay
             } else {
                 console.error('Signup failed:',response.data.errors);
@@ -154,6 +155,7 @@ const  InstructorSignup = ()=>{
                         <form className="form-container" onSubmit={handleSubmit}>
                             <div className='form-logo'>
                                 <span>HRMS</span> 
+                                <img className='auth-logo' src={logo2} alt = 'logo2' />
                             </div>
                             <div className='form-header'>
                                

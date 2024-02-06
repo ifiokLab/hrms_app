@@ -125,7 +125,7 @@ const CourseViewPage = ()=>{
                 <div className='content-details'>
                      <h3 className='video-title'>{title}</h3>
                     <video controls>
-                        <source src={`${apiUrl}${file}`} type="video/mp4" />
+                        <source src={`${file}`} type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
                 </div>

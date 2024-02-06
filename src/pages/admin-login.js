@@ -10,6 +10,7 @@ import hero1 from '../images/designer1.svg';
 import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
 import logo from '../images/logo192.png';
+import logo2 from '../images/logo.png';
 import apiUrl from '../components/api-url';
 import { useDispatch} from 'react-redux';
 import { setUser, setLoading } from '../actions/user-action'; // Import setUser and setLoading actions
@@ -34,7 +35,7 @@ const  AdminLogin = ()=>{
 
         try {
            
-            const response = await axios.post(`${apiUrl}/organization/login/`, {
+            const response = await axios.post(`${apiUrl}/login/`, {
             email,
             password,
             });
@@ -44,8 +45,17 @@ const  AdminLogin = ()=>{
 
                 // Redirect to the home page
                 setTimeout(() => {
+                    if(response.data.user.isEmployer){
+                        navigate('/employer-dashboard/');
+                    }
+                    if(response.data.user.isEmployee){
+                        navigate('/employee/dashboard/');
+                    }
+                    if(response.data.user.isInstructor){
+                        navigate('/instructor/dashboard/');
+                    }
                    
-                    navigate('/employer-dashboard/');
+                   
                 }, 2000); // 2000 milliseconds (2 seconds) delay
             } else {
                 console.error('Signup failed:',response.data.errors);
@@ -127,6 +137,7 @@ const  AdminLogin = ()=>{
                         <form className="form-container" onSubmit={handleSubmit}>
                             <div className='form-logo'>
                                 <span>HRMS</span> 
+                                <img className='auth-logo' src={logo2} alt = 'logo2' />
                             </div>
                             <div className='form-header'>
                                
@@ -153,6 +164,14 @@ const  AdminLogin = ()=>{
                                     {isLoading ? <div className="loader"></div> : '' }
                                     
                                 </button>
+                            </div>
+                            <div className='link-btn-wrapper'>
+                                <Link to='/organization/signup/'>Signup as an orgainization</Link>
+                               
+                            </div>
+                            <div className='link-btn-wrapper'>
+                                
+                                <Link to='/instructor/signup/'>Signup as an Instructor</Link>
                             </div>
                         </form>
                     </div>

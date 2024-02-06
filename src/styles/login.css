@@ -107,8 +107,10 @@ form .btn-wrapper{
     
 }
 form .form-logo{
-    text-align: end;
     margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
 form .form-logo span{
     font-weight: 600;
@@ -126,6 +128,10 @@ form .form-header span{
     font-weight: 600;
     margin: 6px 0;
    
+}
+form .link-btn-wrapper a{
+    font-size: .8rem;
+   margin: 5px 0;
 }
 
 form .btn-wrapper button{
@@ -152,6 +158,10 @@ input,textarea,select {
 select{
     cursor: pointer;
 }
+form .auth-logo{
+    height: 80px;
+    width:auto;
+}
   
 label {
     position: absolute;
@@ -174,7 +184,21 @@ label {
         display: none;
     }
     .form-container {
-        max-width: 500px;
+        max-width: 400px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    }
+}
+@media screen  and (max-width:499px){
+    .page-wrapper .login-wrapper .container1{
+        display: none;
+    }
+    .form-container {
+        max-width: 500px;
+        box-shadow: unset;
+    }
+    .page-wrapper .login-wrapper .container2 .container2-wrapper {
+        height: unset;
+       
+        margin-top: 50px;
     }
 }

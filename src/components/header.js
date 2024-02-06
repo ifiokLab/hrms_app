@@ -61,7 +61,7 @@ const Header = ()=>{
                         <img src={logo} alt='profile' />
                     )
                 : (
-                    <i class="fa-solid fa-circle-xmark"></i>
+                    <i class="fa-solid fa-user"></i>
                 )}
                     
                 </div>

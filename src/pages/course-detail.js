@@ -47,7 +47,7 @@ const CourseDetailPage = ()=>{
     };
     const fetchRequirements = async ()=>{
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/courses/${id}/add-requirements/`);
+            const response = await axios.get(`${apiUrl}/courses/${id}/add-requirements/`);
             setRequirements(response.data);
             setLoading(!loading);
         } catch (error) {
@@ -57,7 +57,7 @@ const CourseDetailPage = ()=>{
     };
     const fetchObjectives = async ()=>{
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/courses/${id}/add-objectives/`);
+            const response = await axios.get(`${apiUrl}/courses/${id}/add-objectives/`);
             setObjectives(response.data);
             setLoading(!loading);
         } catch (error) {
@@ -67,7 +67,7 @@ const CourseDetailPage = ()=>{
     };
     const fetchContentCounts = async ()=>{
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/course/${id}/content-type-count/`);
+            const response = await axios.get(`${apiUrl}/api/course/${id}/content-type-count/`);
             setContentCount(response.data);
             console.log('contentCount:',response.data);
             setLoading(!loading);
@@ -78,7 +78,7 @@ const CourseDetailPage = ()=>{
     };
     const fetchCourseDetail = async () => {
         try {
-          const response = await axios.get(`http://localhost:8000/courses/${id}/`);
+          const response = await axios.get(`${apiUrl}/courses/${id}/`);
           setCourse(response.data);
           setLoading(false);
         } catch (error) {
@@ -89,7 +89,7 @@ const CourseDetailPage = ()=>{
     
     const fetchCourseSections = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/sections/${id}/`);
+            const response = await axios.get(`${apiUrl}/api/sections/${id}/`);
             console.log(response.data);
             setSections(response.data);
             setOpenSections(new Array(response.data).fill(false));
@@ -99,7 +99,7 @@ const CourseDetailPage = ()=>{
     };
     const checkEnrollment = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/check-organization-enrollment/${id}/`,{
+            const response = await axios.get(`${apiUrl}/api/check-organization-enrollment/${id}/`,{
                 headers: {
                     Authorization: `Token ${user?.auth_token}`,
                 },
@@ -114,7 +114,7 @@ const CourseDetailPage = ()=>{
 
     const fetchOrganizations = async () => {
         try {
-          const response = await axios.get(`${apiUrl}/api/organizations/list/`,{
+          const response = await axios.get(`${apiUrl}/api/organizations/list/course/${id}`,{
             headers: {
                 'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
             },
@@ -138,7 +138,7 @@ const CourseDetailPage = ()=>{
             // Check if thumbnail is a file (not a base64 string)
            
     
-            const response = await axios.post(`http://127.0.0.1:8000/api/enroll-organization/${id}/`, formData, {
+            const response = await axios.post(`${apiUrl}/api/enroll-organization/${id}/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
@@ -147,6 +147,7 @@ const CourseDetailPage = ()=>{
             
             console.log('response.data:',response.data);
             if (response.data.success) { 
+                checkEnrollment();
                 setShowSnackbar(true);
                 setsnackbarStatus('success');
                 setTimeout(() => {
@@ -460,7 +461,7 @@ const CourseDetailPage = ()=>{
                     <div className='video-wrapper'>
                        
                         <video controls>
-                            <source src={`${apiUrl}${course.preview_video}`} type="video/mp4" />
+                            <source src={`${course.preview_video}`} type="video/mp4" />
                             Your browser does not support the video tag.
                         </video>
                     </div>

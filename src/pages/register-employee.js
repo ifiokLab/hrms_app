@@ -11,6 +11,7 @@ import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
 import logo from '../images/logo192.png';
 import apiUrl from '../components/api-url';
+import logo2 from '../images/logo.png';
 import { useDispatch} from 'react-redux';
 import { setUser, setLoading } from '../actions/user-action'; // Import setUser and setLoading actions
 
@@ -155,6 +156,7 @@ const  EmployeeSignup = ()=>{
                         <form className="form-container" onSubmit={handleSubmit}>
                             <div className='form-logo'>
                                 <span>HRMS</span> 
+                                <img className='auth-logo' src={logo2} alt = 'logo2' />
                             </div>
                             <div className='form-header'>
                                

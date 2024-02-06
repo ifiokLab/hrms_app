@@ -144,7 +144,7 @@ const EmployeeDashboard = ()=>{
                             {organizations.map((data, index) => (
                                 <Link to={`/employee/organization/dashboard/${data.id}/${data.organization}/`} className='cards organization-card' key={index}>
                                 <div className='icon hrms-icon'>
-                                    <img src={`${apiUrl}${data.logo}`} alt={data.name} />
+                                    <img src={`${data.logo}`} alt={data.name} />
                                 </div>
                                 <div className='text-wrapper'>
                                     <div className='title-header'>{data.organization}</div>
@@ -172,7 +172,7 @@ const EmployeeDashboard = ()=>{
                             ))}
                             </div>
                         ) : (
-                            <h4>You haven't created any organizations yet.</h4>
+                            <h4>Loading...</h4>
                         )}
                     </div>
                 </div>

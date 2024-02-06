@@ -585,7 +585,7 @@ const Elearning = ()=>{
                         <div className='course-container'>
                             {courses.map((course) => (
                                 <Link key={course.id} to={`/course-detail/${course.id}/${course.title}/`} className='card'>
-                                    <img src ={`${apiUrl}${course.thumbnail}`} alt='' />
+                                    <img src ={`${course.thumbnail}`} alt='' />
 
                                     {course.is_enrolled ? (
                                         <div className = 'heart-button enrolled'>enrolled</div>

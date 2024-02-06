@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import apiUrl from '../components/api-url';
 import { Swiper, SwiperSlide, } from 'swiper/react';
 import { Autoplay,Pagination,Navigation } from 'swiper/modules';
 //import Header from '../components/header';
@@ -16,7 +17,49 @@ import logo from '../images/logo192.png';
 //import hero1 from '../styles/hero1.jpg';
 
 const EmployerDashboard = ()=>{
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.user.user);
+    const [employeeProfile,setEmployeeProfile] = useState({});
+    const navigate = useNavigate();
+    useEffect(() => {
+
+       
+        if (user=== null || user?.isEmployee === true ) {
+            // Redirect to the login page
+            navigate('/');
+            return; // Stop further execution of useEffect
+        }
+        const fetchProfileData = async () => {
+            try {
+              const response = await axios.get(`${apiUrl}/employer/profile/fetch/`,{
+                headers: {
+                    Authorization: `Token ${user?.auth_token}`,
+                },
+              });
+              
+                if (response.data.success) {
+                    setEmployeeProfile(response.data.data);
+                    
+                    //setPreviousPicture Redirect to the home page
+                   
+                }else{
+                    console.log('else:',response.data.data);
+                    setEmployeeProfile(response.data.data);
+                }
+                
+              
+            } catch (error) {
+                setTimeout(() => {
+                    //navigate('/instructor/login/'); // Change '/' to the actual path of your home page
+                }, 2000); // 2000 milliseconds (2 seconds) delay
+              console.error('Errors:', error);
+            }
+        };
+        
+      
+      
+       
+        fetchProfileData();
+    }, [user,navigate]);
     return(
         <div className ='page-wrapper'>
             <Header/>
@@ -25,7 +68,7 @@ const EmployerDashboard = ()=>{
                     <div className = 'box1-wrapper'>
                         <div className = 'card organization' >
                             <i class="fa-solid fa-building"></i>
-                            <span className = 'title'>{user.user.first_name} {user.user.last_name}</span>
+                            <span className = 'title'>{user.first_name} {user.last_name}</span>
                         </div>
                         <Link to='/employer-dashboard/' className = 'card'>
                             <span className="material-symbols-outlined">
@@ -41,9 +84,9 @@ const EmployerDashboard = ()=>{
                              <i class="fa-solid fa-chalkboard"></i>
                             <span className = 'title'>Your Courses</span>
                         </Link>
-                        <Link className = 'card'>
+                        <Link to={`${employeeProfile.exist ? '/employer/profile/' : '/employer/profile/create'}`} className = 'card'>
                             <i className="fa-solid fa-gear"></i>
-                            <span className = 'title'>Settings</span>
+                            <span className = 'title'>Settings </span>
                         </Link>
                         <Link className = 'card'>
                             <i class="fa-solid fa-headset"></i>
@@ -61,7 +104,7 @@ const EmployerDashboard = ()=>{
                     <div className = "container-2-wrapper">
                         <div className='title'>All Apps</div>
                         <div className='apps-container'>
-                            <Link className='cards'>
+                            <Link to='/organizations/' className='cards'>
                                 <div className='icon hrms-icon'>
                                     <i class="fa-solid fa-user-tie"></i>
                                 </div>
@@ -79,24 +122,8 @@ const EmployerDashboard = ()=>{
                                     <p>Human Resource management System</p>
                                 </div>
                             </Link>
-                            <Link className='cards'>
-                                <div className='icon p-icon'>
-                                <i class="fa-solid fa-chart-simple"></i>
-                                </div>
-                                <div className='text-wrapper'>
-                                    <div className='title-header'>Performance</div>
-                                    <p>Monitor employee performance</p>
-                                </div>
-                            </Link>
-                            <Link className='cards'>
-                                 <div className='icon pay-icon'>
-                                 <i class="fa-solid fa-credit-card"></i>
-                                 </div>
-                                <div className='text-wrapper'>
-                                    <div className='title-header'>Payroll</div>
-                                    <p>Seamless payment & invoice system</p>
-                                </div>
-                            </Link>
+                           
+                            
                             <Link className='cards'>
                                  <div className='icon time-icon'>
                                  <i class="fa-solid fa-business-time"></i>
@@ -118,6 +145,7 @@ const EmployerDashboard = ()=>{
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>
     );

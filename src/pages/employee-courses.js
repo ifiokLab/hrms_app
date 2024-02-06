@@ -110,7 +110,7 @@ const EmployeeCourses = ()=>{
                         <div className='course-container'>
                         {courses.map((course) => (
                             <Link to={`/course-view-page/${course.id}/${course.title}/`}  className='card'>
-                                <img src = {`${apiUrl}${course.thumbnail}`} alt='' />
+                                <img src = {`${course.thumbnail}`} alt='' />
                                 <div className='card-details'>
                                     <h2>{course.title}</h2>
                                     <div className='author-name'>{course.instructor}r</div>

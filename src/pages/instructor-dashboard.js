@@ -118,7 +118,7 @@ const InstructorDashboard = ()=>{
                         {courses.length > 0 ? (
                             courses.map(course => (
                             <div key={course.id} className='course-box'>
-                            <img src={`${apiUrl}${course.thumbnail}`} alt={course.title} />
+                            <img src={`${course.thumbnail}`} alt={course.title} />
                             <div className='details-card'>
                                 <div className='box-1'>
                                 <div className='title'>{course.title}</div>

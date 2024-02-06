@@ -103,13 +103,13 @@ const CreateEmployerProfile = ()=>{
         <div className ='page-wrapper'>
             <Header/>
             <div className = 'wrapper' >
-                <div className='sidebar-container-1'>
+            <div className='sidebar-container-1'>
                     <div className = 'box1-wrapper'>
                         <div className = 'card organization' >
                             <i class="fa-solid fa-building"></i>
                             <span className = 'title'>{user.first_name} {user.last_name}</span>
                         </div>
-                        <Link className = 'card'>
+                        <Link to='/employer-dashboard/' className = 'card'>
                             <span className="material-symbols-outlined">
                                 apps
                             </span>
@@ -119,9 +119,13 @@ const CreateEmployerProfile = ()=>{
                             <i class="fa-solid fa-users"></i>
                             <span className = 'title'>Organization & users</span>
                         </Link>
-                        <Link className = 'card'>
+                        <Link to='/organization/courses/' className = 'card'>
+                             <i class="fa-solid fa-chalkboard"></i>
+                            <span className = 'title'>Your Courses</span>
+                        </Link>
+                        <Link to="" className = 'card'>
                             <i className="fa-solid fa-gear"></i>
-                            <span className = 'title'>Settings</span>
+                            <span className = 'title'>Settings </span>
                         </Link>
                         <Link className = 'card'>
                             <i class="fa-solid fa-headset"></i>
@@ -145,6 +149,7 @@ const CreateEmployerProfile = ()=>{
                             
                             </div>
                             <div className={`form-group ${dateOfBirth ? 'active' : ''}`}>
+                               <div>Date of birth</div>
                                 <input type="date" id="date" value={dateOfBirth} onChange = {(event)=>setDateOfBirth(event.target.value)} required />
                                
                             </div>

@@ -6,6 +6,7 @@ import { Autoplay,Pagination,Navigation } from 'swiper/modules';
 //import Header from '../components/header';
 import 'swiper/swiper-bundle.css';
 import '../styles/login.css';
+import logo2 from '../images/logo.png';
 import hero1 from '../images/designer1.svg';
 import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
@@ -152,8 +153,9 @@ const  AdminSignup = ()=>{
                <div className='container2'>
                     <div className='container2-wrapper'>
                         <form className="form-container" onSubmit={handleSubmit}>
-                            <div className='form-logo'>
+                             <div className='form-logo'>
                                 <span>HRMS</span> 
+                                <img className='auth-logo' src={logo2} alt = 'logo2' />
                             </div>
                             <div className='form-header'>
                                

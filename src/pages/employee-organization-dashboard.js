@@ -38,6 +38,7 @@ const EmployeeOrganizationDashboard = ()=>{
     const [showSnackbar, setShowSnackbar] = useState(false);
     const [snackbarStatus, setsnackbarStatus] = useState('');
     const [payrollHistory,setPayrollHistory] = useState([]);
+    const [employeeProfile,setEmployeeProfile] = useState({});
 
     
     const toggleTimeSheetModal = ()=>{
@@ -227,11 +228,37 @@ const EmployeeOrganizationDashboard = ()=>{
               console.error('Error fetching organization:', error.message);
             }
         };
+        const fetchProfileData = async () => {
+            try {
+              const response = await axios.get(`${apiUrl}/employee/profile/fetch/`,{
+                headers: {
+                    Authorization: `Token ${user?.auth_token}`,
+                },
+              });
+              
+                if (response.data.success) {
+                    setEmployeeProfile(response.data.data);
+                    
+                    //setPreviousPicture Redirect to the home page
+                   
+                }else{
+                    console.log('else:',response.data.data);
+                    setEmployeeProfile(response.data.data);
+                }
+                
+              
+            } catch (error) {
+                setTimeout(() => {
+                    //navigate('/instructor/login/'); // Change '/' to the actual path of your home page
+                }, 2000); // 2000 milliseconds (2 seconds) delay
+              console.error('Errors:', error);
+            }
+        };
         
        
        
       
-       
+        fetchProfileData();
         fetchOrganization();
         fetchRequest();
         fetchTimeSheet();
@@ -257,11 +284,15 @@ const EmployeeOrganizationDashboard = ()=>{
                         </Link>
                         <Link to='/organizations/' className = 'card'>
                             <i class="fa-solid fa-users"></i>
-                            <span className = 'title'>Organization & users</span>
+                            <span className = 'title'>Organization </span>
                         </Link>
-                        <Link className = 'card'>
+                        <Link to='/employee/courses' className = 'card'>
+                             <i class="fa-solid fa-chalkboard"></i>
+                            <span className = 'title'>Your Courses</span>
+                        </Link>
+                        <Link to={`${employeeProfile.exist ? '/employee/profile/' : '/employee/profile/create'}`} className = 'card'>
                             <i className="fa-solid fa-gear"></i>
-                            <span className = 'title'>Settings</span>
+                            <span className = 'title'>Settings </span>
                         </Link>
                         <Link className = 'card'>
                             <i class="fa-solid fa-headset"></i>
@@ -280,7 +311,7 @@ const EmployeeOrganizationDashboard = ()=>{
                        <div className='organization-header'>
                         <div className='box1'>
                             <div className='box1-logo'>
-                                <img src={`${apiUrl}${organization.logo}`} alt = {organization.name}/>
+                                <img src={`${organization.logo}`} alt = {organization.name}/>
                                 <div className='org-name'>{organization.name}</div>
                             </div>
                         </div>
@@ -289,7 +320,7 @@ const EmployeeOrganizationDashboard = ()=>{
                             <div className={`tabs ${openSlideSections === 1 ? 'active' :''}`} onClick={() => toggleSlider(1)}>Requests</div>
                             <div className={`tabs ${openSlideSections === 2 ? 'active' :''}`} onClick={() => toggleSlider(2)}>Notifications</div>
                             <div className={`tabs ${openSlideSections === 3 ? 'active' :''}`} onClick={() => toggleSlider(3)}>Payroll History</div>
-                            <div className={`tabs ${openSlideSections === 4 ? 'active' :''}`} onClick={() => toggleSlider(4)}>Courses</div>
+                            
                            
                         </div>
                        </div>
