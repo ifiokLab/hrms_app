@@ -72,8 +72,7 @@ const OrganizationDashboard = ()=>{
     const handleTimeSheet = async (event) => {
         event.preventDefault();
         setIsLoading(!isLoading);
-        setsnackbarStatus('fail');
-        setShowSnackbar(true);
+       
         
         try {
             const formData = new FormData();
@@ -90,14 +89,19 @@ const OrganizationDashboard = ()=>{
             });
     
             if (response.data.success) {
+                setsnackbarStatus('success');
+                setShowSnackbar(true);
                 setTimeout(() => {
                     setIsLoading(isLoading);
+                    setShowSnackbar(false);
+                    
                     
                     setEndingDate('');
                     setTaskName('');
                     setHoursWorked('');
                     setActivityDescription('');
                     setTimesheetModal(!timesheetModal);
+                    fetchTimeSheet();
              
                     //navigate('/');
                    
@@ -105,6 +109,15 @@ const OrganizationDashboard = ()=>{
                 //console.log('org created successfully:', response.data.course);
                 // Redirect to the home page or do any other actions
             } else {
+                setsnackbarStatus('fail');
+                setShowSnackbar(true);
+                setTimeout(() => {
+                    setIsLoading(isLoading);
+                    setShowSnackbar(false);
+             
+                    //navigate('/');
+                   
+                }, 2000);
                 setErrorMessage('An unknown error occured.');
                 //console.error('Course creation failed:', response.data.message);
                 // Handle failed course creation, e.g., show error messages to the user
