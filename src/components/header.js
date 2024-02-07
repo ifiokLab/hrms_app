@@ -71,30 +71,91 @@ const Header = ()=>{
                      <i class="fa-solid fa-circle-xmark"></i>
                 </div>
                 <div className='sidebar-container-1'>
-                        <div className = 'box1-wrapper'>
+                        {user.isEmployer && (
+                            <div className = 'box1-wrapper'>
                             <div className = 'card organization' >
                                 <i class="fa-solid fa-building"></i>
-                                <span className = 'title'>Haerna Sherma</span>
+                                <span className = 'title'>{user.first_name} {user.last_name}</span>
                             </div>
-                            <Link className = 'card'>
+                            <Link to='/employer-dashboard/' className = 'card'>
                                 <span className="material-symbols-outlined">
                                     apps
                                 </span>
                                 <span className = 'title'>Apps</span>
                             </Link>
-                            <Link className = 'card'>
+                            <Link to='/organizations/' className = 'card'>
                                 <i class="fa-solid fa-users"></i>
                                 <span className = 'title'>Organization & users</span>
                             </Link>
-                            <Link className = 'card'>
+                            <Link to='/organization/courses/' className = 'card'>
+                                 <i class="fa-solid fa-chalkboard"></i>
+                                <span className = 'title'>Your Courses</span>
+                            </Link>
+                            <Link to={`${profile.exist ? '/employer/profile/' : '/employer/profile/create'}`} className = 'card'>
                                 <i className="fa-solid fa-gear"></i>
-                                <span className = 'title'>Settings</span>
+                                <span className = 'title'>Settings </span>
                             </Link>
                             <Link className = 'card'>
                                 <i class="fa-solid fa-headset"></i>
                                 <span className = 'title'>Support</span>
                             </Link>
                         </div>
+                        )}
+                         {user.isEmployee && (
+                             <div className='sidebar-container-1'>
+                             <div className = 'box1-wrapper'>
+                                 <div className = 'card organization' >
+                                     <i class="fa-solid fa-building"></i>
+                                     <span className = 'title'>{user.first_name} {user.last_name}</span>
+                                 </div>
+                                 <Link to='/employee/dashboard/' className = 'card'>
+                                     <i class="fa-solid fa-users"></i>
+                                     <span className = 'title'>Organizations</span>
+                                 </Link>
+                                 <Link to='/employee/courses' className = 'card'>
+                                      <i class="fa-solid fa-chalkboard"></i>
+                                     <span className = 'title'>Your Courses</span>
+                                 </Link>
+                                
+                                 
+                                 <Link to={`${profile.exist ? '/employee/profile/' : '/employee/profile/create'}`} className = 'card'>
+                                     <i className="fa-solid fa-gear"></i>
+                                     <span className = 'title'>Settings </span>
+                                 </Link>
+                                 <Link className = 'card'>
+                                     <i class="fa-solid fa-headset"></i>
+                                     <span className = 'title'>Support</span>
+                                 </Link>
+                             </div>
+                             
+                         </div>
+                        )}
+                         {user.isInstructor && (
+                             <div className='sidebar-container-1'>
+                             <div className = 'box1-wrapper'>
+                                 <div className = 'card organization' >
+                                     <i class="fa-solid fa-building"></i>
+                                     <span className = 'title'>{user.first_name} {user.last_name}</span>
+                                 </div>
+                                 <Link to='/instructor/dashboard/' className = 'card'>
+                                     <i class="fa-solid fa-chalkboard"></i>
+                                     <span className = 'title'>Your Courses</span>
+                                 </Link>
+                                
+                                 
+                                
+                                 <Link to={`${profile.exist ? '/instructor/profile/' : '/instructor/profile/create'}`} className = 'card'>
+                                     <i className="fa-solid fa-gear"></i>
+                                     <span className = 'title'>Settings </span>
+                                 </Link>
+                                 <Link className = 'card'>
+                                     <i class="fa-solid fa-headset"></i>
+                                     <span className = 'title'>Support</span>
+                                 </Link>
+                             </div>
+                             
+                         </div>
+                        )}
                         <div className = 'box2-wrapper' >
                             <Link className = 'card'>
                                 <i class="fa-solid fa-right-from-bracket"></i>

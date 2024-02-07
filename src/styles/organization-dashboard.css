@@ -48,12 +48,15 @@
 }
 .organization-body{
     margin-top: 10px;
+    overflow-x: scroll;
+    width: 100%;
 }
 
 .organization-body table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+  
   }
   
 .organization-body  thead {

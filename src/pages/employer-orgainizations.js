@@ -44,6 +44,7 @@ const EmployerOrganizations = ()=>{
     const [showSnackbar, setShowSnackbar] = useState(false);
     const [snackbarStatus, setsnackbarStatus] = useState('');
     const [payrollHistory,setPayrollHistory] = useState([]);
+    const [loadOrg,setLoadOrg] = useState(false);
 
     const handleEllipsisClick = (event,index) => {
         event.preventDefault();
@@ -294,6 +295,7 @@ const EmployerOrganizations = ()=>{
 
     
     const fetchOrganizations = async () => {
+        setLoadOrg(true);
         try {
             const response = await axios.get(`${apiUrl}/organization/list/`, {
                 headers: {
@@ -303,6 +305,7 @@ const EmployerOrganizations = ()=>{
             });
             //console.log(response.data.all_courses)
             setOrganizations(response.data.all_organizations);
+            setLoadOrg(false);
             //setLoading(false);
         } catch (error) {
             console.error('Error fetching user courses:', error);
@@ -432,7 +435,12 @@ const EmployerOrganizations = ()=>{
                             </div>
                             <div className='create-btn' onClick={toggleOrgModal}>create</div>
                         </div>
-                        {organizations.length > 0 ? (
+                        {loadOrg ? (
+                           <h4>Loading....</h4>
+                        ):
+                        (
+                            <>
+                             {organizations.length > 0 ? (
                             <div className='apps-container'>
                             {organizations.map((data, index) => (
                                 <Link to={`/organization/dashboard/${data.id}/${data.name}/`} className='cards organization-card' key={index}>
@@ -467,6 +475,9 @@ const EmployerOrganizations = ()=>{
                         ) : (
                             <h4>You haven't created any organizations yet.</h4>
                         )}
+                            </>
+                        )}
+                       
                     </div>
                 </div>
             </div>

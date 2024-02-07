@@ -64,6 +64,7 @@ const OrganizationDashboard = ()=>{
         setScheduleModal(!scheduleModal);
     }
     const toggleTimeSheetModal = ()=>{
+        setErrorMessage('');
         setTimesheetModal(!timesheetModal);
     };
     const toggleEmployeesTimesheetModal = (index) => {
@@ -118,7 +119,7 @@ const OrganizationDashboard = ()=>{
                     //navigate('/');
                    
                 }, 2000);
-                setErrorMessage('An unknown error occured.');
+                setErrorMessage(response.data.message);
                 //console.error('Course creation failed:', response.data.message);
                 // Handle failed course creation, e.g., show error messages to the user
             }
