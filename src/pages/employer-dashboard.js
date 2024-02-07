@@ -119,12 +119,12 @@ const EmployerDashboard = ()=>{
                                 </div>
                                 <div className='text-wrapper'>
                                     <div className='title-header'>Elearning</div>
-                                    <p>Human Resource management System</p>
+                                    <p>Upskill your team with top in demand courses</p>
                                 </div>
                             </Link>
                            
                             
-                            <Link className='cards'>
+                            <Link to='/organizations/' className='cards'>
                                  <div className='icon time-icon'>
                                  <i class="fa-solid fa-business-time"></i>
                                  </div>
@@ -139,7 +139,7 @@ const EmployerDashboard = ()=>{
                                 </div>
                                 <div className='text-wrapper'>
                                     <div className='title-header'>Your Courses</div>
-                                    <p>Monitor employee performance</p>
+                                    <p>A world of learning </p>
                                 </div>
                             </Link>
                         </div>
