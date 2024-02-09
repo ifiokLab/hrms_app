@@ -38,12 +38,9 @@
     border-radius: 4px;
     display: inline-block;
     z-index: 10000;
-    opacity: 0;
-    visibility: hidden;
-    animation: shakeFadeOff 8s forwards; /* 3s duration, forwards to keep the final state */
-  
-    /* Additional styles for the shake effect */
-    animation-iteration-count: 1;
+    opacity: 1;
+    visibility: visible;
+   
   }
   
   @keyframes shakeFadeOff {
