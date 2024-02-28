@@ -58,19 +58,48 @@
     margin-top: 20px;
   
   }
+.back{
+    border: solid #03192e 1px;
+    padding: 10px 20px;
+    margin-right: 20px;
+    cursor: pointer
+    ;
+}
+.organization-form table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.organization-form thead{
+    background-color: #03192e;
+    color: white;
+}
   
 .organization-body  thead {
     background-color: #03192e;
     color: white;
 }
+
 .organization-body th{
+    color: white;
+    font-size: .8rem;
+}
+.organization-form th{
     color: white;
     font-size: .8rem;
 }
 .organization-body td{
     font-size: .8rem;
 }
+.organization-form td{
+    font-size: .8rem;
+}
 .organization-body th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+.organization-form td{
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
@@ -81,7 +110,15 @@
     cursor: pointer;
     color: white;
 }
+.organization-form tbody tr:hover{
+    background-color: #2196F3;
+    cursor: pointer;
+    color: white;
+}
 .organization-body  tbody tr:hover td{
+    color: white;
+}
+.organization-form tbody tr:hover td{
     color: white;
 }
 .organization-body table .status{

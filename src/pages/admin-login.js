@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link,useNavigate } from 'react-router-dom';
+import React, { useState,useEffect } from 'react';
+import { Navigate, Link, useNavigate,useParams, useLocation } from 'react-router-dom'; // Import useLocation
 import axios from 'axios';
 import { Swiper, SwiperSlide, } from 'swiper/react';
 import { Autoplay,Pagination,Navigation } from 'swiper/modules';
@@ -21,13 +21,24 @@ const  AdminLogin = ()=>{
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [nextPage, setNextPage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation(); // Get current location
+    //const { nextpage } = new URLSearchParams(location.search);
+    //const { nextpage } = new URLSearchParams(location.search).get('nextpage');
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+    
+    useEffect(() => {
+        const nextpage = new URLSearchParams(location.search).get('nextpage');
+        setNextPage(nextpage); 
+       
+    }, [location.search]);
+    
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -49,10 +60,29 @@ const  AdminLogin = ()=>{
                         navigate('/employer-dashboard/');
                     }
                     if(response.data.user.isEmployee){
-                        navigate('/employee/dashboard/');
+                       
+                        if(nextPage){
+                            
+                            navigate(`${nextPage}`);
+                            //navigate('/client/dashboard/');
+                            //<Navigate to={nextPage} />
+                        }else{
+                            navigate('/employee/dashboard/');
+                        }
                     }
                     if(response.data.user.isInstructor){
                         navigate('/instructor/dashboard/');
+                    }
+                    if(response.data.user.isClient){
+                        if(nextPage){
+                            
+                            navigate(`${nextPage}`);
+                            //navigate('/client/dashboard/');
+                            //<Navigate to={nextPage} />
+                        }else{
+                            navigate('/client/dashboard/');
+                        }
+                        
                     }
                    
                    
@@ -166,7 +196,11 @@ const  AdminLogin = ()=>{
                                 </button>
                             </div>
                             <div className='link-btn-wrapper'>
-                                <Link to='/organization/signup/'>Signup as an orgainization</Link>
+                                <Link to='/organization/signup/'>Signup as an organization</Link>
+                               
+                            </div>
+                            <div className='link-btn-wrapper'>
+                                <Link to='/client/signup/'>Signup as a client</Link>
                                
                             </div>
                             <div className='link-btn-wrapper'>

@@ -20,33 +20,38 @@ import apiUrl from '../components/api-url';
 import DesktopLogout from './desktop-logout';
 //import hero1 from '../styles/hero1.jpg';
 
-const CreateInstructorProfile = ()=>{
-    const user = useSelector((state) => state.user.user);
-    const [title, setTitle] = useState('');
-    const [biography, setBiography] = useState('');
-    const [website, setWebsite] = useState('');
+const CreateClientProfile = ()=>{
+    const [dateOfBirth, setDateOfBirth] = useState('');
+    const [gender, setGender] = useState('');
+    const [maritalStatus, setMaritalStatus] = useState('');
     const [profilePicture, setProfilePicture] = useState('');
     const [phone, setPhone] = useState('');
+    const [address, setAddress] = useState('');
     const navigate = useNavigate();
-    const [employeeProfile,setEmployeeProfile] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const user = useSelector(state => state.user.user);
 
+    
+    
+   
+   
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsLoading(!isLoading);
         
         try {
             const formData = new FormData();
-            formData.append('title', title);
-            formData.append('biography', biography);
-            formData.append('website', website);
-            formData.append('picture', profilePicture);
-            formData.append('phone', phone);
+            formData.append('date_of_birth', dateOfBirth);
+            formData.append('gender', gender);
+            formData.append('marital_status', maritalStatus);
+            formData.append('phone_number', phone);
+            formData.append('address', address);
+            formData.append('image', profilePicture);
     
             // Check if thumbnail is a file (not a base64 string)
            
     
-            const response = await axios.post(`${apiUrl}/instructor/profile/create/`, formData, {
+            const response = await axios.post(`${apiUrl}/client/profile/create/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
@@ -56,7 +61,7 @@ const CreateInstructorProfile = ()=>{
             if (response.data.success) {
                 setTimeout(() => {
                     setIsLoading(isLoading);
-                    navigate('/instructor/profile/');
+                    navigate('/client/profile/');
                    
                 }, 2000);
                 console.log('profile created successfully:');
@@ -74,7 +79,7 @@ const CreateInstructorProfile = ()=>{
             // Handle unexpected errors
         }
     };
-    
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
     
@@ -87,54 +92,29 @@ const CreateInstructorProfile = ()=>{
         }
     };
     
-    const handleTitleChange = (event) => {
-        setTitle(event.target.value);
-    };
-   
-    const handleWebsiteChange = (event) => {
-        setWebsite(event.target.value);
-    };
     
-    const handlePhoneChange = (event) => {
-        setPhone(event.target.value);
-    };
-
    
     
 
-    useEffect(() => {
-        // Check if the user is authenticated  !User && User.isInstructor === true 
-       
-        if (user=== null ) {
-            // Redirect to the login page
-            //navigate('/login');
-            return; // Stop further execution of useEffect
-        };
-      
+   
     
-        // Fetch categories and default subcategories
-       
-        
-    }, [user, navigate]);
+  
 
     return(
         <div className ='page-wrapper'>
             <Header/>
             <div className = 'wrapper' >
-                 <div className='sidebar-container-1'>
+                <div className='sidebar-container-1'>
                     <div className = 'box1-wrapper'>
                         <div className = 'card organization' >
                             <i class="fa-solid fa-building"></i>
                             <span className = 'title'>{user.first_name} {user.last_name}</span>
                         </div>
-                        <Link to='/instructor/dashboard/' className = 'card'>
+                        <Link to='/client/dashboard/' className = 'card'>
                             <i class="fa-solid fa-chalkboard"></i>
-                            <span className = 'title'>Your Courses</span>
-                        </Link>
-                       
-                        
-                       
-                        <Link to={`${employeeProfile.exist ? '/instructor/profile/' : '/instructor/profile/create'}`} className = 'card'>
+                            <span className = 'title'>Organizations & Partnerships</span>
+                        </Link>              
+                        <Link to='#' className = 'card'>
                             <i className="fa-solid fa-gear"></i>
                             <span className = 'title'>Settings </span>
                         </Link>
@@ -156,39 +136,50 @@ const CreateInstructorProfile = ()=>{
                                 <span>Create Profile</span>
                             
                             </div>
-                            <div className={`form-group ${title ? 'active' : ''}`}>
-                                <input type="text" id="title" value={title} onChange = {handleTitleChange} required />
-                                <label htmlFor="title">Title</label>
+                            <div className={`form-group ${dateOfBirth ? 'active' : ''}`}>
+                            <div className='previous'>Date of birth:</div>
+                                <input type="date" id="date" value={dateOfBirth} onChange = {(event)=>setDateOfBirth(event.target.value)} required />
+                               
                             </div>
-                            <div className={`form-group ${biography ? 'active' : ''}`}>
-                            
-                                <ReactQuill
-                                id='biography'
-                                value={biography}
-                                
-                                onChange={(value) => setBiography(value)}
-                                placeholder="Biography"
-                                required
-                                />
-                                
+                           
+                            <div className={`form-group ${gender ? 'active' : ''}`}>
+                                <select name="gender" value={gender} onChange={(event)=>setGender(event.target.value)} required>
+                                    <option value="">Select Gender</option>
+                                    <option value="M">Male</option>
+                                    <option value="F">Female</option>
+                                    <option value="O">Other</option>
+                                </select>
+                               
                             </div>
-                            <div className={`form-group ${website ? 'active' : ''}`}>
-                                <input type="text" id="website" value={website} onChange = {handleWebsiteChange} placeholder ='optional' />
-                                <label htmlFor="website">Website</label>
+                            <div className={`form-group ${maritalStatus ? 'active' : ''}`}>
+                                <select name="maritalStatus" value={maritalStatus} onChange={(event)=>setMaritalStatus(event.target.value)} required>
+                                    <option value="">Select Marital Status</option>
+                                    <option value="S">Single</option>
+                                    <option value="M">Married</option>
+                                    <option value="D">Divorced</option>
+                                    <option value="W">Widowed</option>
+                                </select>
+                               
                             </div>
                             <div className={`form-group ${phone ? 'active' : ''}`}>
-                                <input type="text" id="phone" value={phone} onChange = {handlePhoneChange} required />
-                                <label htmlFor="title">phone</label>
+                                <input type="text" id="phone" value={phone} onChange = {(event)=>setPhone(event.target.value)} required />
+                                <label htmlFor="phone">phone</label>
+                            </div>
+                            <div className={`form-group ${address ? 'active' : ''}`}>
+                                <input type="text" id="address" value={address} onChange = {(event)=>setAddress(event.target.value)} required />
+                                <label htmlFor="address">Address</label>
                             </div>
                         
                             <div className = 'thumbnail-wrapper' >
                                 <label htmlFor="profilePicture" className='thumb-label'>Profile picture</label>
+                                
                                 <input
+                                
                                 type="file"
                                 id="profilePicture"
                                 name="profilePicture"
                                 onChange={handleFileChange}
-                                required
+                               required
                                 />
                             </div>
                         
@@ -209,4 +200,4 @@ const CreateInstructorProfile = ()=>{
     );
 };
 
-export default CreateInstructorProfile;
+export default CreateClientProfile;

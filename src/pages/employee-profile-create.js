@@ -17,6 +17,7 @@ import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
 import logo from '../images/logo192.png';
 import apiUrl from '../components/api-url';
+import DesktopLogout from './desktop-logout';
 //import hero1 from '../styles/hero1.jpg';
 
 const CreateEmployeeProfile = ()=>{
@@ -129,10 +130,7 @@ const CreateEmployeeProfile = ()=>{
                         </Link>
                     </div>
                     <div className = 'box2-wrapper' >
-                        <Link className = 'card'>
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                            <span className = 'title'>Logout</span>
-                        </Link>
+                        <DesktopLogout />
                     </div>
                 </div>
                 <div className='container-2'>

@@ -11,6 +11,8 @@ import hero1 from '../images/designer1.svg';
 import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
 import logo from '../images/logo192.png';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../actions/user-action'; // Import actions
 import { useSelector } from 'react-redux';
 //import hero1 from '../styles/hero1.jpg';
 
@@ -18,11 +20,18 @@ const Header = ()=>{
     const [sidebarOpen,setSideBarOpen] = useState(false);
     const [profile,setProfile] = useState('');
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const user = useSelector(state => state.user.user);
+    const auth = useSelector(state => state.user);
     const toggleSideBar = ()=>{
         setSideBarOpen(!sidebarOpen);
     };
     useEffect(() => {
+        if (auth.user === null ) {
+            // Redirect to the login page
+            navigate('/');
+            return ;
+        }
         const fetchProfile = async () => {
             try {
                 const response = await axios.get(`${apiUrl}/user/profile/fetch/`,{
@@ -44,6 +53,10 @@ const Header = ()=>{
 
       fetchProfile();
     }, [user,navigate]);
+    const handleLogout = async () => {
+        dispatch(setUser(null));
+        navigate('/logout');
+    };
     return(
         <div className ='header-wrapper'>
             <div className = 'logo' >
@@ -71,7 +84,7 @@ const Header = ()=>{
                      <i class="fa-solid fa-circle-xmark"></i>
                 </div>
                 <div className='sidebar-container-1'>
-                        {user.isEmployer && (
+                        {user?.isEmployer && (
                             <div className = 'box1-wrapper'>
                             <div className = 'card organization' >
                                 <i class="fa-solid fa-building"></i>
@@ -101,7 +114,7 @@ const Header = ()=>{
                             </Link>
                         </div>
                         )}
-                         {user.isEmployee && (
+                         {user?.isEmployee && (
                              <div className='sidebar-container-1'>
                              <div className = 'box1-wrapper'>
                                  <div className = 'card organization' >
@@ -130,7 +143,7 @@ const Header = ()=>{
                              
                          </div>
                         )}
-                         {user.isInstructor && (
+                         {user?.isInstructor && (
                              <div className='sidebar-container-1'>
                              <div className = 'box1-wrapper'>
                                  <div className = 'card organization' >
@@ -157,10 +170,10 @@ const Header = ()=>{
                          </div>
                         )}
                         <div className = 'box2-wrapper' >
-                            <Link className = 'card'>
+                            <div onClick={handleLogout} className = 'card'>
                                 <i class="fa-solid fa-right-from-bracket"></i>
                                 <span className = 'title'>Logout</span>
-                            </Link>
+                            </div>
                         </div>
                 </div>
             </div>

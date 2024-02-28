@@ -10,6 +10,7 @@ import "react-quill/dist/quill.snow.css";
 import 'swiper/swiper-bundle.css';
 import '../styles/employer-dashboard.css';
 import '../styles/create-course.css';
+import DesktopLogout from './desktop-logout';
 import '../styles/instructor.css';
 import Header from '../components/header';
 import hero1 from '../images/designer1.svg';
@@ -104,10 +105,7 @@ const InstructorProfile = ()=>{
                         </Link>
                     </div>
                     <div className = 'box2-wrapper' >
-                        <Link className = 'card'>
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                            <span className = 'title'>Logout</span>
-                        </Link>
+                        <DesktopLogout />
                     </div>
                 </div>
                 <div className='container-2'>

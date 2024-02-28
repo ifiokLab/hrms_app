@@ -9,6 +9,7 @@ import 'swiper/swiper-bundle.css';
 import '../styles/snackbar.css';
 import '../styles/employer-dashboard.css';
 import Header from '../components/header';
+import DesktopLogout from './desktop-logout';
 
 //import hero1 from '../styles/hero1.jpg';
 
@@ -432,10 +433,10 @@ const OrganizationDashboard = ()=>{
     const fetchEmployees = async () => {
         try {
           const response = await axios.get(`${apiUrl}/employees/list/${Id}/`);
-          console.log(response.data);
+          
           setEmployees(response.data);
         } catch (error) {
-          console.error('Error fetching organization:', error.message);
+          console.error('Error fetching employees:', error.message);
         }
     };
     const fetchPaymentSchedule = async () => {
@@ -684,10 +685,7 @@ const OrganizationDashboard = ()=>{
                         </Link>
                     </div>
                     <div className = 'box2-wrapper' >
-                        <Link className = 'card'>
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                            <span className = 'title'>Logout</span>
-                        </Link>
+                        <DesktopLogout />
                     </div>
                 </div>
                 <div className='container-2'>
@@ -701,13 +699,13 @@ const OrganizationDashboard = ()=>{
                         </div>
                         <div className='box2'>
                             <div className={`tabs ${openSlideSections === 0 ? 'active' :''}`} onClick={() => toggleSlider(0)}>Employees</div>
-                            <div className={`tabs ${openSlideSections === 1 ? 'active' :''}`} onClick={() => toggleSlider(1)}>My TimeSheet</div>
+                           
                             <div className={`tabs ${openSlideSections === 2 ? 'active' :''}`} onClick={() => toggleSlider(2)}>Employee TimeSheet</div>
                             <div className={`tabs ${openSlideSections === 3 ? 'active' :''}`} onClick={() => toggleSlider(3)}>Requests</div>
                             <div className={`tabs ${openSlideSections === 4 ? 'active' :''}`} onClick={() => toggleSlider(4)}>Onboarding</div>
                             <div className={`tabs ${openSlideSections === 5 ? 'active' :''}`} onClick={() => toggleSlider(5)}>Offboarding</div>
-                            <div className={`tabs ${openSlideSections === 6 ? 'active' :''}`} onClick={() => toggleSlider(6)}>Performance</div>
-                            <div className={`tabs ${openSlideSections === 7 ? 'active' :''}`} onClick={() => toggleSlider(7)}>Payroll</div>
+                           {/* <div className={`tabs ${openSlideSections === 6 ? 'active' :''}`} onClick={() => toggleSlider(6)}>Performance</div> */}
+                            {/*        <div className={`tabs ${openSlideSections === 7 ? 'active' :''}`} onClick={() => toggleSlider(7)}>Payroll</div> */}
                         </div>
                        </div>
                        {openSlideSections === 0 && (
@@ -720,6 +718,7 @@ const OrganizationDashboard = ()=>{
                                     <th>First name</th>
                                     <th>Last name</th>
                                     <th>Department</th>
+                                    <th>Timesheet</th>
                                     <th>Status</th>
                                     {/* Add more columns as needed */}
                                     </tr>
@@ -731,6 +730,9 @@ const OrganizationDashboard = ()=>{
                                         <td>{employee.first_name}</td>
                                         <td>{employee.last_name}</td>
                                         <td>{employee.department}</td>
+                                        <td>
+                                            <Link to = {`/employee/timesheet/${Id}/${employee.userId}/${employee.first_name}${employee.last_name}/list/`} >view timesheet</Link>
+                                        </td>
                                         <td className={`status ${StatusModal === 0 ? 'show' :''}`} onClick={() => toggleStatusModal(employee.id)} >
                                             <span>{employee.status}</span>
                                             <i class="fa-solid fa-ellipsis-vertical"></i>
@@ -759,64 +761,28 @@ const OrganizationDashboard = ()=>{
                             </table>
                          </div>
                        )}
-                       {openSlideSections === 1 && (
-                        <div className='organization-body'>
-                            <div className = 'timesheet'>
-                                <div className='body-title'>My TimeSheet</div>
-                                <div className='time-btn' onClick={toggleTimeSheetModal}>
-                                    Create TimeSheet
-                                </div>
-                            </div>
-                            <table>
-                                <thead>
-                                    <tr>
-                                    <th>ID</th>
-                                    <th>Date</th>
-                                    <th>Name</th>
-                                    <th>Organization</th>
-                                    <th>Task name</th>
-                                    <th>Description</th>
-                                    <th>Hours worked</th>
-                                    {/* Add more columns as needed */}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {timeSheet.map((employee) => (
-                                    <tr key={employee.id}>
-                                        <td>#{employee.organization}{employee.id}</td>
-                                        <td>{employee.date}</td>
-                                        <td>{employee.user}</td>
-                                        <td>{employee.organization}</td>
-                                        <td>{employee.task_name}</td>
-                                        <td>{employee.activity_description}</td>
-                                       
-                                        <td>{employee.hours_worked}</td>
-                                    
-                                    </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                         </div>
-                       )}
+                       
                         {openSlideSections === 2 && (
                         <div className='organization-body'>
                             <div className = 'timesheet'>
-                                <div className='body-title'>My TimeSheet</div>
-                                <div className='time-btn' onClick={toggleTimeSheetModal}>
-                                    Create TimeSheet
+                                <div className='body-title'>Employee TimeSheet</div>
+                                <div className='time-bt' >
+                                   
                                 </div>
                             </div>
                             <table>
                                 <thead>
                                     <tr>
                                     
-                                    <th>Date</th>
+                                    <th>Start Date</th>
+                                    <th>End date</th>
                                     <th>Name</th>
                                     <th>Organization</th>
-                                    <th>Task name</th>
-                                    <th>Description</th>
-                                    <th>Hours worked</th>
-                                    <th>Status</th>
+                                    <th>Client</th>
+                                    <th>Total hours</th>
+                                    <th>Client approved</th>
+                                    <th>Approve</th>
+                                    <th>Detail</th>
                                     {/* Add more columns as needed */}
                                     </tr>
                                 </thead>
@@ -824,26 +790,27 @@ const OrganizationDashboard = ()=>{
                                     {employeesTimesheet.map((employee) => (
                                     <tr key={employee.id}>
                                        
-                                        <td>{employee.date}</td>
+                                        <td>{employee.start_date}</td>
+                                        <td>{employee.end_date}</td>
                                         <td>{employee.user}</td>
                                         <td>{employee.organization}</td>
-                                        <td>{employee.task_name}</td>
-                                        <td className='table-description'>{employee.activity_description}</td>
+                                        <td>{employee.client}</td>
+                                        <td className='table-description'>{employee.total_hours}</td>
                                        
-                                        <td>{employee.hours_worked}</td>
+                                        <td>{employee.client_approved}</td>
                                         <td className={`status ${employeesTimesheetModal === 0 ? 'show' :''}`} onClick={() => toggleEmployeesTimesheetModal(employee.id)} >
-                                            <span>{employee.status}</span>
+                                            <span>{employee.organization_approved}</span>
                                             <i class="fa-solid fa-ellipsis-vertical"></i>
                                             {employeesTimesheetModal === employee.id && (
                                                 <div className = 'status-modal'>
                                                    
-                                                    {employee.status === 'Approved' && (
+                                                    {employee.organization_approved === 'Approved' && (
                                                         <div className='card' onClick={()=>handleEmployeeTimesheet('Rejected',employee.id)}>Reject</div>
                                                     )}
                                                    
                                                    
                                                     
-                                                    {(employee.status === 'Pending' || employee.status === 'Rejected' || employee.status === 'Under Review') && (
+                                                    {(employee.organization_approved === 'Pending' || employee.organization_approved === 'Rejected' || employee.organization_approved === 'Under Review') && (
                                                         <div className='card' onClick={()=>handleEmployeeTimesheet('Approved',employee.id)}>Approve</div> 
                                                     )}
                                                    
@@ -854,6 +821,8 @@ const OrganizationDashboard = ()=>{
                                             
                                             
                                         </td>
+                                        <td><Link to ={`/employee/timesheet/detail/${employee.id}/${employee.userId}/${employee.user}/`}>view</Link></td>
+                                        
                                     
                                     </tr>
                                     ))}
@@ -995,7 +964,7 @@ const OrganizationDashboard = ()=>{
                             </table>
                          </div>
                        )}
-                       {openSlideSections === 7 && (
+                      {/* {openSlideSections === 7 && (
                             <div className='organization-body'>
                                 <div className='body-title-wrapper'>
                                     <div className='schedule-title'>
@@ -1040,18 +1009,18 @@ const OrganizationDashboard = ()=>{
                             </table>
                             <div className='total-salary'>
                             Total Salary: {totalSalary}
-                             {/* calcolate the total salary amount and display it here */}
+                             
                             </div>
                             <div className='submit-payroll-wrapper'>
-                                {/*the employer should be able to submit the payroll */}
+                               
                                 <div className = 'btn' onClick={handleSubmitPayroll}>
                                      Submit Payroll
                                      {isLoading ? <div className="loader"></div> : '' }
                                 </div>
                             </div>
                           </div>
-                       )}
-                       {openSlideSections === 8 && (
+                       )} */}
+                      {/* {openSlideSections === 8 && (
                         <div className='organization-body'>
                         <div className='body-title'>Payroll list</div>
                         <table>
@@ -1102,8 +1071,8 @@ const OrganizationDashboard = ()=>{
                             </table>
                        
                       </div>
-                        )}
-                         {openSlideSections === 9 && (
+                        )} */}
+                        {/* {openSlideSections === 9 && (
                         <div className='organization-body'>
                         <div className='body-title'>Total invoice</div>
                         <table>
@@ -1133,7 +1102,7 @@ const OrganizationDashboard = ()=>{
                             </table>
                        
                       </div>
-                        )}
+                        )} */}
                       
                     </div>
                 </div>

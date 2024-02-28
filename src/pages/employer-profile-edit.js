@@ -7,6 +7,7 @@ import { Autoplay,Pagination,Navigation } from 'swiper/modules';
 //import Header from '../components/header';
 import ReactQuill from 'react-quill';
 import "react-quill/dist/quill.snow.css";
+import DesktopLogout from './desktop-logout';
 import 'swiper/swiper-bundle.css';
 import '../styles/employer-dashboard.css';
 import '../styles/create-course.css';
@@ -176,10 +177,7 @@ const EditEmployerProfile  = ()=>{
                         </Link>
                     </div>
                     <div className = 'box2-wrapper' >
-                        <Link className = 'card'>
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                            <span className = 'title'>Logout</span>
-                        </Link>
+                       <DesktopLogout />
                     </div>
                 </div>
                 <div className='container-2'>

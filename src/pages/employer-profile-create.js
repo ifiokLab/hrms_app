@@ -12,6 +12,7 @@ import '../styles/employer-dashboard.css';
 import '../styles/create-course.css';
 import '../styles/instructor.css';
 import Header from '../components/header';
+import DesktopLogout from './desktop-logout';
 import hero1 from '../images/designer1.svg';
 import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
@@ -133,10 +134,7 @@ const CreateEmployerProfile = ()=>{
                         </Link>
                     </div>
                     <div className = 'box2-wrapper' >
-                        <Link className = 'card'>
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                            <span className = 'title'>Logout</span>
-                        </Link>
+                       <DesktopLogout />
                     </div>
                 </div>
                 <div className='container-2'>

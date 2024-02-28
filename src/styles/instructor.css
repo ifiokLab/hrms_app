@@ -6,6 +6,15 @@
     padding: 0;
     margin: 0;
 }
+.btn-wrapper-invite button{
+    background-color: #2d2f31;
+    color: white;
+    border: transparent;
+    cursor: pointer;
+    padding: 5px 20px;
+    display: flex;
+    
+}
 
 .page-wrapper .course-header .title{
     font-size: 1rem;

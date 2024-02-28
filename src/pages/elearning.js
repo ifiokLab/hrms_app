@@ -11,6 +11,7 @@ import '../styles/employer-dashboard.css';
 import '../styles/organizations.css';
 import '../styles/elearning.css';
 import Header from '../components/header';
+import DesktopLogout from './desktop-logout';
 import hero1 from '../images/designer1.svg';
 import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
@@ -23,6 +24,8 @@ const Elearning = ()=>{
     const [searchQuery, setSearchQuery] = useState('');
     const [enrolled, setEnrolled] = useState(false);
     const navigate = useNavigate();
+    
+   
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -61,6 +64,7 @@ const Elearning = ()=>{
       
         fetchCourses();
     }, [user]);
+   
     
    
     
@@ -103,10 +107,7 @@ const Elearning = ()=>{
                         </Link>
                     </div>
                     <div className = 'box2-wrapper' >
-                        <Link className = 'card'>
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                            <span className = 'title'>Logout</span>
-                        </Link>
+                        <DesktopLogout />
                     </div>
                 </div>
                 <div className='container-2'>
@@ -599,7 +600,7 @@ const Elearning = ()=>{
                                     
                                     <div className='card-details'>
                                         <h2>{course.title}</h2>
-                                        <div className='author-name'>{course.instructor}</div>
+                                        <div className='author-name'></div>
                                         <div className='ratings-card'>
                                             <span className='num box'>4.5</span>
                                             <span className='stars box'>
@@ -614,8 +615,8 @@ const Elearning = ()=>{
                                             </span>
                                         </div>
                                         <div className='price-card'>
-                                        <span className='price'>${course.discountPrice}</span>
-                                        <span className='discount'>${course.price}</span>
+                                        <span className='price'></span>
+                                        <span className='discount'></span>
                                         </div>
                                     </div>
                                 </Link>

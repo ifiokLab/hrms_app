@@ -10,6 +10,7 @@ import "react-quill/dist/quill.snow.css";
 import 'swiper/swiper-bundle.css';
 import '../styles/employer-dashboard.css';
 import '../styles/create-course.css';
+import DesktopLogout from './desktop-logout';
 import '../styles/instructor.css';
 import Header from '../components/header';
 import hero1 from '../images/designer1.svg';
@@ -17,12 +18,12 @@ import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
 import logo from '../images/logo192.png';
 import apiUrl from '../components/api-url';
-import DesktopLogout from './desktop-logout';
 //import hero1 from '../styles/hero1.jpg';
 
-const EmployeeProfile = ()=>{
+const ClientProfile = ()=>{
     const user = useSelector((state) => state.user.user);
     const  [profile,setProfile] = useState({});
+    const [employeeProfile,setEmployeeProfile] = useState({});
     const navigate = useNavigate();
    
 
@@ -30,7 +31,7 @@ const EmployeeProfile = ()=>{
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/employee/profile/fetch/`,{
+                const response = await axios.get(`${apiUrl}/client/profile/fetch/`,{
                     headers: {
                         Authorization: `Token ${user?.auth_token}`,
                     },
@@ -46,8 +47,34 @@ const EmployeeProfile = ()=>{
              
             }   
         };
-
+        const fetchProfileData = async () => {
+            try {
+              const response = await axios.get(`${apiUrl}/client/profile/fetch/`,{
+                headers: {
+                    Authorization: `Token ${user?.auth_token}`,
+                },
+              });
+              
+                if (response.data.success) {
+                    setEmployeeProfile(response.data.data);
+                    
+                    //setPreviousPicture Redirect to the home page
+                   
+                }else{
+                    console.log('else:',response.data.data);
+                    setEmployeeProfile(response.data.data);
+                }
+                
+              
+            } catch (error) {
+                setTimeout(() => {
+                    //navigate('/instructor/login/'); // Change '/' to the actual path of your home page
+                }, 2000); // 2000 milliseconds (2 seconds) delay
+              console.error('Errors:', error);
+            }
+        };
       fetchProfile();
+      fetchProfileData();
     }, [user,navigate]);
 
 
@@ -61,17 +88,14 @@ const EmployeeProfile = ()=>{
                             <i class="fa-solid fa-building"></i>
                             <span className = 'title'>{user.first_name} {user.last_name}</span>
                         </div>
-                        <Link to='/employee/dashboard/' className = 'card'>
-                            <i class="fa-solid fa-users"></i>
-                            <span className = 'title'>Organizations</span>
+                        <Link to='/client/dashboard/' className = 'card'>
+                            <i class="fa-solid fa-chalkboard"></i>
+                            <span className = 'title'>Organizations & Partnerships</span>
                         </Link>
-                        <Link to='/employee/courses' className = 'card'>
-                             <i class="fa-solid fa-chalkboard"></i>
-                            <span className = 'title'>Your Courses</span>
-                        </Link>
+                       
                         
                        
-                        <Link to={`#`} className = 'card'>
+                        <Link to={`${employeeProfile.exist ? '/client/profile/' : '/client/profile/create'}`} className = 'card'>
                             <i className="fa-solid fa-gear"></i>
                             <span className = 'title'>Settings </span>
                         </Link>
@@ -89,11 +113,11 @@ const EmployeeProfile = ()=>{
                         <div className='author-container'>
                              <div className='profile-container'>
                                 <div className='caption'>Your Profile</div>
-                                <img src={`${apiUrl}${profile.picture}`} alt = 'instructor' />
+                                <img src={`${profile.picture}`} alt = 'instructor' />
                                 <div className='author-details'>
                                     <div className='name'>
                                         {user.first_name} {user.last_name}
-                                        <Link className='profile-edit' to='/employee/profile/edit/'>
+                                        <Link className='profile-edit' to='/client/profile/edit/'>
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </Link>
                                     </div>
@@ -111,11 +135,7 @@ const EmployeeProfile = ()=>{
                                 
                                     <div className='description'>
                                     
-                                    <ReactQuill
-                                    value={profile.biography}
-                                        readOnly={true}
-                                        theme={"bubble"}
-                                    />
+                                    
 
 
                                     </div>
@@ -129,4 +149,4 @@ const EmployeeProfile = ()=>{
     );
 };
 
-export default EmployeeProfile;
+export default ClientProfile;

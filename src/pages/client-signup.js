@@ -6,18 +6,26 @@ import { Autoplay,Pagination,Navigation } from 'swiper/modules';
 //import Header from '../components/header';
 import 'swiper/swiper-bundle.css';
 import '../styles/login.css';
+import logo2 from '../images/logo.png';
 import hero1 from '../images/designer1.svg';
 import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
 import logo from '../images/logo192.png';
 import apiUrl from '../components/api-url';
 import { useDispatch} from 'react-redux';
-import DesktopLogout from './desktop-logout';
 import { setUser, setLoading } from '../actions/user-action'; // Import setUser and setLoading actions
+
+
+
 //import hero1 from '../styles/hero1.jpg';
 
-const  InstructorLogin = ()=>{
+const  ClientSignup = ()=>{
     const dispatch = useDispatch();
+    const [fname, setFname] = useState('');
+    const [lname, setLname] = useState('');
+    const [ConfirmPassword, setConfirmPassword] = useState('');
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -25,19 +33,28 @@ const  InstructorLogin = ()=>{
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
-    };
+    
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setErrorMessage('');
         setIsLoading(!isLoading);
+        if (password !== ConfirmPassword ) {
+            // Redirect to the login page
+            setIsLoading(isLoading);
+            setErrorMessage(`Password mismatch.`);
+           
+            return; // Stop further execution of useEffect
+        }
 
         try {
            
-            const response = await axios.post(`${apiUrl}/instructor/login/`, {
-            email,
-            password,
+            const response = await axios.post(`${apiUrl}/client/signup/`, {
+                first_name: fname,
+                last_name: lname,
+                email,
+                password,
+                ConfirmPassword,
             });
 
             if (response.data.success) {
@@ -45,8 +62,8 @@ const  InstructorLogin = ()=>{
 
                 // Redirect to the home page
                 setTimeout(() => {
-                   
-                    navigate('/instructor/dashboard/');
+                    console.log('hello');
+                    navigate('/client/dashboard/'); // Change '/' to the actual path of your home page
                 }, 2000); // 2000 milliseconds (2 seconds) delay
             } else {
                 console.error('Signup failed:',response.data.errors);
@@ -68,12 +85,30 @@ const  InstructorLogin = ()=>{
         }
     };
 
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+    const toggleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword(!showConfirmPassword);
+    };
+   
+    const handleFnameChange = (event) => {
+        setFname(event.target.value);
+    };
+    
+    const handleLnameChange = (event) => {
+        setLname(event.target.value);
+    };
+
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
     };
     
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
+    };
+    const handleConfirmPasswordChange = (event) => {
+        setConfirmPassword(event.target.value);
     };
     const slides = [
         hero1,
@@ -128,13 +163,22 @@ const  InstructorLogin = ()=>{
                         <form className="form-container" onSubmit={handleSubmit}>
                             <div className='form-logo'>
                                 <span>HRMS</span> 
+                                <img className='auth-logo' src={logo2} alt = 'logo2' />
                             </div>
                             <div className='form-header'>
                                
-                                <span>Login</span>
+                                <span>Client Signup</span>
                                 
                             </div>
                             {errorMessage && <div className="error-message">{errorMessage}</div>}
+                            <div className={`form-group ${fname ? 'active' : ''}`}>
+                                <input type="text" id="fname" value={fname} onChange = {handleFnameChange} required />
+                                <label htmlFor="fname">First name</label>
+                            </div>
+                            <div className={`form-group ${lname ? 'active' : ''}`}>
+                                <input type="text" id="lname" value={lname} onChange = {handleLnameChange} required />
+                                <label htmlFor="lname">last name</label>
+                            </div>
                             <div className={`form-group ${email ? 'active' : ''}`}>
                                 <input type="text" id="email" value={email} onChange = {handleEmailChange} required />
                                 <label htmlFor="email">Email</label>
@@ -146,11 +190,19 @@ const  InstructorLogin = ()=>{
                                     <i class={`fa-solid ${showPassword ? 'fa-eye-slash' : 'fa-eye' }`}></i>
                                 </div>
                             </div>
+                            <div className={`form-group ${ConfirmPassword ? 'active' : ''}`}>
+                                <input  type={showConfirmPassword ? 'text' : 'password'} id="confirm-password" value={ConfirmPassword} onChange = {handleConfirmPasswordChange} required />
+                                <label htmlFor="password">Confirm Password</label>
+                                <div className='eye-icon' onClick={toggleConfirmPasswordVisibility}>
+                                    <i class={`fa-solid ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye' }`}></i>
+                                </div>
+                            </div>
+
                             
 
                             <div className='btn-wrapper'>
                                 <button type="submit">
-                                    Login
+                                    signup
                                     {isLoading ? <div className="loader"></div> : '' }
                                     
                                 </button>
@@ -163,4 +215,4 @@ const  InstructorLogin = ()=>{
     );
 };
 
-export default InstructorLogin;
+export default ClientSignup;

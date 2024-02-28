@@ -1,65 +1,60 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import apiUrl from '../components/api-url';
 import { Swiper, SwiperSlide, } from 'swiper/react';
 import { Autoplay,Pagination,Navigation } from 'swiper/modules';
 //import Header from '../components/header';
+import DesktopLogout from './desktop-logout';
 import 'swiper/swiper-bundle.css';
 import '../styles/employer-dashboard.css';
-import '../styles/organizations.css';
+import '../styles/instructor.css';
 import Header from '../components/header';
-import DesktopLogout from './desktop-logout';
 import hero1 from '../images/designer1.svg';
 import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
 import logo from '../images/logo192.png';
+import apiUrl from '../components/api-url';
 //import hero1 from '../styles/hero1.jpg';
 
-const EmployeeDashboard = ()=>{
+const ClientDashboard = ()=>{
     const user = useSelector((state) => state.user.user);
+    const auth = useSelector(state => state.user);
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(false);
     const [organizations,setOrganizations] = useState([]);
-    const navigate = useNavigate();
-    const [openModalIndex, setOpenModalIndex] = useState(null);
+    const [loadOrg,setLoadOrg] = useState(false);
+    //const [loading, setLoading] = useState(true);
     const [employeeProfile,setEmployeeProfile] = useState({});
-   
     
-
-    const handleEllipsisClick = (event,index) => {
-        event.preventDefault();
-        setOpenModalIndex(openModalIndex === index ? null : index);
-    };
-
-
-    
-    const fetchEmployeeOrganizations = async () => {
-        try {
-            const response = await axios.get(`${apiUrl}/employee/organization/list/`, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
-                },
-            });
-            //console.log(response.data.all_courses)
-            setOrganizations(response.data.all_organizations);
-            //setLoading(false);
-        } catch (error) {
-            console.error('Error fetching user courses:', error);
-            //setLoading(false);
-        }
-    };
+    const navigate = useNavigate();
     useEffect(() => {
-
-       
-        if (user=== null || user?.isEmployer === true ) {
+        if (auth.user === null ) {
             // Redirect to the login page
             navigate('/');
-            return; // Stop further execution of useEffect
+            return ;
         }
+        const fetchOrganizations = async () => {
+            setLoadOrg(true);
+            try {
+                const response = await axios.get(`${apiUrl}/client-organizations/list/`, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                    },
+                });
+                //console.log(response.data.all_courses)
+                setOrganizations(response.data.all_organizations);
+                setLoadOrg(false);
+                //setLoading(false);
+            } catch (error) {
+                console.error('Error fetching user courses:', error);
+                //setLoading(false);
+            }
+        };
         const fetchProfileData = async () => {
             try {
-              const response = await axios.get(`${apiUrl}/employee/profile/fetch/`,{
+              const response = await axios.get(`${apiUrl}/client/profile/fetch/`,{
                 headers: {
                     Authorization: `Token ${user?.auth_token}`,
                 },
@@ -83,18 +78,10 @@ const EmployeeDashboard = ()=>{
               console.error('Errors:', error);
             }
         };
-        
-      
-      
-        fetchEmployeeOrganizations();
         fetchProfileData();
-    }, [user,navigate]);
+        fetchOrganizations();
+    }, [user]);
 
-    
-
-  
-    
-   
 
     return(
         <div className ='page-wrapper'>
@@ -104,19 +91,18 @@ const EmployeeDashboard = ()=>{
                     <div className = 'box1-wrapper'>
                         <div className = 'card organization' >
                             <i class="fa-solid fa-building"></i>
-                            <span className = 'title'>{user.first_name} {user.last_name}</span>
+                            <span className = 'title'>{user?.first_name} {user?.last_name}</span>
                         </div>
-                        <Link to='/employee/dashboard/' className = 'card'>
-                            <i class="fa-solid fa-users"></i>
-                            <span className = 'title'>Organizations</span>
+                        <Link to='/client/dashboard/' className = 'card'>
+                            <i class="fa-solid fa-chalkboard"></i>
+                            <span className = 'title'>Organizations & Partnerships</span>
                         </Link>
-                        <Link to='/employee/courses' className = 'card'>
-                             <i class="fa-solid fa-chalkboard"></i>
-                            <span className = 'title'>Your Courses</span>
+                        <Link to='/' className = 'card'>
+                            <i class="fa-solid fa-chalkboard"></i>
+                            <span className = 'title'>Recents Invites</span>
                         </Link>
-                        
                        
-                        <Link to={`${employeeProfile.exist ? '/employee/profile/' : '/employee/profile/create'}`} className = 'card'>
+                        <Link to={`${employeeProfile.exist ? '/client/profile/' : '/client/profile/create'}`} className = 'card'>
                             <i className="fa-solid fa-gear"></i>
                             <span className = 'title'>Settings </span>
                         </Link>
@@ -126,58 +112,59 @@ const EmployeeDashboard = ()=>{
                         </Link>
                     </div>
                     <div className = 'box2-wrapper' >
-                        <DesktopLogout />
+                       <DesktopLogout />
                     </div>
                 </div>
                 <div className='container-2'>
                     <div className = "container-2-wrapper">
+                    <div className = "container-2-wrapper">
                         <div className='employer-organizations'>
                             <div class = 'org'>
-                                Your organizations
+                                Your Partnerships
                             </div>
-                           <div></div>
+                            <div className='creat-btn' ></div>
                         </div>
-                        {organizations.length > 0 ? (
+                        {loadOrg ? (
+                           <h4>Loading....</h4>
+                        ):
+                        (
+                            <>
+                             {organizations.length > 0 ? (
                             <div className='apps-container'>
                             {organizations.map((data, index) => (
-                                <Link to={`/employee/organization/dashboard/${data.id}/${data.organization}/`} className='cards organization-card' key={index}>
+                                <Link to={`/client/organization/${data.id}/${data.name}/`} className='cards organization-card' key={index}>
                                 <div className='icon hrms-icon'>
                                     <img src={`${data.logo}`} alt={data.name} />
                                 </div>
                                 <div className='text-wrapper'>
-                                    <div className='title-header'>{data.organization}</div>
+                                    <div className='title-header'>{data.name}</div>
                                     <p>{data.overview}</p>
                                     <div className='employee-count'>
-                                        <i class="fa-solid fa-users"></i>
-                                        <span>({data.department})</span>
+                                        
                                    
                                     </div>
                                     
                                     
                                 </div>
-                                <div className='chevron-card' onClick={(event) => handleEllipsisClick(event,index)}>
-                                    <i className="fa-solid fa-ellipsis-vertical"></i>
+                                <div className='chevron-card' >
+                                  
                                 </div>
-                                {openModalIndex === index && (
-                                    <div className='option-modal'>
-                                    {/* Users should be able to click on edit tab to edit the specific organization */}
-                                    <div className='option-card' >Request</div>
-                                    <div className='option-card' >View</div>
-                                   
-                                    </div>
-                                )}
+                                
                                 </Link>
                             ))}
                             </div>
                         ) : (
-                            <h4>Loading...</h4>
+                            <h4>You don't have  any partnership yet.</h4>
                         )}
+                            </>
+                        )}
+                       
+                    </div>
                     </div>
                 </div>
             </div>
-           
         </div>
     );
 };
 
-export default EmployeeDashboard;
+export default ClientDashboard;

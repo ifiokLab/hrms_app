@@ -36,13 +36,40 @@ import EditEmployeeProfile from './pages/employee-profile-edit';
 import CreateEmployerProfile from './pages/employer-profile-create';
 import EmployerProfile from './pages/employer-profile';
 import EditEmployerProfile from './pages/employer-profile-edit';
-
+import Logout from './pages/logout';
+import ClientSignup from './pages/client-signup';
+import ClientDashboard from './pages/client-dashboard';
+import CreateClientProfile from './pages/client-profile-create';
+import ClientProfile from './pages/client-profile';
+import EditClientProfile from './pages/client-profile-edit';
+import ClientInvite from './pages/client-invite';
+import EmployeeInvite from './pages/employee-invitation';
+import Expired from './pages/expired';
+import ClientOrganization from './pages/client-organization';
+import  EmployeeTimesheetEdit from './pages/employee-timesheet-edit';
+import  EmployeeTimesheetList from './pages/employee-timesheet-list';
+import EmployeeTimesheetDetail from './pages/employee-timesheet-detail';
+import StaffsTimesheetList from './pages/staff-timesheet-list';
 
 function App() {
   return (
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<AdminLogin />} />
+      <Route path="staffs/timesheet/:Id/:userId/:name/list/" element={<StaffsTimesheetList  />} />
+      <Route path="employee/timesheet/:Id/:userId/:name/list/" element={<EmployeeTimesheetList  />} />
+      <Route path="employee/timesheet/detail/:timesheet_id/:Id/:name/" element={<EmployeeTimesheetDetail  />} />
+      <Route path="employee/timesheet/edit/:timesheet_id/:Id/:name/" element={<EmployeeTimesheetEdit  />} />
+      <Route path="expired/" element={<Expired />} />
+      <Route path="client/organization/:Id/:name/" element={<ClientOrganization  />} />
+      <Route path="client/dashboard/" element={<ClientDashboard />} />
+      <Route path="client/profile/create/" element={<CreateClientProfile />} />
+      <Route path="client/profile/edit/" element={<EditClientProfile />} />
+      <Route path="client/profile/" element={<ClientProfile />} />
+      <Route path="client/signup/" element={<ClientSignup />} />
+      <Route path="employee-invite/:invitation_code/" element={<EmployeeInvite />} />
+      <Route path="client/:invitation_code/" element={<ClientInvite />} />
+      <Route path="logout" element={<Logout />} />
       <Route path="employer/profile/edit/" element={<EditEmployerProfile />} />
       <Route path="employer/profile/" element={<EmployerProfile />} />
       <Route path="employer/profile/create/" element={<CreateEmployerProfile />} />

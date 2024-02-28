@@ -9,12 +9,13 @@ import 'swiper/swiper-bundle.css';
 import '../styles/employer-dashboard.css';
 import Header from '../components/header';
 import '../styles/snackbar.css';
+import DesktopLogout from './desktop-logout';
 
 //import hero1 from '../styles/hero1.jpg';
 
 const EmployeeOrganizationDashboard = ()=>{
     const user = useSelector((state) => state.user.user);
-    const { Id } = useParams();
+    const { Id,name } = useParams();
     const [organization,setOrganization] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -39,6 +40,103 @@ const EmployeeOrganizationDashboard = ()=>{
     const [snackbarStatus, setsnackbarStatus] = useState('');
     const [payrollHistory,setPayrollHistory] = useState([]);
     const [employeeProfile,setEmployeeProfile] = useState({});
+    const [clients,setClients] = useState([]);
+    const [formData, setFormData] = useState({
+        client: '',
+        organization:Id,
+        start_date: '',
+        end_date: '',
+        hours_worked_sat: null,
+        hours_worked_sun: null,
+        hours_worked_mon: null,
+        hours_worked_tue: null,
+        hours_worked_wed: null,
+        hours_worked_thur: null,
+        hours_worked_fri: null,
+        
+        allowance_sat: null,
+        allowance_sun: null,
+        allowance_mon: null,
+        allowance_tue: null,
+        allowance_wed: null,
+        allowance_thur: null,
+        allowance_fri: null,
+
+        activity_description_sat: '',
+        activity_description_sun: '',
+        activity_description_mon: '',
+        activity_description_tue: '',
+        activity_description_wed: '',
+        activity_description_thur: '',
+        activity_description_fri: '',
+        total_hours: 0, // Initialize total_hours
+    });
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+            total_hours: calculateTotalHours({ ...formData, [name]: value }), // Update total hours when any day's hours are changed
+        });
+        console.log('FormData:', formData); // Log formData to check the values
+        console.log('Total Hours:', calculateTotalHours({ ...formData, [name]: value })); // Log total hours calculation
+    };
+    
+
+    const calculateTotalHours = (data) => {
+        let total = 0;
+       
+        // Calculate total hours for each day and add to total
+        for (const [key, value] of Object.entries(data)) {
+            if (key.startsWith('hours_worked_') && value !== null && !isNaN(value)) {
+                total += parseFloat(value);
+            }
+        }
+        return total;
+    };
+
+    const  handleGeneralTimesheetSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(!isLoading);
+        setShowSnackbar(showSnackbar);
+       
+       
+      
+        
+        try {
+            const sanitizedFormData = Object.fromEntries(
+                Object.entries(formData).map(([key, value]) => [key, value === null ? '' : value])
+            );
+            const totalHours = calculateTotalHours(formData); 
+            setFormData((prevData) => ({
+                ...prevData,
+                total_hours: totalHours,
+            }));
+
+            console.log('filteredFormData:', sanitizedFormData);    
+           
+            const response = await axios.post(`${apiUrl}/create-time-sheet/`, sanitizedFormData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                },
+            });
+            console.log('TimeSheet created:', response.data);
+            setIsLoading(isLoading);
+            toggleTimeSheetModal();
+            setsnackbarStatus('success');
+            setShowSnackbar(!showSnackbar);
+            
+            fetchTimeSheet();
+            
+            // Do something after successful submission
+        } catch (error) {
+            setsnackbarStatus('fail')
+            console.error('Error creating TimeSheet:', error);
+        }
+    };
+
+   
 
     
     const toggleTimeSheetModal = ()=>{
@@ -210,6 +308,7 @@ const EmployeeOrganizationDashboard = ()=>{
         }
     };
    
+   
 
     useEffect(() => {
 
@@ -226,6 +325,22 @@ const EmployeeOrganizationDashboard = ()=>{
               setOrganization(response.data);
             } catch (error) {
               console.error('Error fetching organization:', error.message);
+            }
+        };
+        const fetchClients = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/clients/list/${Id}`, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                    },
+                });
+                //console.log(response.data.all_courses)
+                setClients(response.data.all_clients);
+              
+            } catch (error) {
+                console.error('Error fetching clients:', error);
+                //setLoading(false);
             }
         };
         const fetchProfileData = async () => {
@@ -263,6 +378,8 @@ const EmployeeOrganizationDashboard = ()=>{
         fetchRequest();
         fetchTimeSheet();
         fetchPayrollHistory();
+        fetchClients();
+        
         
     }, [Id,user,navigate]);
    
@@ -300,10 +417,7 @@ const EmployeeOrganizationDashboard = ()=>{
                         </Link>
                     </div>
                     <div className = 'box2-wrapper' >
-                        <Link className = 'card'>
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                            <span className = 'title'>Logout</span>
-                        </Link>
+                       <DesktopLogout />
                     </div>
                 </div>
                 <div className='container-2'>
@@ -312,14 +426,22 @@ const EmployeeOrganizationDashboard = ()=>{
                         <div className='box1'>
                             <div className='box1-logo'>
                                 <img src={`${organization.logo}`} alt = {organization.name}/>
-                                <div className='org-name'>{organization.name}</div>
+                                <div className='org-name'>{organization.name} </div>
                             </div>
                         </div>
                         <div className='box2'>
                             <div className={`tabs ${openSlideSections === 0 ? 'active' :''}`} onClick={() => toggleSlider(0)}>TimeSheet</div>
+                            {organization.organization_type === 'HEALTH' ? (
+                                 <div className={`tabs ${openSlideSections === 4 ? 'active' :''}`} onClick={() => toggleSlider(4)}>Client List</div>
+                            ) 
+                            :(
+                                ""
+                            ) 
+                            }
+                           
                             <div className={`tabs ${openSlideSections === 1 ? 'active' :''}`} onClick={() => toggleSlider(1)}>Requests</div>
-                            <div className={`tabs ${openSlideSections === 2 ? 'active' :''}`} onClick={() => toggleSlider(2)}>Notifications</div>
-                            <div className={`tabs ${openSlideSections === 3 ? 'active' :''}`} onClick={() => toggleSlider(3)}>Payroll History</div>
+                           {/* <div className={`tabs ${openSlideSections === 2 ? 'active' :''}`} onClick={() => toggleSlider(2)}>Notifications</div>
+                            <div className={`tabs ${openSlideSections === 3 ? 'active' :''}`} onClick={() => toggleSlider(3)}>Payroll History</div> */}
                             
                            
                         </div>
@@ -331,38 +453,83 @@ const EmployeeOrganizationDashboard = ()=>{
                                 <div className='time-btn' onClick={toggleTimeSheetModal}>
                                     Create TimeSheet
                                 </div>
+                               
                             </div>
-                            <table>
+                            {organization.organization_type === 'HEALTH' ? (
+                                <table>
                                 <thead>
                                     <tr>
                                     <th>ID</th>
-                                    <th>Date</th>
-                                    <th>Name</th>
+                                    <th>Start date</th>
+                                    <th>End date</th>
                                     <th>Organization</th>
-                                    <th>Task name</th>
-                                    <th>Description</th>
+                                    <th>Client</th>
                                     <th>Hours worked</th>
-                                    <th>Status</th>
+                                    <th>Client Approved</th>
+                                    <th>Organization Approved</th>
+                                    <th>Detail</th>
                                     {/* Add more columns as needed */}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {timeSheet.map((employee) => (
                                     <tr key={employee.id}>
-                                        <td>#{employee.organization}{employee.id}</td>
-                                        <td>{employee.date}</td>
-                                        <td>{employee.user}</td>
-                                        <td>{employee.organization}</td>
-                                        <td>{employee.task_name}</td>
-                                        <td className='table-description'>{employee.activity_description}</td>
+                                        <td>#{employee.id}</td>
+                                        <td>{employee.start_date}</td>
+                                        <td>{employee.end_date}</td>
                                        
+                                        <td>{employee.organization}</td>
+                                        <td>{employee.client}</td>
+                                       
+                
                                         <td>{employee.hours_worked}</td>
-                                        <td>{employee.status}</td>
+                                        <td>{employee.client_approved}</td>
+                                        <td>{employee.organization_approved}</td>
+                                        <td><Link to ={`/employee/timesheet/edit/${employee.id}/${Id}/${name}/`}>view</Link></td>
                                     
                                     </tr>
                                     ))}
                                 </tbody>
                             </table>
+                            ):
+                            (
+                                <table>
+                                <thead>
+                                    <tr>
+                                    <th>ID</th>
+                                    <th>Start date</th>
+                                    <th>End date</th>
+                                    <th>Organization</th>
+                                   
+                                    <th>Hours worked</th>
+                                  
+                                    <th>Organization Approved</th>
+                                    <th>Detail</th>
+                                    {/* Add more columns as needed */}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {timeSheet.map((employee) => (
+                                    <tr key={employee.id}>
+                                        <td>#{employee.id}</td>
+                                        <td>{employee.start_date}</td>
+                                        <td>{employee.end_date}</td>
+                                       
+                                        <td>{employee.organization}</td>
+                                       
+                                       
+                
+                                        <td>{employee.hours_worked}</td>
+                                       
+                                        <td>{employee.organization_approved}</td>
+                                        <td><Link to ={`/employee/timesheet/edit/${employee.id}/${Id}/${name}/`}>view</Link></td>
+                                    
+                                    </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            )
+                        }
                          </div>
                        )}
                         {openSlideSections === 1 && (
@@ -442,6 +609,44 @@ const EmployeeOrganizationDashboard = ()=>{
                        
                       </div>
                         )}
+                        {openSlideSections === 4 && (
+                        <div className='organization-body'>
+                            <div className = 'timesheet'>
+                                <div className='body-title'>Clients</div>
+                                <div className='time-bt' >
+                                  
+                                </div>
+                            </div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                    <th>ID</th>
+                                   
+                                    <th>Name</th>
+                                    <th>Organization</th>
+                                    <th>Hourly rate</th>
+                                    
+                                    {/* Add more columns as needed */}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {clients.map((employee) => (
+                                    <tr key={employee.id}>
+                                        <td>#{employee.organization}{employee.id}</td>
+                                        <td>{employee.name}</td>
+                                        <td>{employee.organization}</td>
+                                        <td>${employee.hourly_rate}/hr</td>
+                                       
+                                
+                                        
+                                    
+                                    </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                         </div>
+                       )}
+                        
                        
                       
                       
@@ -450,33 +655,61 @@ const EmployeeOrganizationDashboard = ()=>{
                 </div>
             </div>
 
-            <form className={`organization-form ${timesheetModal ? 'timesheet-modal' : ''}`} onSubmit = {handleTimeSheet} >
+           
+            <form className={`organization-form ${requestModal ? 'timesheet-modal' : ''}`} onSubmit = {handleRequest} >
                 <div className='form-wrapper'>
                     <div className='form-header'>
-                        <div className='title'>Create timesheet</div>
-                        <div className='icon' onClick={toggleTimeSheetModal}>
+                        <div className='title'>Create request</div>
+                        <div className='icon' onClick={toggleRequestModal}>
                             <i class="fa-solid fa-circle-xmark"></i>
                         </div>
                     </div>
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
                     <div className='form-body'>
-                        <div className={`form-group ${taskName ? 'active' : ''}`}>
-                            <input id='task-name' type='text' value={taskName} onChange = {(event)=>setTaskName(event.target.value)} required />
-                            <label htmlFor="task-name">Task name</label>
+                        <div className={`form-group ${requestType ? 'active' : ''}`}>
+                            <select
+                                id="requestType"
+                                value={requestType}
+                                onChange={(e) => setRequestType(e.target.value)}
+                                >
+                                {/* Add options for request types */}
+                                <option value="Vacation">Vacation</option>
+                                <option value="Sick Leave">Sick Leave</option>
+                                <option value="Work from Home">Work from Home</option>
+                                <option value="Business Travel">Business Travel</option>
+                                <option value="Training">Training</option>
+                                <option value="Maternity Leave">Maternity Leave</option>
+                                <option value="Paternity Leave">Paternity Leave</option>
+                                <option value="Unpaid Leave">Unpaid Leave</option>
+                                <option value="Remote Work">Remote Work</option>
+                                <option value="Conference Attendance">Conference Attendance</option>
+                                <option value="Family Emergency">Family Emergency</option>
+                                <option value="Personal Development">Personal Development</option>
+                                <option value="Community Service">Community Service</option>
+                                <option value="Study Leave">Study Leave</option>
+                                <option value="Flex Time">Flex Time</option>
+                                <option value="Sabbatical">Sabbatical</option>
+                                <option value="Resignation">Resignation</option>
+                                <option value="Other">Other</option>
+                                {/* Add other request types as needed */}
+                            </select>
+                            <label htmlFor="requestType">Request</label>
                         </div>
-                        <div className={`form-group ${ activityDescription ? 'active' : ''}`}>
-                            <textarea id="activity-description" value={activityDescription} onChange = {(event)=>setActivityDescription(event.target.value)} required></textarea>
-                          
-                            <label htmlFor="activity-description">Activity description</label>
+                        <div className={`form-group ${ reason ? 'active' : ''}`}>
+                            <textarea id="reason" value={reason}  onChange={(e) => setReason(e.target.value)} required></textarea>
+                        
+                            <label htmlFor="reason">Reason</label>
                         </div>
-                        <div className={`form-group ${hoursWorked ? 'active' : ''}`}>
-                            <input id='hours-worked'  type='number' value={hoursWorked} onChange = {(event)=>setHoursWorked(event.target.value)} required />
-                            <label htmlFor="hours-worked">hours worked</label>
+                    
+                        <div className={`form-group ${startDate ? 'active' : ''}`}>
+                            <div className='date'>start date:</div>
+                            <input id='start-date'  type='date' value={startDate} onChange = {(event)=>setStartDate(event.target.value)} required />
+                        
                         </div>
-                        <div className={`form-group ${endingDate ? 'active' : ''}`}>
-                            <div className='date'>Date:</div>
-                            <input id='ending-date'  type='datetime-local' value={endingDate} onChange = {(event)=>setEndingDate(event.target.value)} required />
-                           
+                        <div className={`form-group ${endDate ? 'active' : ''}`}>
+                            <div className='date'>End date:</div>
+                            <input id='end-date'  type='date' value={endDate} onChange = {(event)=>setEndDate(event.target.value)} required />
+                        
                         </div>
                         
                         
@@ -491,74 +724,293 @@ const EmployeeOrganizationDashboard = ()=>{
                     </div>
                 </div>
             </form>
-            <form className={`organization-form ${requestModal ? 'timesheet-modal' : ''}`} onSubmit = {handleRequest} >
-            <div className='form-wrapper'>
-                <div className='form-header'>
-                    <div className='title'>Create request</div>
-                    <div className='icon' onClick={toggleRequestModal}>
+            <form className={`organization-form ${timesheetModal ? 'timesheet-modal' : ''}`} onSubmit={handleGeneralTimesheetSubmit}>
+            <div className="form-wrapper" id="timesheet-table-wrapper">
+                <div className="form-header">
+                    <div className="title">Create TimeSheet</div>
+                    <div className="icon" onClick={toggleTimeSheetModal}>
                         <i class="fa-solid fa-circle-xmark"></i>
                     </div>
                 </div>
-                {errorMessage && <div className="error-message">{errorMessage}</div>}
-                <div className='form-body'>
-                    <div className={`form-group ${requestType ? 'active' : ''}`}>
-                        <select
-                            id="requestType"
-                            value={requestType}
-                            onChange={(e) => setRequestType(e.target.value)}
-                            >
-                            {/* Add options for request types */}
-                            <option value="Vacation">Vacation</option>
-                            <option value="Sick Leave">Sick Leave</option>
-                            <option value="Work from Home">Work from Home</option>
-                            <option value="Business Travel">Business Travel</option>
-                            <option value="Training">Training</option>
-                            <option value="Maternity Leave">Maternity Leave</option>
-                            <option value="Paternity Leave">Paternity Leave</option>
-                            <option value="Unpaid Leave">Unpaid Leave</option>
-                            <option value="Remote Work">Remote Work</option>
-                            <option value="Conference Attendance">Conference Attendance</option>
-                            <option value="Family Emergency">Family Emergency</option>
-                            <option value="Personal Development">Personal Development</option>
-                            <option value="Community Service">Community Service</option>
-                            <option value="Study Leave">Study Leave</option>
-                            <option value="Flex Time">Flex Time</option>
-                            <option value="Sabbatical">Sabbatical</option>
-                            <option value="Resignation">Resignation</option>
-                            <option value="Other">Other</option>
-                            {/* Add other request types as needed */}
-                        </select>
-                        <label htmlFor="requestType">Request</label>
-                    </div>
-                    <div className={`form-group ${ reason ? 'active' : ''}`}>
-                        <textarea id="reason" value={reason}  onChange={(e) => setReason(e.target.value)} required></textarea>
-                      
-                        <label htmlFor="reason">Reason</label>
-                    </div>
+                <div className="form-group">
+                    {organization.organization_type === 'HEALTH' ? (
+                            <>
+                                <label htmlFor="client">Client:</label>
+                                <select
+                                    id="client"
+                                    name="client"
+                                    value={formData.client}
+                                    onChange={handleChange}
+                                    required
+                                >
+                                    <option value="" disabled>Select Clients</option>
+                                    {clients.map((client) => (
+                                        <option key={client.id} value={client.id}>
+                                            {client.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </>
+                        ):
+                        (
+                            ""
+                        )
+                    }
                    
-                    <div className={`form-group ${startDate ? 'active' : ''}`}>
-                        <div className='date'>start date:</div>
-                        <input id='start-date'  type='date' value={startDate} onChange = {(event)=>setStartDate(event.target.value)} required />
-                       
-                    </div>
-                    <div className={`form-group ${endDate ? 'active' : ''}`}>
-                        <div className='date'>End date:</div>
-                        <input id='end-date'  type='date' value={endDate} onChange = {(event)=>setEndDate(event.target.value)} required />
-                       
-                    </div>
-                    
-                    
+                </div>
+                <div className="form-group">
+                    <div>Start Date:</div>
+                    <input
+                        type="datetime-local"
+                        id="start_date"
+                        name="start_date"
+                        value={formData.start_date}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <div>End Date:</div>
+                    <input
+                        type="datetime-local"
+                        id="end_date"
+                        name="end_date"
+                        value={formData.end_date}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <table id='timesheet-table' >
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Sat</th>
+                            <th>Sun</th>
+                            <th>Mon</th>
+                            <th>Tue</th>
+                            <th>Wed</th>
+                            <th>Thur</th>
+                            <th>Fri</th>
+                            <th>Total hours</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                            <td>Hours</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="hours_worked_sat"
+                                    value={formData.hours_worked_sat || ''}
+                                    onChange={handleChange}
+                                    placeholder="Enter hours"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="hours_worked_sun"
+                                    value={formData.hours_worked_sun || ''}
+                                    onChange={handleChange}
+                                    placeholder="Enter hours"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="hours_worked_mon"
+                                    value={formData.hours_worked_mon || ''}
+                                    onChange={handleChange}
+                                    placeholder="Enter hours"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="hours_worked_tue"
+                                    value={formData.hours_worked_tue || ''}
+                                    onChange={handleChange}
+                                    placeholder="Enter hours"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="hours_worked_wed"
+                                    value={formData.hours_worked_wed || ''}
+                                    onChange={handleChange}
+                                    placeholder="Enter hours"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="hours_worked_thur"
+                                    value={formData.hours_worked_thur || ''}
+                                    onChange={handleChange}
+                                    placeholder="Enter hours"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="hours_worked_fri"
+                                    value={formData.hours_worked_fri || ''}
+                                    onChange={handleChange}
+                                    placeholder="Enter hours"
+                                />
+                            </td>
+                            {/* Calculate total hours */}
+                            <td>{formData.total_hours}</td>
+                        </tr>
 
-                    <div className='btn-wrapper'>
-                        <button type="submit">
-                            Create
-                            {isLoading ? <div className="loader"></div> : '' }
-                                
-                        </button>
-                    </div>
+                        <tr>
+                            <td>Description</td>
+                            <td>
+                                <input
+                                    type="text"
+                                    name="activity_description_sat"
+                                    value={formData.activity_description_sat}
+                                    onChange={handleChange}
+                                    placeholder="Description"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    name="activity_description_sun"
+                                    value={formData.activity_description_sun}
+                                    onChange={handleChange}
+                                    placeholder="Description"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    name="activity_description_mon"
+                                    value={formData.activity_description_mon}
+                                    onChange={handleChange}
+                                    placeholder="Description"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    name="activity_description_tue"
+                                    value={formData.activity_description_tue}
+                                    onChange={handleChange}
+                                    placeholder="Description"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    name="activity_description_wed"
+                                    value={formData.activity_description_wed}
+                                    onChange={handleChange}
+                                    placeholder="Description"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    name="activity_description_thur"
+                                    value={formData.activity_description_thur}
+                                    onChange={handleChange}
+                                    placeholder="Description"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    name="activity_description_fri"
+                                    value={formData.activity_description_fri}
+                                    onChange={handleChange}
+                                    placeholder="Description"
+                                />
+                            </td>
+                           
+                            <td></td> 
+                        </tr>
+                        <tr>
+                            <td>Daily allowance</td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="allowance_sat"
+                                    value={formData.allowance_sat || ''}
+                                    onChange={handleChange}
+                                    placeholder="allowance"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="allowance_sun"
+                                    value={formData.allowance_sun || ''}
+                                    onChange={handleChange}
+                                    placeholder="allowance"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="allowance_mon"
+                                    value={formData.allowance_mon || ''}
+                                    onChange={handleChange}
+                                    placeholder="allowance"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="allowance_tue"
+                                    value={formData.allowance_tue || ''}
+                                    onChange={handleChange}
+                                    placeholder="allowance"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="allowance_wed"
+                                    value={formData.allowance_wed || ''}
+                                    onChange={handleChange}
+                                    placeholder="allowance"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="allowance_thur"
+                                    value={formData.allowance_thur || ''}
+                                    onChange={handleChange}
+                                    placeholder="allowance"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    name="allowance_fri"
+                                    value={formData.allowance_fri || ''}
+                                    onChange={handleChange}
+                                    placeholder="allowance"
+                                />
+                            </td>
+                            {/* Calculate total hours */}
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div className='btn-wrapper-timesheet' >
+                    <button type="submit">
+                        Save
+                        {isLoading ? <div className="loader"></div> : '' }
+                    </button>
                 </div>
             </div>
         </form>
+
         {showSnackbar && (
                 <div className={` ${snackbarStatus==='success' ? 'snackbar-success' :'snackbar-danger'} `}>
                     {snackbarStatus === 'success' ? (
