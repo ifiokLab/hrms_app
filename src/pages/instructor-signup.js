@@ -38,6 +38,13 @@ const  InstructorSignup = ()=>{
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsLoading(!isLoading);
+        if (password !== ConfirmPassword ) {
+            // Redirect to the login page
+            setIsLoading(isLoading);
+            setErrorMessage(`Password mismatch.`);
+           
+            return; // Stop further execution of useEffect
+        }
 
         try {
            

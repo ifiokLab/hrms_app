@@ -68,14 +68,32 @@
       transform: translateX(-50%) translateX(0);
     }
   }
+  @keyframes shakeFadeOffMobile {
+    0% {
+      opacity: 1;
+      visibility: visible;
+     
+    }
+  
+    20%, 80% {
+      opacity: 0.8;
+    }
+  
+    40%, 60% {
+      opacity: .6;
+    }
+  
+    100% {
+      opacity: 0;
+      visibility: hidden;
+     
+    }
+  }
 
 
 @media screen and (max-width:992px){
   .snackbar-danger,.snackbar-success{
-    opacity: 1;
-    visibility: visible;
-    animation: unset; /* 3s duration, forwards to keep the final state */
-  
+    animation: shakeFadeOffMobile 8s forwards; /* 3s duration, forwards to keep the final state */
     /* Additional styles for the shake effect */
     animation-iteration-count: unset;
   }

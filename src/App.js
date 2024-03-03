@@ -50,12 +50,16 @@ import  EmployeeTimesheetEdit from './pages/employee-timesheet-edit';
 import  EmployeeTimesheetList from './pages/employee-timesheet-list';
 import EmployeeTimesheetDetail from './pages/employee-timesheet-detail';
 import StaffsTimesheetList from './pages/staff-timesheet-list';
+import ForgotPassword from './pages/forgot-password';
+import PasswordConfirm from './pages/password-confirm';
 
 function App() {
   return (
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<AdminLogin />} />
+      <Route path="/forgot-password/" element={<ForgotPassword />} />
+      <Route path="/password/reset/confirm/:uuid/:token/" element={<PasswordConfirm />} />
       <Route path="staffs/timesheet/:Id/:userId/:name/list/" element={<StaffsTimesheetList  />} />
       <Route path="employee/timesheet/:Id/:userId/:name/list/" element={<EmployeeTimesheetList  />} />
       <Route path="employee/timesheet/detail/:timesheet_id/:Id/:name/" element={<EmployeeTimesheetDetail  />} />

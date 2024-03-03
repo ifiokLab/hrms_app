@@ -186,6 +186,10 @@ const  AdminLogin = ()=>{
                                     <i class={`fa-solid ${showPassword ? 'fa-eye-slash' : 'fa-eye' }`}></i>
                                 </div>
                             </div>
+                            <div className='forgot-btn-wrapper'>
+                                <Link to='/forgot-password/'>Forgot password?</Link>
+                               
+                            </div>
                             
 
                             <div className='btn-wrapper'>

@@ -51,6 +51,11 @@ const OrganizationDashboard = ()=>{
     const [employeesTimesheetModal,setEmployeesTimesheetModal] = useState(0);
     const [paymentSchedule,setPaymentSchedule] = useState('');
     const [scheduleModal,setScheduleModal] = useState('');
+    const [rateModal,setRateModal] = useState(false);
+    const [organizationRateModal,setOrganizationRateModal] = useState(false);
+    const [rate,setRate] = useState('');
+    const [client,setClient] = useState('');
+    const [clientId,setClientId] = useState('');
     const [scheduleType,setScheduleType] = useState('');
     const [invoiceList,setInvoiceList] = useState([]);
     const [paidModal,setPaidModal] = useState(0);
@@ -64,6 +69,23 @@ const OrganizationDashboard = ()=>{
     const toggleScheduleModal = ()=>{
         setScheduleModal(!scheduleModal);
     }
+    const toggleOrganizationModal = ()=>{
+        setErrorMessage('');
+        setOrganizationRateModal(!organizationRateModal);
+    }
+    const toggleRateModal = (client,hourly_rate,clientId)=>{
+        setClient(client);
+        setRate(hourly_rate);
+        setClientId(clientId);
+        setRateModal(!rateModal);
+    }
+    const closeRateModal = ()=>{
+        setClient('');
+        setRate('');
+        setClientId('');
+        setRateModal(!rateModal);
+    }
+    
     const toggleTimeSheetModal = ()=>{
         setErrorMessage('');
         setTimesheetModal(!timesheetModal);
@@ -373,6 +395,104 @@ const OrganizationDashboard = ()=>{
             setTimeout(() => {
                 setIsLoading(isLoading);
                 setErrorMessage('response.data.message');
+               
+            }, 2000);
+            // Handle unexpected errors
+        }
+    };
+
+    const handleClientRate = async (event) => {
+        event.preventDefault();
+        setIsLoading(!isLoading);
+        setShowSnackbar(false);
+        
+        try {
+            const formData = new FormData();
+            formData.append('clientId', clientId);
+            formData.append('organizationId', Id);
+            formData.append('hourly_rate', rate);
+            const response = await axios.put(`${apiUrl}/client-rate-update/`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                },
+            });
+    
+            if (response.data.success) {
+                setTimeout(() => {
+                    setIsLoading(isLoading);
+                    setClient('');
+                    setClientId('');
+                    setRate('');
+                    setRateModal(!rateModal);
+                    fetchEmployeesTimeSheet();
+                    setsnackbarStatus('success');
+                    setShowSnackbar(true);
+                    //navigate('/');
+                   
+                }, 2000);
+                //console.log('org created successfully:', response.data.course);
+                // Redirect to the home page or do any other actions
+            } else {
+                setErrorMessage('An unknown error occured.');
+                setsnackbarStatus('fail');
+                setShowSnackbar(true);
+                //console.error('Course creation failed:', response.data.message);
+                // Handle failed course creation, e.g., show error messages to the user
+            }
+        } catch (error) {
+            console.error('An error occurred during course creation:', error);
+            setTimeout(() => {
+                setIsLoading(isLoading);
+                setErrorMessage('an error occurred.');
+               
+            }, 2000);
+            // Handle unexpected errors
+        }
+    };
+    const handleOrganizationRate = async (event) => {
+        event.preventDefault();
+        setIsLoading(!isLoading);
+        setShowSnackbar(false);
+        setErrorMessage('');
+        
+        try {
+            const formData = new FormData();
+            formData.append('organizationId', Id);
+            formData.append('hourly_rate', rate);
+            const response = await axios.post(`${apiUrl}/organization-rate-update/`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                },
+            });
+    
+            if (response.data.success) {
+                setTimeout(() => {
+                    setIsLoading(isLoading);
+                   
+                    setRate('');
+                    toggleOrganizationModal();
+                    fetchEmployeesTimeSheet();
+                    setsnackbarStatus('success');
+                    setShowSnackbar(true);
+                    //navigate('/');
+                   
+                }, 2000);
+                //console.log('org created successfully:', response.data.course);
+                // Redirect to the home page or do any other actions
+            } else {
+                setErrorMessage('An unknown error occured.');
+                setsnackbarStatus('fail');
+                setShowSnackbar(true);
+                //console.error('Course creation failed:', response.data.message);
+                // Handle failed course creation, e.g., show error messages to the user
+            }
+        } catch (error) {
+            console.error('An error occurred during course creation:', error);
+            setTimeout(() => {
+                setIsLoading(isLoading);
+                setErrorMessage('an error occurred.');
                
             }, 2000);
             // Handle unexpected errors
@@ -766,11 +886,16 @@ const OrganizationDashboard = ()=>{
                         <div className='organization-body'>
                             <div className = 'timesheet'>
                                 <div className='body-title'>Employee TimeSheet</div>
-                                <div className='time-bt' >
-                                   
+                               {organization.organization_type !== 'HEALTH' ? (
+                                 <div className='time-btn' onClick={toggleOrganizationModal}>
+                                 Set rate
                                 </div>
+                               ):(
+                                <div></div>
+                               )}
                             </div>
-                            <table>
+                            {organization.organization_type === 'HEALTH' ? (
+                                <table>
                                 <thead>
                                     <tr>
                                     
@@ -779,7 +904,9 @@ const OrganizationDashboard = ()=>{
                                     <th>Name</th>
                                     <th>Organization</th>
                                     <th>Client</th>
+                                    <th>Hourly rate</th>
                                     <th>Total hours</th>
+                                    <th>Bill</th>
                                     <th>Client approved</th>
                                     <th>Approve</th>
                                     <th>Detail</th>
@@ -795,9 +922,76 @@ const OrganizationDashboard = ()=>{
                                         <td>{employee.user}</td>
                                         <td>{employee.organization}</td>
                                         <td>{employee.client}</td>
-                                        <td className='table-description'>{employee.total_hours}</td>
-                                       
+                                        <td className='ta'>£{employee.hourly_rate}/hr
+                                        
+                                            <i class="fa-solid fa-pen-to-square" style={{marginLeft:'2px'}} onClick={()=>toggleRateModal(employee.client,employee.hourly_rate,employee.clientId)}></i>
+                                        </td>
+                                        <td className='table-description'>{employee.hours_worked}</td>
+                                        <td >£{employee.bill}</td>
                                         <td>{employee.client_approved}</td>
+                                        <td className={`status ${employeesTimesheetModal === 0 ? 'show' :''}`} onClick={() => toggleEmployeesTimesheetModal(employee.id)} >
+                                            <span>{employee.organization_approved}</span>
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                            {employeesTimesheetModal === employee.id && (
+                                                <div className = 'status-modal'>
+                                                   
+                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Pending',employee.id)}>Pending</div>
+                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Processing',employee.id)}>Processing</div>
+                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Processed',employee.id)}>Processed</div>
+                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Rejected',employee.id)}>Rejected</div>
+                                                </div>
+                                            )}
+                                            
+                                            
+                                        </td>
+                                        <td><Link to ={`/employee/timesheet/detail/${employee.id}/${employee.userId}/${employee.user}/`}>view</Link></td>
+                                        
+                                    
+                                    </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            ) :(
+                                <table>
+                                <thead>
+                                    <tr>
+                                    
+                                    <th>Start Date</th>
+                                    <th>End date</th>
+                                    <th>Name</th>
+                                    <th>Organization</th>
+                                   
+                                  
+                                    <th>Total hours</th>
+                                    <th>Bill</th>
+                                    
+                                    <th>Approve</th>
+                                    <th>Detail</th>
+                                    {/* Add more columns as needed */}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {employeesTimesheet.map((employee) => (
+                                    <tr key={employee.id}>
+                                       
+                                        <td>{employee.start_date}</td>
+                                        <td>{employee.end_date}</td>
+                                        <td>{employee.user}</td>
+                                        <td>{employee.organization}</td>
+                                       
+                                        
+                                        <td className='table-description'>{employee.hours_worked}</td>
+                                        <td >
+                                            {employee.rateExist ? (
+                                                 <>
+                                                 £{employee.rate}
+                                                 </>
+                                            ):(
+                                                <i class="fa-solid fa-pen-to-square" style={{marginLeft:'2px'}} onClick={toggleOrganizationModal}></i>
+                                            )}
+                                           
+                                        </td>
+                                       
                                         <td className={`status ${employeesTimesheetModal === 0 ? 'show' :''}`} onClick={() => toggleEmployeesTimesheetModal(employee.id)} >
                                             <span>{employee.organization_approved}</span>
                                             <i class="fa-solid fa-ellipsis-vertical"></i>
@@ -828,6 +1022,8 @@ const OrganizationDashboard = ()=>{
                                     ))}
                                 </tbody>
                             </table>
+                            )}
+                            
                          </div>
                        )}
                        {openSlideSections === 3 && (
@@ -890,7 +1086,7 @@ const OrganizationDashboard = ()=>{
                        )}
                         {openSlideSections === 4 && (
                          <div className='organization-body'>
-                            <div className='body-title'>Employee List</div>
+                            <div className='body-title'>Invite List</div>
                             <table>
                                 <thead>
                                     <tr>
@@ -1246,6 +1442,68 @@ const OrganizationDashboard = ()=>{
                                 <option  value='Bi-Weekly'>Bi-Weekly</option>
                                 <option  value='Weekly'>Weekly</option>
                             </select>
+                        </div>
+                        
+                        
+
+                        <div className='btn-wrapper'>
+                            <button type="submit">
+                                submit
+                                {isLoading ? <div className="loader"></div> : '' }
+                                    
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <form className={`organization-form ${rateModal ? 'show-member' : ''}`} onSubmit ={handleClientRate}>
+                <div className='form-wrapper'>
+                    <div className='form-header'>
+                        <div className='title'>Set rate</div>
+                        <div className='icon' onClick={closeRateModal }>
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </div>
+                    </div>
+                    {errorMessage && <div className="error-message">{errorMessage}</div>}
+                    <div className='form-body'>
+                        
+                        <div className={`form-group`}>
+                            <div className='client' >Client:{client}</div>
+                        </div>
+                        <div className={`form-group ${rate ? 'active' : ''}`}>
+                            <input id='hours-worked'  type='number' value={rate} onChange = {(event)=>setRate(event.target.value)} required />
+                            <label htmlFor="hours-worked">Rate</label>
+                        </div>
+                        
+                        
+
+                        <div className='btn-wrapper'>
+                            <button type="submit">
+                                submit
+                                {isLoading ? <div className="loader"></div> : '' }
+                                    
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <form className={`organization-form ${organizationRateModal ? 'show-member' : ''}`} onSubmit ={handleOrganizationRate}>
+                <div className='form-wrapper'>
+                    <div className='form-header'>
+                        <div className='title'>Set rate</div>
+                        <div className='icon' onClick={toggleOrganizationModal }>
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </div>
+                    </div>
+                    {errorMessage && <div className="error-message">{errorMessage}</div>}
+                    <div className='form-body'>
+                        
+                        <div className={`form-group`}>
+                            <div className='client' >{organization.name}</div>
+                        </div>
+                        <div className={`form-group ${rate ? 'active' : ''}`}>
+                            <input id='rate'  type='number' value={rate} onChange = {(event)=>setRate(event.target.value)} required />
+                            <label htmlFor="rate">Rate</label>
                         </div>
                         
                         

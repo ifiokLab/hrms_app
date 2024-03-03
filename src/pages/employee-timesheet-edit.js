@@ -19,6 +19,8 @@ const EmployeeTimesheetEdit= ()=>{
     const [organization,setOrganization] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoading2, setIsLoading2] = useState(false);
+    const [isLoading3, setIsLoading3] = useState(false);
    
     const navigate = useNavigate();
    
@@ -122,6 +124,75 @@ const EmployeeTimesheetEdit= ()=>{
             setShowSnackbar(true);
             setsnackbarStatus('success');
             fetchTimeSheet();
+           
+          
+            
+            // Do something after successful submission
+        } catch (error) {
+            setShowSnackbar(true);
+            setsnackbarStatus('fail');
+            console.error('Error creating TimeSheet:', error);
+        }
+    };
+    const  TimesheetSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading2(!isLoading2);
+        setShowSnackbar(false);
+      
+        
+        try {   
+            const sanitizedFormData = Object.fromEntries(
+                Object.entries(formData).map(([key, value]) => [key, value === null ? '' : value])
+            );
+            const totalHours = calculateTotalHours(formData); 
+            setFormData((prevData) => ({
+                ...prevData,
+                total_hours: totalHours,
+            }));
+
+           
+            const response = await axios.put(`${apiUrl}/submit-timesheet-approval/${timesheet_id}/`,sanitizedFormData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                },
+            });
+           
+            setIsLoading2(isLoading2);
+            setShowSnackbar(true);
+            setsnackbarStatus('success');
+            fetchTimeSheet();
+           
+          
+            
+            // Do something after successful submission
+        } catch (error) {
+            setShowSnackbar(true);
+            setsnackbarStatus('fail');
+            console.error('Error creating TimeSheet:', error);
+        }
+    };
+
+    const  TimesheetDelete = async (e) => {
+        e.preventDefault();
+        setIsLoading3(!isLoading3);
+        setShowSnackbar(false);
+      
+        
+        try {   
+           
+            const response = await axios.delete(`${apiUrl}/user-timesheet-delete/${timesheet_id}/`, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                },
+            });
+           
+            setIsLoading3(isLoading3);
+            setShowSnackbar(true);
+            setsnackbarStatus('success');
+            navigate(`/employee/organization/dashboard/${Id}/${name}/`);
+            
            
           
             
@@ -322,6 +393,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.hours_worked_sat || ''}
                                                 onChange={handleChange}
                                                 placeholder="Enter hours"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -331,6 +403,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.hours_worked_sun || ''}
                                                 onChange={handleChange}
                                                 placeholder="Enter hours"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -340,6 +413,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.hours_worked_mon || ''}
                                                 onChange={handleChange}
                                                 placeholder="Enter hours"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -349,6 +423,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.hours_worked_tue || ''}
                                                 onChange={handleChange}
                                                 placeholder="Enter hours"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -358,6 +433,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.hours_worked_wed || ''}
                                                 onChange={handleChange}
                                                 placeholder="Enter hours"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -367,6 +443,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.hours_worked_thur || ''}
                                                 onChange={handleChange}
                                                 placeholder="Enter hours"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -376,6 +453,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.hours_worked_fri || ''}
                                                 onChange={handleChange}
                                                 placeholder="Enter hours"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         {/* Calculate total hours */}
@@ -391,6 +469,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.activity_description_sat}
                                                 onChange={handleChange}
                                                 placeholder="Description"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -400,6 +479,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.activity_description_sun}
                                                 onChange={handleChange}
                                                 placeholder="Description"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -409,6 +489,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.activity_description_mon}
                                                 onChange={handleChange}
                                                 placeholder="Description"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -418,6 +499,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.activity_description_tue}
                                                 onChange={handleChange}
                                                 placeholder="Description"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -427,6 +509,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.activity_description_wed}
                                                 onChange={handleChange}
                                                 placeholder="Description"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -436,6 +519,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.activity_description_thur}
                                                 onChange={handleChange}
                                                 placeholder="Description"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -445,6 +529,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.activity_description_fri}
                                                 onChange={handleChange}
                                                 placeholder="Description"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                     
@@ -459,6 +544,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.allowance_sat || ''}
                                                 onChange={handleChange}
                                                 placeholder="allowance"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -468,6 +554,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.allowance_sun || ''}
                                                 onChange={handleChange}
                                                 placeholder="allowance"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -477,6 +564,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.allowance_mon || ''}
                                                 onChange={handleChange}
                                                 placeholder="allowance"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -486,6 +574,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.allowance_tue || ''}
                                                 onChange={handleChange}
                                                 placeholder="allowance"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -495,6 +584,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.allowance_wed || ''}
                                                 onChange={handleChange}
                                                 placeholder="allowance"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -504,6 +594,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.allowance_thur || ''}
                                                 onChange={handleChange}
                                                 placeholder="allowance"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         <td>
@@ -513,6 +604,7 @@ const EmployeeTimesheetEdit= ()=>{
                                                 value={formData.allowance_fri || ''}
                                                 onChange={handleChange}
                                                 placeholder="allowance"
+                                                disabled={formData.final_approval}
                                             />
                                         </td>
                                         {/* Calculate total hours */}
@@ -524,10 +616,25 @@ const EmployeeTimesheetEdit= ()=>{
                                 <div className='back' onClick={()=>{navigate(`/employee/organization/dashboard/${Id}/${name}/`)}}>
                                     Back
                                 </div>
-                                <button type="submit">
-                                    Save
-                                    {isLoading ? <div className="loader"></div> : '' }
-                                </button>
+                                {formData.final_approval === true ? (
+                                    ""
+                                ):(
+                                    <>
+                                    <div className='delete-btn' onClick={TimesheetDelete} >
+                                        Delete
+                                        {isLoading3 ? <div className="loader"></div> : '' }
+                                    </div>
+                                    <button type="submit">
+                                        Save
+                                        {isLoading ? <div className="loader"></div> : '' }
+                                    </button>
+                                    <button type="button" style={{margin:'0 4px'}} onClick = {TimesheetSubmit} >
+                                        Submit
+                                        {isLoading2 ? <div className="loader"></div> : '' }
+                                    </button>
+                                    </>
+                                )}
+                                
                             </div>
                         </div>
                     </form>

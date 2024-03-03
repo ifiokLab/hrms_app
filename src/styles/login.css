@@ -33,8 +33,22 @@
     justify-content: center;
     height: 100%;
 }
+.forgot-btn-wrapper{
+    display:flex;
+    justify-content: flex-end;
+    margin: 0;
+    padding: 0;
+}
+.forgot-btn-wrapper a{
+    color: blue;
+    font-size: .86rem;
+}
 
-
+#form-container-password{
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  
+}
 .page-wrapper .container1 .hero-container{
     display: flex;
     align-items: center;
