@@ -71,7 +71,11 @@
 }
 #timesheet-table-wrapper{
     width: 60%;
+    
+    overflow-x: scroll;
 }
+
+
 
 .organization-form .form-wrapper .form-header{
     display: flex;
