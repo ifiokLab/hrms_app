@@ -194,7 +194,7 @@ const EmployeeTimesheetList = ()=>{
                             <i class="fa-solid fa-users"></i>
                             <span className = 'title'>Organization </span>
                         </Link>
-                        <Link to='/employee/courses' className = 'card'>
+                        <Link to='/organization/courses/' className = 'card'>
                              <i class="fa-solid fa-chalkboard"></i>
                             <span className = 'title'>Your Courses</span>
                         </Link>

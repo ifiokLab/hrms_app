@@ -24,6 +24,7 @@ const Elearning = ()=>{
     const [searchQuery, setSearchQuery] = useState('');
     const [enrolled, setEnrolled] = useState(false);
     const navigate = useNavigate();
+    const [employeeProfile,setEmployeeProfile] = useState({});
     
    
 
@@ -60,9 +61,36 @@ const Elearning = ()=>{
            // console.error('Error fetching courses:', error);
           }
         };
+        const fetchProfileData = async () => {
+            try {
+              const response = await axios.get(`${apiUrl}/employer/profile/fetch/`,{
+                headers: {
+                    Authorization: `Token ${user?.auth_token}`,
+                },
+              });
+              
+                if (response.data.success) {
+                    setEmployeeProfile(response.data.data);
+                    
+                    //setPreviousPicture Redirect to the home page
+                   
+                }else{
+                    console.log('else:',response.data.data);
+                    setEmployeeProfile(response.data.data);
+                }
+                
+              
+            } catch (error) {
+                setTimeout(() => {
+                    //navigate('/instructor/login/'); // Change '/' to the actual path of your home page
+                }, 2000); // 2000 milliseconds (2 seconds) delay
+              console.error('Errors:', error);
+            }
+        };
 
       
         fetchCourses();
+        fetchProfileData();
     }, [user]);
    
     
@@ -97,9 +125,9 @@ const Elearning = ()=>{
                              <i class="fa-solid fa-chalkboard"></i>
                             <span className = 'title'>Your Courses</span>
                         </Link>
-                        <Link className = 'card'>
+                        <Link to={`${employeeProfile.exist ? '/employer/profile/' : '/employer/profile/create'}`} className = 'card'>
                             <i className="fa-solid fa-gear"></i>
-                            <span className = 'title'>Settings</span>
+                            <span className = 'title'>Settings </span>
                         </Link>
                         <Link className = 'card'>
                             <i class="fa-solid fa-headset"></i>

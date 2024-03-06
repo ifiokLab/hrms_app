@@ -260,3 +260,11 @@ label {
     cursor: pointer;
     
 }
+
+@media screen and (max-width:799px) {
+    #timesheet-table-wrapper{
+        width: 96%;
+        
+        overflow-x: scroll;
+    }
+}
