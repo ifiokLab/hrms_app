@@ -101,7 +101,7 @@ const StaffsTimesheetList = ()=>{
     const fetchTimeSheet = async () => {
         try {
             
-            const response = await axios.get(`${apiUrl}/employee-timesheet/${userId}/list/`,{
+            const response = await axios.get(`${apiUrl}/employee-timesheet/${userId}/${Id}/list/`,{
                 headers: {
                     'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
                 },
@@ -179,26 +179,21 @@ const StaffsTimesheetList = ()=>{
             <Header/>
             <div className = 'wrapper' >
                 <div className='sidebar-container-1'>
-                    <div className = 'box1-wrapper'>
+                <div className = 'box1-wrapper'>
                         <div className = 'card organization' >
                             <i class="fa-solid fa-building"></i>
-                            <span className = 'title'>{user.first_name} {user.last_name}</span>
+                            <span className = 'title'>{user?.first_name} {user?.last_name}</span>
                         </div>
-                        <Link className = 'card'>
-                            <span className="material-symbols-outlined">
-                                apps
-                            </span>
-                            <span className = 'title'>Apps</span>
+                        <Link to='/client/dashboard/' className = 'card'>
+                            <i class="fa-solid fa-chalkboard"></i>
+                            <span className = 'title'>Organizations & Partnerships</span>
                         </Link>
-                        <Link to='/organizations/' className = 'card'>
-                            <i class="fa-solid fa-users"></i>
-                            <span className = 'title'>Organization </span>
+                        <Link to='/' className = 'card'>
+                            <i class="fa-solid fa-chalkboard"></i>
+                            <span className = 'title'>Recents Invites</span>
                         </Link>
-                        <Link to='/employee/courses' className = 'card'>
-                             <i class="fa-solid fa-chalkboard"></i>
-                            <span className = 'title'>Your Courses</span>
-                        </Link>
-                        <Link to={`${employeeProfile.exist ? '/employee/profile/' : '/employee/profile/create'}`} className = 'card'>
+                       
+                        <Link to={`${employeeProfile.exist ? '/client/profile/' : '/client/profile/create'}`} className = 'card'>
                             <i className="fa-solid fa-gear"></i>
                             <span className = 'title'>Settings </span>
                         </Link>
@@ -264,15 +259,10 @@ const StaffsTimesheetList = ()=>{
                                             {employeesTimesheetModal === employee.id && (
                                                 <div className = 'status-modal'>
                                                    
-                                                    {employee.client_approved=== 'Approved' && (
-                                                        <div className='card' onClick={()=>handleEmployeeTimesheet('Rejected',employee.id)}>Reject</div>
-                                                    )}
-                                                   
-                                                   
-                                                    
-                                                    {(employee.client_approved === 'Pending' || employee.client_approved === 'Rejected' || employee.client_approved === 'Under Review') && (
-                                                        <div className='card' onClick={()=>handleEmployeeTimesheet('Approved',employee.id)}>Approve</div> 
-                                                    )}
+                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Pending',employee.id)}>Pending</div>
+                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Processing',employee.id)}>Processing</div>
+                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Processed',employee.id)}>Processed</div>
+                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Rejected',employee.id)}>Rejected</div>
                                                    
                                                    
                                                    
