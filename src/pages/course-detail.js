@@ -461,7 +461,7 @@ const CourseDetailPage = ()=>{
                     <div className='video-wrapper'>
                        
                         <video controls>
-                            <source src={`${course.preview_video}`} type="video/mp4" />
+                            <source src={`${apiUrl}${course.preview_video}`} type="video/mp4" />
                             Your browser does not support the video tag.
                         </video>
                     </div>
