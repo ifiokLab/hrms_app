@@ -54,7 +54,7 @@ const CreateCourse = ()=>{
             // Check if thumbnail is a file (not a base64 string)
            
     
-            const response = await axios.post('http://127.0.0.1:8000/courses/create/', formData, {
+            const response = await axios.post(`${apiUrl}/courses/create/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
