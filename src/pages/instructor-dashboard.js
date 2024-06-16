@@ -31,7 +31,7 @@ const InstructorDashboard = ()=>{
         const fetchUserCourses = async () => {
             setLoading(true);
         try {
-            const response = await axios.get('http://127.0.0.1:8000/instructor-courses/', {
+            const response = await axios.get(`${apiUrl}/instructor-courses/`, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
@@ -116,7 +116,7 @@ const InstructorDashboard = ()=>{
                         {courses.length > 0 ? (
                             courses.map(course => (
                             <div key={course.id} className='course-box'>
-                            <img src={`${course.thumbnail}`} alt={course.title} />
+                            <img src={`${apiUrl}${course.thumbnail}`} alt={course.title} />
                             <div className='details-card'>
                                 <div className='box-1'>
                                 <div className='title'>{course.title}</div>
