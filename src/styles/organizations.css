@@ -85,6 +85,7 @@
 .organization-form .form-wrapper .form-header .title{
     font-size: .8rem;
     font-weight: 800;
+    text-align: center;
 }
 .organization-form .form-wrapper .form-header .icon{
     font-size: .7rem;
