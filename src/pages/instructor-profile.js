@@ -113,7 +113,7 @@ const InstructorProfile = ()=>{
                         <div className='author-container'>
                              <div className='profile-container'>
                                 <div className='caption'>Your Profile</div>
-                                <img src={`${profile.picture}`} alt = 'instructor' />
+                                <img src={`${apiUrl}${profile.picture}`} alt = 'instructor' />
                                 <div className='author-details'>
                                     <div className='name'>
                                         {user.first_name} {user.last_name} 
