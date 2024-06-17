@@ -113,37 +113,43 @@ const InstructorDashboard = ()=>{
                             <div className='title' >Courses</div>
                         <Link to = '/instructor/courses/create/' className='create-course'>Create Course</Link>
                         </div>
-                        {courses.length > 0 ? (
-                            courses.map(course => (
-                            <div key={course.id} className='course-box'>
-                            <img src={`${apiUrl}${course.thumbnail}`} alt={course.title} />
-                            <div className='details-card'>
-                                <div className='box-1'>
-                                <div className='title'>{course.title}</div>
-                                <Link to={`/course-sections/${course.id}/${course.title}/`} className='edit'>
-                                    Edit / Manage course
-                                </Link>
-                                </div>
-                                <div>
-                                <Link to={`/courses/add-requirement/${course.id}/${course.title}/`} className='requirements'>
-                                    Add requirements
-                                </Link>
-                                </div>
-                                <div className='status'>
-                                <Link to={`/courses/add-objectives/${course.id}/${course.title}/`} className='objectives'>
-                                    Add objectives
-                                </Link>
-                                <Link to={`/course/${course.id}/edit/`} className='edit-course'>
-                                    edit-course
-                                </Link>
-                                <span>Status:</span>
-                                <span>Draft</span>
-                                </div>
-                            </div>
-                            </div>
-                            ))
-                        ) : (
-                        <p>You haven't created any courses yet.</p>
+                        { loading ? (
+                            <>
+                                {courses.length > 0 ? (
+                                    courses.map(course => (
+                                    <div key={course.id} className='course-box'>
+                                    <img src={`${apiUrl}${course.thumbnail}`} alt={course.title} />
+                                    <div className='details-card'>
+                                        <div className='box-1'>
+                                        <div className='title'>{course.title}</div>
+                                        <Link to={`/course-sections/${course.id}/${course.title}/`} className='edit'>
+                                            Edit / Manage course
+                                        </Link>
+                                        </div>
+                                        <div>
+                                        <Link to={`/courses/add-requirement/${course.id}/${course.title}/`} className='requirements'>
+                                            Add requirements
+                                        </Link>
+                                        </div>
+                                        <div className='status'>
+                                        <Link to={`/courses/add-objectives/${course.id}/${course.title}/`} className='objectives'>
+                                            Add objectives
+                                        </Link>
+                                        <Link to={`/course/${course.id}/edit/`} className='edit-course'>
+                                            edit-course
+                                        </Link>
+                                        <span>Status:</span>
+                                        <span>Draft</span>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    ))
+                                ) : (
+                                <p>You haven't created any courses yet.</p>
+                                )}
+                            </>
+                        ):(
+                            <p>Loading...</p>
                         )}
 
                 
