@@ -29,20 +29,22 @@ const InstructorDashboard = ()=>{
 
 
         const fetchUserCourses = async () => {
-            
-        try {
-            const response = await axios.get(`${apiUrl}/instructor-courses/`, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
-                },
-            });
-            setCourses(response.data.all_courses);
-            setLoading(false);
-        } catch (error) {
-            console.error('Error fetching user courses:', error);
-            setLoading(false);
-        }
+            console.log('loaing..',loading);
+            try {
+                const response = await axios.get(`${apiUrl}/instructor-courses/`, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                    },
+                });
+                setLoading(false);
+                console.log('loaing..',loading);
+                setCourses(response.data.all_courses);
+                
+            } catch (error) {
+                console.error('Error fetching user courses:', error);
+                setLoading(false);
+            }
         };
         const fetchProfileData = async () => {
             try {
@@ -73,7 +75,7 @@ const InstructorDashboard = ()=>{
 
         fetchUserCourses();
         fetchProfileData();
-    }, [user,loading]);
+    }, [user]);
 
 
     return(
@@ -113,7 +115,7 @@ const InstructorDashboard = ()=>{
                             <div className='title' >Courses</div>
                         <Link to = '/instructor/courses/create/' className='create-course'>Create Course</Link>
                         </div>
-                        { loading ? (
+                        { loading === true ? (
                            <p>Loading...</p>
                         ):(
                             <>
