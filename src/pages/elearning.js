@@ -145,7 +145,7 @@ const Elearning = ()=>{
                     <div className='course-wrapper'>
                         <div className ='laptop-nav-wrapper'>
                             <div className='category-tab'>
-                                <div className='title'>Categories</div>
+                                <div className='title'><i class="fa-solid fa-list"></i></div>
                                 <div className='category-menu'>
                                     <div className='category-section'>
                                         <Link to='/search?query=Development' className='link-tab'>
