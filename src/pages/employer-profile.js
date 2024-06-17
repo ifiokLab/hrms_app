@@ -104,11 +104,11 @@ const EmployerProfile = ()=>{
                                     <div className='title'>
                                     {profile.title}
                                     </div>
-                                    <div className='phone'>
+                                    <div className='phone icon-tab'>
                                         <i class="fa-solid fa-phone"></i>
                                     {profile.phone}
                                     </div>
-                                    <div className='website'>
+                                    <div className='website icon-tab'>
                                         <i class="fa-solid fa-globe"></i>
                                         {profile.address}
                                     </div>
