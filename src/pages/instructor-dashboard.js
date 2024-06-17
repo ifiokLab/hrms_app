@@ -20,7 +20,7 @@ import apiUrl from '../components/api-url';
 const InstructorDashboard = ()=>{
     const user = useSelector((state) => state.user.user);
     const [courses, setCourses] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     //const [loading, setLoading] = useState(true);
     const [employeeProfile,setEmployeeProfile] = useState({});
     
@@ -29,7 +29,7 @@ const InstructorDashboard = ()=>{
 
 
         const fetchUserCourses = async () => {
-            setLoading(!loading);
+            
         try {
             const response = await axios.get(`${apiUrl}/instructor-courses/`, {
                 headers: {
@@ -38,10 +38,10 @@ const InstructorDashboard = ()=>{
                 },
             });
             setCourses(response.data.all_courses);
-            setLoading(loading);
+            setLoading(!loading);
         } catch (error) {
             console.error('Error fetching user courses:', error);
-            setLoading(false);
+            setLoading(!loading);
         }
         };
         const fetchProfileData = async () => {
