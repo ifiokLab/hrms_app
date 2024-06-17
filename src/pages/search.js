@@ -22,6 +22,7 @@ const Search = ()=>{
     const location = useLocation();
     const [results, setResults] = useState([]);
     const [term, setTerm] = useState('');
+    const [loading, setLoading] = useState(true);
     const user = useSelector((state) => state.user.user);
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
@@ -42,8 +43,10 @@ const Search = ()=>{
    
     const fetchSearchResults = async (query) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/search-courses/?query=${query}`);
+            const response = await axios.get(`${apiUrl}/api/search-courses/?query=${query}`);
             setResults(response.data.all_courses);
+            setLoading(!loading);
+            
         } catch (error) {
             console.error('Error fetching search results:', error);
         }
@@ -580,43 +583,49 @@ const Search = ()=>{
                         </div>
                
                         <div className='course-container'>
-                            {results.map((course) => (
-                                <Link key={course.id} to={`/course-detail/${course.id}/${course.title}/`} className='card'>
-                                    <img src ={`${apiUrl}${course.thumbnail}`} alt='' />
+                           {loading ? (
+                                <p>Loading....</p>
+                           ) : (
+                                <>
+                                     {results.map((course) => (
+                                        <Link key={course.id} to={`/course-detail/${course.id}/${course.title}/`} className='card'>
+                                            <img src ={`${apiUrl}${course.thumbnail}`} alt='' />
 
-                                    {course.is_enrolled ? (
-                                        <div className = 'heart-button enrolled'>enrolled</div>
-                                        )
-                                        :
-                                        (
-                                            ''
-                                        )
-                                    }
-                                    
-                                    
-                                    <div className='card-details'>
-                                        <h2>{course.title}</h2>
-                                        <div className='author-name'>{course.instructor}</div>
-                                        <div className='ratings-card'>
-                                            <span className='num box'>4.5</span>
-                                            <span className='stars box'>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star-half"></i>
-                                            </span>
-                                            <span className='students box'>
-                                                (218,087)
-                                            </span>
-                                        </div>
-                                        <div className='price-card'>
-                                        <span className='price'>${course.discountPrice}</span>
-                                        <span className='discount'>${course.price}</span>
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
+                                            {course.is_enrolled ? (
+                                                <div className = 'heart-button enrolled'>enrolled</div>
+                                                )
+                                                :
+                                                (
+                                                    ''
+                                                )
+                                            }
+                                            
+                                            
+                                            <div className='card-details'>
+                                                <h2>{course.title}</h2>
+                                                <div className='author-name'>{course.instructor}</div>
+                                                <div className='ratings-card'>
+                                                    <span className='num box'>4.5</span>
+                                                    <span className='stars box'>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <i class="fa-solid fa-star-half"></i>
+                                                    </span>
+                                                    <span className='students box'>
+                                                        
+                                                    </span>
+                                                </div>
+                                                <div className='price-card'>
+                                                <span className='price'>${course.discountPrice}</span>
+                                                <span className='discount'>${course.price}</span>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </>
+                           )}
                             
                         </div>
                   
