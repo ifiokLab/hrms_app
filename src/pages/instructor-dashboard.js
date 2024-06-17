@@ -38,10 +38,10 @@ const InstructorDashboard = ()=>{
                 },
             });
             setCourses(response.data.all_courses);
-            setLoading(!loading);
+            setLoading(false);
         } catch (error) {
             console.error('Error fetching user courses:', error);
-            setLoading(!loading);
+            setLoading(false);
         }
         };
         const fetchProfileData = async () => {
@@ -73,7 +73,7 @@ const InstructorDashboard = ()=>{
 
         fetchUserCourses();
         fetchProfileData();
-    }, [user]);
+    }, [user,loading]);
 
 
     return(
