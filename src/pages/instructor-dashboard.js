@@ -115,7 +115,7 @@ const InstructorDashboard = ()=>{
                             <div className='title' >Courses</div>
                         <Link to = '/instructor/courses/create/' className='create-course'>Create Course</Link>
                         </div>
-                        { loading === true ? (
+                        { loading  ? (
                            <p>Loading...</p>
                         ):(
                             <>
