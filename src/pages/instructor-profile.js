@@ -9,7 +9,7 @@ import ReactQuill from 'react-quill';
 import "react-quill/dist/quill.snow.css";
 import 'swiper/swiper-bundle.css';
 import '../styles/employer-dashboard.css';
-import '../styles/profile.css';
+//import '../styles/profile.css';
 import '../styles/create-course.css';
 import DesktopLogout from './desktop-logout';
 import '../styles/instructor.css';

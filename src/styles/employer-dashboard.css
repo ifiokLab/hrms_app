@@ -20,6 +20,16 @@
     bottom: 0;
     top: 0;
 }
+
+.author-container .profile-container  .name a{
+    margin-left:12px;
+}
+.phone, .website{
+    font-size: .7rem;
+}
+.phone i, .website i{
+    margin-right: 12px;
+}
 .page-wrapper .wrapper .sidebar-container-1{
     display: flex;
     justify-content: space-between;
