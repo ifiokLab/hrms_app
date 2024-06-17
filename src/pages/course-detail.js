@@ -284,16 +284,16 @@ const CourseDetailPage = ()=>{
                                  <i class="fa-solid fa-star"></i>
                                  <i class="fa-solid fa-star"></i>
                                  <i class="fa-solid fa-star-half"></i>
-                                 <span className='student-num'>119,564</span>
+                                 <span className='student-num'></span>
                              </div>
                          </div>
                          <div className='author-card'>
-                             <span className='name'>Created by Steve ben </span>
+                             <span className='name'>{course.instructor} </span>
                          </div>
                      </div>
                      <div className='container2'>
                          <div className = 'preview-container'>
-                             <img src={previewImage} alt = 'preview image' />
+                             <img src={`${apiUrl}${course.thumbnail}`} alt = 'preview image' />
                              <div className='image-overlay'  onClick={handlePlayButtonClick}>
                                  <div className='wrapper'>
                                      <div className='btn-wraper'>

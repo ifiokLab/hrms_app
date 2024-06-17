@@ -44,8 +44,9 @@ const Search = ()=>{
     const fetchSearchResults = async (query) => {
         try {
             const response = await axios.get(`${apiUrl}/api/search-courses/?query=${query}`);
-            setResults(response.data.all_courses);
             setLoading(!loading);
+            setResults(response.data.all_courses);
+            
             
         } catch (error) {
             console.error('Error fetching search results:', error);
@@ -618,8 +619,8 @@ const Search = ()=>{
                                                     </span>
                                                 </div>
                                                 <div className='price-card'>
-                                                <span className='price'>${course.discountPrice}</span>
-                                                <span className='discount'>${course.price}</span>
+                                                <span className='price'></span>
+                                                <span className='discount'></span>
                                                 </div>
                                             </div>
                                         </Link>
