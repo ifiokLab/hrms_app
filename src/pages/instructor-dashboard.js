@@ -29,7 +29,7 @@ const InstructorDashboard = ()=>{
 
 
         const fetchUserCourses = async () => {
-            setLoading(true);
+            setLoading(!loading);
         try {
             const response = await axios.get(`${apiUrl}/instructor-courses/`, {
                 headers: {
@@ -38,7 +38,7 @@ const InstructorDashboard = ()=>{
                 },
             });
             setCourses(response.data.all_courses);
-            setLoading(false);
+            setLoading(loading);
         } catch (error) {
             console.error('Error fetching user courses:', error);
             setLoading(false);
