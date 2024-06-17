@@ -23,6 +23,7 @@ const Elearning = ()=>{
     const user = useSelector((state) => state.user.user);
     const [searchQuery, setSearchQuery] = useState('');
     const [enrolled, setEnrolled] = useState(false);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [employeeProfile,setEmployeeProfile] = useState({});
     
@@ -54,10 +55,11 @@ const Elearning = ()=>{
                     Authorization: `Token ${user?.auth_token}`,
                 },
             });
-            
+            setLoading(!loading);
             setCourses(response.data.all_courses);
            
           } catch (error) {
+            setLoading(!loading);
            // console.error('Error fetching courses:', error);
           }
         };
@@ -612,43 +614,49 @@ const Elearning = ()=>{
                         </div>
                
                         <div className='course-container'>
-                            {courses.map((course) => (
-                                <Link key={course.id} to={`/course-detail/${course.id}/${course.title}/`} className='card'>
-                                    <img src ={`${course.thumbnail}`} alt='' />
+                            {loading ? (
+                                <p>Loading....</p>
+                            ) : (
+                                 <>
+                                    {courses.map((course) => (
+                                    <Link key={course.id} to={`/course-detail/${course.id}/${course.title}/`} className='card'>
+                                        <img src ={`${apiUrl}${course.thumbnail}`} alt='' />
 
-                                    {course.is_enrolled ? (
-                                        <div className = 'heart-button enrolled'>enrolled</div>
-                                        )
-                                        :
-                                        (
-                                            ''
-                                        )
-                                    }
-                                    
-                                    
-                                    <div className='card-details'>
-                                        <h2>{course.title}</h2>
-                                        <div className='author-name'></div>
-                                        <div className='ratings-card'>
-                                            <span className='num box'>4.5</span>
-                                            <span className='stars box'>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star"></i>
-                                                <i class="fa-solid fa-star-half"></i>
-                                            </span>
-                                            <span className='students box'>
-                                                (218,087)
-                                            </span>
+                                        {course.is_enrolled ? (
+                                            <div className = 'heart-button enrolled'>enrolled</div>
+                                            )
+                                            :
+                                            (
+                                                ''
+                                            )
+                                        }
+                                        
+                                        
+                                        <div className='card-details'>
+                                            <h2>{course.title}</h2>
+                                            <div className='author-name'></div>
+                                            <div className='ratings-card'>
+                                                <span className='num box'>4.5</span>
+                                                <span className='stars box'>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star"></i>
+                                                    <i class="fa-solid fa-star-half"></i>
+                                                </span>
+                                                <span className='students box'>
+                                                    
+                                                </span>
+                                            </div>
+                                            <div className='price-card'>
+                                            <span className='price'></span>
+                                            <span className='discount'></span>
+                                            </div>
                                         </div>
-                                        <div className='price-card'>
-                                        <span className='price'></span>
-                                        <span className='discount'></span>
-                                        </div>
-                                    </div>
-                                </Link>
-                            ))}
+                                    </Link>
+                                     ))}
+                                </>
+                            )}
                             
                         </div>
                   
