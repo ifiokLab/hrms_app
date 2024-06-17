@@ -114,6 +114,8 @@ const InstructorDashboard = ()=>{
                         <Link to = '/instructor/courses/create/' className='create-course'>Create Course</Link>
                         </div>
                         { loading ? (
+                           <p>Loading...</p>
+                        ):(
                             <>
                                 {courses.length > 0 ? (
                                     courses.map(course => (
@@ -148,8 +150,6 @@ const InstructorDashboard = ()=>{
                                 <p>You haven't created any courses yet.</p>
                                 )}
                             </>
-                        ):(
-                            <p>Loading...</p>
                         )}
 
                 
