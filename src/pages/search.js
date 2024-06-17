@@ -604,7 +604,7 @@ const Search = ()=>{
                                             
                                             <div className='card-details'>
                                                 <h2>{course.title}</h2>
-                                                <div className='author-name'>{course.instructor}</div>
+                                                <div className='author-name'>{course.overview}</div>
                                                 <div className='ratings-card'>
                                                     <span className='num box'>4.5</span>
                                                     <span className='stars box'>
