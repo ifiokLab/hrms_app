@@ -180,7 +180,7 @@ const ClientInvite = ()=>{
                             <p>Please accept the invitation to join the organization:{invitation?.organization}</p>
                             <div className='btn-wrapper-invite'>
                                 <button onClick={handleAcceptInvitation} >
-                                    Submit
+                                    Accept
                                     {isLoading ? <div className="loader"></div> : '' }
                                         
                                 </button>
