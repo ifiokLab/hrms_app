@@ -24,6 +24,7 @@ const InstructorProfile = ()=>{
     const user = useSelector((state) => state.user.user);
     const  [profile,setProfile] = useState({});
     const [employeeProfile,setEmployeeProfile] = useState({});
+    const [loading,setLoading] = useState(true);
     const navigate = useNavigate();
    
 
@@ -37,12 +38,14 @@ const InstructorProfile = ()=>{
                     },
                 });
                 if(response.data.success){
+                    setLoading(!loading)
                     setProfile(response.data.data)
                  }else{
                     //navigate('/profile/create/');
                 };
             
             } catch (error) {
+                setLoading(!loading)
                 //navigate('/access-denied/');
              
             }   
@@ -113,37 +116,41 @@ const InstructorProfile = ()=>{
                         <div className='author-container'>
                              <div className='profile-container'>
                                 <div className='caption'>Your Profile</div>
-                                <img src={`${apiUrl}${profile.picture}`} alt = 'instructor' />
-                                <div className='author-details'>
-                                    <div className='name'>
-                                        {user.first_name} {user.last_name} 
-                                        <Link className='profile-edit' to='/instructor/profile/edit/'>
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </Link>
-                                    </div>
-                                    <div className='title'>
-                                    {profile.title}
-                                    </div>
-                                    <div className='phone'>
-                                        <i class="fa-solid fa-phone"></i>
-                                    {profile.phone}
-                                    </div>
-                                    <div className='website'>
-                                        <i class="fa-solid fa-globe"></i>
-                                        {profile.website}
-                                    </div>
-                                
-                                    <div className='description'>
+                                {loading ? (
+                                    <p>Loading...</p>
+                                ):(
+                                    <><img src={`${apiUrl}${profile.picture}`} alt = 'instructor' />
+                                    <div className='author-details'>
+                                        <div className='name'>
+                                            {user.first_name} {user.last_name} 
+                                            <Link className='profile-edit' to='/instructor/profile/edit/'>
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </Link>
+                                        </div>
+                                        <div className='title'>
+                                        {profile.title}
+                                        </div>
+                                        <div className='phone'>
+                                            <i class="fa-solid fa-phone"></i>
+                                        {profile.phone}
+                                        </div>
+                                        <div className='website'>
+                                            <i class="fa-solid fa-globe"></i>
+                                            {profile.website}
+                                        </div>
                                     
-                                    <ReactQuill
-                                    value={profile.biography}
-                                        readOnly={true}
-                                        theme={"bubble"}
-                                    />
-
-
-                                    </div>
-                                </div>
+                                        <div className='description'>
+                                        
+                                        <ReactQuill
+                                        value={profile.biography}
+                                            readOnly={true}
+                                            theme={"bubble"}
+                                        />
+    
+    
+                                        </div>
+                                    </div></>
+                                )}
                             </div>
                         </div>
                     </div>
