@@ -17,13 +17,15 @@
 .author-container .profile-container  .name{
     color: #7325a3;
     font-weight: 900;
-    margin-right: 8px;
+}
+.author-container .profile-container  .name a{
+    margin-left:12px;
 }
 .phone, .website{
     font-size: .7rem;
 }
 .phone i, .website i{
-    margin-right: 8px;
+    margin-right: 12px;
 }
 .website{
     color: #7325a3;
