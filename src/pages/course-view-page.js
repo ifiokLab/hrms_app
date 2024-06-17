@@ -276,19 +276,14 @@ const CourseViewPage = ()=>{
                         <div className='wrapper'>
                             <div className='profile-container'>
                                 <div className='caption'>Instructor</div>
-                                <img src={previewImage} alt = 'instructor' />
+                                <img src={`${apiUrl}${course.instructor_picture}`} alt = 'instructor' />
                                 <div className='author-details'>
-                                    <div className='name'>Zaid Sabih</div>
+                                    <div className='name'>{course.instructor}</div>
                                     <div className='title'>
-                                        Ethical Hacker, Computer Scientist & CEO of zSecurity
+                                        {course.instructor_title}
                                     </div>
                                     <div className='description'>
-                                    My name is Zaid Al-Quraishi, I am a professional ethical hacker, computer scientist, and the founder and CEO of zSecurity & Bug-Bounty. I am passionate about utilising my skills to improve the security of organisations and individuals by identifying and resolving vulnerabilities in their systems.
-
-                                    I have in-depth knowledge and experience in the fields of ethical hacking & cyber security, and I have helped over 1 million students worldwide on multiple teaching platforms to gain a better understanding of the subject.
-
-                                    My companies, zSecurity & Bug-Bounty, specialise in providing ethical hacking services and managed bug-bounty programs to help organisations identify and remediate vulnerabilities in their systems.
-
+                                        {course.instructor_biography}
 
                                     </div>
                                 </div>
