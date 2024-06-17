@@ -296,23 +296,19 @@ const CourseViewPage = ()=>{
                  <div className='slider-content'>
                     <div className='annoucement-container'>
                         <div className='profile'>
-                            <img src={previewImage} alt = 'preview' />
+                            {/*<img src={previewImage} alt = 'preview' />*/}
                             <div className='profile-details'>
-                                <div className='name'>Joe</div>
+                                <div className='name'></div>
                                 <div className='time'>
-                                    posted an announcement · 5 months ago
+                                   
                                 </div>
                             </div>
                         </div>
                         <div className='title'>
-                            Natural Language with NLTK and Python Blog Post
+                           
                         </div>
                         <div className='description'>
-                            Hi Everyone,
-
-                            This week's blog post is all about using the Natural Language Toolkit (NLTK) library for Python and how you can leverage it for Part-of-Speech Tagging, Sentiment Analysis, Named Entity Recognition, and more!
-
-                            You can check it out here:
+                          
                         </div>
                     </div>
                  </div>
