@@ -59,7 +59,8 @@ const  ClientViaLink = ()=>{
             });
 
             if (response.data.success) {
-                dispatch(setUser(response.data.user));
+                console.log('response.data.data:',response.data.data);
+                dispatch(setUser(response.data.data));
 
                 // Redirect to the home page
                 setTimeout(() => {
