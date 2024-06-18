@@ -52,6 +52,7 @@ import EmployeeTimesheetDetail from './pages/employee-timesheet-detail';
 import StaffsTimesheetList from './pages/staff-timesheet-list';
 import ForgotPassword from './pages/forgot-password';
 import PasswordConfirm from './pages/password-confirm';
+import ClientViaLink from './pages/register-client';
 
 function App() {
   return (
@@ -102,6 +103,8 @@ function App() {
       <Route path="employee/login/" element={<EmployeeLogin />} />
       <Route path="organization/dashboard/:Id/:name/" element={<OrganizationDashboard />} />
       <Route path="/employee-signup/:invitation_code/" element={<EmployeeSignup />} />
+
+      <Route path="/client-signup/:invitation_code/" element={<ClientViaLink />} />
       <Route path="organizations/" element={<EmployerOrganizations />} />
       <Route path="organization/signup/" element={<AdminSignup />} />
       <Route path="header" element={<Header />} />
