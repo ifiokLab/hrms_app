@@ -24,7 +24,7 @@ const ForgotPassword = () => {
             setShowSnackbar(true);
             setErrorMessage('Password reset email sent. Check your inbox.');
         } catch (error) {
-            setErrorMessage('Invalid token.');
+            setErrorMessage('User does not exist.');
         }
         setIsLoading(isLoading);
     };
