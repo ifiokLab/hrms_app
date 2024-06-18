@@ -63,7 +63,8 @@ const  ClientViaLink = ()=>{
 
                 // Redirect to the home page
                 setTimeout(() => {
-                    console.log('hello');
+                    console.log('hello,',invitation_code);
+                    
                     navigate(`/client/${invitation_code}/`); // Change '/' to the actual path of your home page
                 }, 2000); // 2000 milliseconds (2 seconds) delay
             } else {

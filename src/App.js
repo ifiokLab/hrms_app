@@ -74,6 +74,7 @@ function App() {
       <Route path="client/signup/" element={<ClientSignup />} />
       <Route path="employee-invite/:invitation_code/" element={<EmployeeInvite />} />
       <Route path="client/:invitation_code/" element={<ClientInvite />} />
+
       <Route path="logout" element={<Logout />} />
       <Route path="employer/profile/edit/" element={<EditEmployerProfile />} />
       <Route path="employer/profile/" element={<EmployerProfile />} />
