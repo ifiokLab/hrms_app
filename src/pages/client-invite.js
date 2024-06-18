@@ -77,13 +77,13 @@ const ClientInvite = ()=>{
 
     useEffect(() => {
         console.log('auth..:',auth.user);
-        /*if (auth.user === null || user.isClient === false ) {
+        if (auth.user === null || user.isClient === false ) {
             // Redirect to the login page
             navigate(`/?nextpage=${location.pathname}`);
             
             return ;
         }
-        */
+        
         const fetchProfileData = async () => {
             try {
               const response = await axios.get(`${apiUrl}/client/profile/fetch/`,{
