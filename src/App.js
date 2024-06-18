@@ -104,7 +104,7 @@ function App() {
       <Route path="organization/dashboard/:Id/:name/" element={<OrganizationDashboard />} />
       <Route path="/employee-signup/:invitation_code/" element={<EmployeeSignup />} />
 
-      <Route path="/client-signup/:invitation_code/" element={<ClientViaLink />} />
+      <Route path="client-signup/:invitation_code/" element={<ClientViaLink />} />
       <Route path="organizations/" element={<EmployerOrganizations />} />
       <Route path="organization/signup/" element={<AdminSignup />} />
       <Route path="header" element={<Header />} />

@@ -50,7 +50,7 @@ const  ClientViaLink = ()=>{
 
         try {
            
-            const response = await axios.post(`${apiUrl}/client-register-via-link/${invitation_code}`, {
+            const response = await axios.post(`${apiUrl}/client-register-via-link/${invitation_code}/`, {
                 first_name: fname,
                 last_name: lname,
                 email,
