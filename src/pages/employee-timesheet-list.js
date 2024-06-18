@@ -216,7 +216,7 @@ const EmployeeTimesheetList = ()=>{
                        <div className='organization-header'>
                         <div className='box1'>
                             <div className='box1-logo'>
-                                <img src={`${organization.logo}`} alt = {organization.name}/>
+                                <img src={`${apiUrl}${organization.logo}`} alt = {organization.name}/>
                                 <div className='org-name'>{organization.name}</div>
                             </div>
                         </div>

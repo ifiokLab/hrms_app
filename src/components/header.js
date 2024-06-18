@@ -169,6 +169,33 @@ const Header = ()=>{
                              
                          </div>
                         )}
+                         {user?.isClient && (
+                             <div className='sidebar-container-1'>
+                             <div className = 'box1-wrapper'>
+                                 <div className = 'card organization' >
+                                     <i class="fa-solid fa-building"></i>
+                                     <span className = 'title'>{user.first_name} {user.last_name}</span>
+                                 </div>
+                                 <Link to='/client/dashboard/' className = 'card'>
+                                     <i class="fa-solid fa-chalkboard"></i>
+                                     <span className = 'title'>Organizations & Partnership</span>
+                                 </Link>
+                                
+                                 
+                                
+                                 <Link to={`${profile.exist ? '/instructor/profile/' : '/instructor/profile/create'}`} className = 'card'>
+                                     <i className="fa-solid fa-gear"></i>
+                                     <span className = 'title'>Settings </span>
+                                 </Link>
+                                 <Link className = 'card'>
+                                     <i class="fa-solid fa-headset"></i>
+                                     <span className = 'title'>Support</span>
+                                 </Link>
+                             </div>
+                             
+                         </div>
+                        )}
+
                         <div className = 'box2-wrapper' >
                             <div onClick={handleLogout} className = 'card'>
                                 <i class="fa-solid fa-right-from-bracket"></i>
