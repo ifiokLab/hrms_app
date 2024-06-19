@@ -450,6 +450,17 @@ const EmployeeOrganizationDashboard = ()=>{
                             <>
                                 {timeSheet.length === 0 ? (
                                     <div className='organization-body'>
+                                        <div className = 'timesheet'>
+                                            <div className='body-title'>Create TimeSheet</div>
+                                            <div className='time-btn' >
+                                            
+                                            </div>
+                                        
+                                        </div> 
+                                     </div>
+                                ) : ( 
+                                   
+                                    <div className='organization-body'>
                                     <div className = 'timesheet'>
                                         <div className='body-title'>My TimeSheet</div>
                                         <div className='time-btn' onClick={toggleTimeSheetModal}>
@@ -532,16 +543,6 @@ const EmployeeOrganizationDashboard = ()=>{
                                     </table>
                                     )
                                 }
-                                    </div>
-                                ) : (
-                                    <div className='organization-body'>
-                                        <div className = 'timesheet'>
-                                            <div className='body-title'>Create TimeSheet</div>
-                                            <div className='time-btn' >
-                                            
-                                            </div>
-                                        
-                                        </div> 
                                     </div>
                                 )}
                             </>
