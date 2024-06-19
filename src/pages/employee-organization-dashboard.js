@@ -329,7 +329,7 @@ const EmployeeOrganizationDashboard = ()=>{
         };
         const fetchClients = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/clients/list/${Id}`, {
+                const response = await axios.get(`${apiUrl}/staff/clients/list/${Id}`, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
