@@ -222,134 +222,146 @@ const EmployeeTimesheetList = ()=>{
                         </div>
                         
                        </div>
-                       <div className='organization-body'>
-                            <div className = 'timesheet'>
-                                <div className='body-title'>Employee TimeSheet</div>
-                                <div className='time-bt' >
-                                   
+                       {timeSheet.length > 0 ?  (
+                            <div className='organization-body'>
+                                <div className = 'timesheet'>
+                                    <div className='body-title'>Employee TimeSheet</div>
+                                    <div className='time-bt' >
+                                    
+                                    </div>
+                                </div>
+                                {organization.organization_type === 'HEALTH' ? (
+                                    <table>
+                                    <thead>
+                                        <tr>
+                                        <th>ID</th>
+                                        <th>Start date</th>
+                                        <th>End date</th>
+                                        <th>Organization</th>
+                                        <th>Client</th>
+                                        <th>Hours worked</th>
+                                        <th>Hourly rate</th>
+                                        <th>Bill amount</th>
+                                        <th>Client Approved</th>
+                                        <th>Organization Approved</th>
+                                        <th>Detail</th>
+                                        {/* Add more columns as needed */}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {timeSheet.map((employee) => (
+                                        <tr key={employee.id}>
+                                            <td>#{employee.id}</td>
+                                            <td>{employee.start_date}</td>
+                                            <td>{employee.end_date}</td>
+                                            
+                                            <td>{employee.organization}</td>
+                                            <td>{employee.client}</td>
+                                            
+                    
+                                            <td>{employee.hours_worked}</td>
+                                            <td>£{employee.hourly_rate}/hr
+                                            
+                                            </td>
+                                            <td>{employee.bill}</td>
+                                            
+                                            <td>{employee.client_approved}</td>
+                
+                                            <td className={`status ${employeesTimesheetModal === 0 ? 'show' :''}`} onClick={() => toggleEmployeesTimesheetModal(employee.id)} >
+                                                <span>{employee.organization_approved}</span>
+                                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                {employeesTimesheetModal === employee.id && (
+                                                    <div className = 'status-modal'>
+                                                        
+                                                        <div className='card' onClick={()=>handleEmployeeTimesheet('Pending',employee.id)}>Pending</div>
+                                                    <div className='card' onClick={()=>handleEmployeeTimesheet('Processing',employee.id)}>Processing</div>
+                                                    <div className='card' onClick={()=>handleEmployeeTimesheet('Processed',employee.id)}>Processed</div>
+                                                    <div className='card' onClick={()=>handleEmployeeTimesheet('Rejected',employee.id)}>Rejected</div>
+                                                        
+                                                        
+                                                    </div>
+                                                )}
+                                                
+                                                
+                                            </td>
+                                            <td><Link to ={`/employee/timesheet/detail/${employee.id}/${Id}/${name}/`}>view</Link></td>
+                                        
+                                        </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                                ):(
+                                    <table>
+                                    <thead>
+                                        <tr>
+                                        <th>ID</th>
+                                        <th>Start date</th>
+                                        <th>End date</th>
+                                        <th>Organization</th>
+                                    
+                                        <th>Hours worked</th>
+                                    
+                                        <th>Bill amount</th>
+                                    
+                                        <th>Organization Approved</th>
+                                        <th>Detail</th>
+                                        {/* Add more columns as needed */}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {timeSheet.map((employee) => (
+                                        <tr key={employee.id}>
+                                            <td>#{employee.id}</td>
+                                            <td>{employee.start_date}</td>
+                                            <td>{employee.end_date}</td>
+                                        
+                                            <td>{employee.organization}</td>
+                                        
+                                        
+                    
+                                            <td>{employee.hours_worked}</td>
+                                        
+                                            <td>£{employee.rate}</td>
+                                        
+                                        
+            
+                                            <td className={`status ${employeesTimesheetModal === 0 ? 'show' :''}`} onClick={() => toggleEmployeesTimesheetModal(employee.id)} >
+                                                <span>{employee.organization_approved}</span>
+                                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                {employeesTimesheetModal === employee.id && (
+                                                    <div className = 'status-modal'>
+                                                    
+                                                    <div className='card' onClick={()=>handleEmployeeTimesheet('Pending',employee.id)}>Pending</div>
+                                                    <div className='card' onClick={()=>handleEmployeeTimesheet('Processing',employee.id)}>Processing</div>
+                                                    <div className='card' onClick={()=>handleEmployeeTimesheet('Processed',employee.id)}>Processed</div>
+                                                    <div className='card' onClick={()=>handleEmployeeTimesheet('Rejected',employee.id)}>Rejected</div>
+                                                    
+                                                    
+                                                    
+                                                    </div>
+                                                )}
+                                                
+                                                
+                                            </td>
+                                            <td><Link to ={`/employee/timesheet/detail/${employee.id}/${Id}/${name}/`}>view</Link></td>
+                                        
+                                        </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                                )}
+                            </div>
+                       ) : (
+                            <div className='organization-body'>
+                                <div className = 'timesheet'>
+                                    <div className='body-title'>Create time sheet</div>
+                                    <div className='time-bt' >
+                                    
+                                    </div>
                                 </div>
                             </div>
-                            {organization.organization_type === 'HEALTH' ? (
-                                  <table>
-                                  <thead>
-                                      <tr>
-                                      <th>ID</th>
-                                      <th>Start date</th>
-                                      <th>End date</th>
-                                      <th>Organization</th>
-                                      <th>Client</th>
-                                      <th>Hours worked</th>
-                                      <th>Hourly rate</th>
-                                      <th>Bill amount</th>
-                                      <th>Client Approved</th>
-                                      <th>Organization Approved</th>
-                                      <th>Detail</th>
-                                      {/* Add more columns as needed */}
-                                      </tr>
-                                  </thead>
-                                  <tbody>
-                                      {timeSheet.map((employee) => (
-                                      <tr key={employee.id}>
-                                          <td>#{employee.id}</td>
-                                          <td>{employee.start_date}</td>
-                                          <td>{employee.end_date}</td>
-                                         
-                                          <td>{employee.organization}</td>
-                                          <td>{employee.client}</td>
-                                         
-                  
-                                          <td>{employee.hours_worked}</td>
-                                          <td>£{employee.hourly_rate}/hr
-                                         
-                                          </td>
-                                          <td>{employee.bill}</td>
-                                         
-                                          <td>{employee.client_approved}</td>
-            
-                                          <td className={`status ${employeesTimesheetModal === 0 ? 'show' :''}`} onClick={() => toggleEmployeesTimesheetModal(employee.id)} >
-                                              <span>{employee.organization_approved}</span>
-                                              <i class="fa-solid fa-ellipsis-vertical"></i>
-                                              {employeesTimesheetModal === employee.id && (
-                                                  <div className = 'status-modal'>
-                                                     
-                                                    <div className='card' onClick={()=>handleEmployeeTimesheet('Pending',employee.id)}>Pending</div>
-                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Processing',employee.id)}>Processing</div>
-                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Processed',employee.id)}>Processed</div>
-                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Rejected',employee.id)}>Rejected</div>
-                                                     
-                                                     
-                                                  </div>
-                                              )}
-                                              
-                                              
-                                          </td>
-                                          <td><Link to ={`/employee/timesheet/detail/${employee.id}/${Id}/${name}/`}>view</Link></td>
-                                      
-                                      </tr>
-                                      ))}
-                                  </tbody>
-                              </table>
-                            ):(
-                                <table>
-                                <thead>
-                                    <tr>
-                                    <th>ID</th>
-                                    <th>Start date</th>
-                                    <th>End date</th>
-                                    <th>Organization</th>
-                                   
-                                    <th>Hours worked</th>
-                                   
-                                    <th>Bill amount</th>
-                                   
-                                    <th>Organization Approved</th>
-                                    <th>Detail</th>
-                                    {/* Add more columns as needed */}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {timeSheet.map((employee) => (
-                                    <tr key={employee.id}>
-                                        <td>#{employee.id}</td>
-                                        <td>{employee.start_date}</td>
-                                        <td>{employee.end_date}</td>
-                                       
-                                        <td>{employee.organization}</td>
-                                       
-                                       
-                
-                                        <td>{employee.hours_worked}</td>
-                                       
-                                        <td>£{employee.rate}</td>
-                                       
-                                       
-          
-                                        <td className={`status ${employeesTimesheetModal === 0 ? 'show' :''}`} onClick={() => toggleEmployeesTimesheetModal(employee.id)} >
-                                            <span>{employee.organization_approved}</span>
-                                            <i class="fa-solid fa-ellipsis-vertical"></i>
-                                            {employeesTimesheetModal === employee.id && (
-                                                <div className = 'status-modal'>
-                                                   
-                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Pending',employee.id)}>Pending</div>
-                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Processing',employee.id)}>Processing</div>
-                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Processed',employee.id)}>Processed</div>
-                                                   <div className='card' onClick={()=>handleEmployeeTimesheet('Rejected',employee.id)}>Rejected</div>
-                                                   
-                                                   
-                                                   
-                                                </div>
-                                            )}
-                                            
-                                            
-                                        </td>
-                                        <td><Link to ={`/employee/timesheet/detail/${employee.id}/${Id}/${name}/`}>view</Link></td>
-                                    
-                                    </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                            )}
-                         </div>
+                       )}
+                       
                         
                        
                       
