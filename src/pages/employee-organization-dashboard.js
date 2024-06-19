@@ -625,41 +625,54 @@ const EmployeeOrganizationDashboard = ()=>{
                       </div>
                         )}
                         {openSlideSections === 4 && (
-                        <div className='organization-body'>
-                            <div className = 'timesheet'>
-                                <div className='body-title'>Clients</div>
-                                <div className='time-bt' >
-                                  
-                                </div>
-                            </div>
-                            <table>
-                                <thead>
-                                    <tr>
-                                    <th>ID</th>
-                                   
-                                    <th>Name</th>
-                                    <th>Organization</th>
-                                    <th>Hourly rate</th>
-                                    
-                                    {/* Add more columns as needed */}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {clients.map((employee) => (
-                                    <tr key={employee.id}>
-                                        <td>#{employee.organization}{employee.id}</td>
-                                        <td>{employee.name}</td>
-                                        <td>{employee.organization}</td>
-                                        <td>${employee.hourly_rate}/hr</td>
-                                       
-                                
+                            <>
+                                {clients.length === 0 ? (
+                                    <div className='organization-body'>
+                                        <div className = 'timesheet'>
+                                            <div className='body-title'> No clients have been assigned to you at this time. Please check back later or contact your administrator for more information.</div>
+                                            <div className='time-bt' >
+                                            
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className='organization-body'>
+                                    <div className = 'timesheet'>
+                                        <div className='body-title'>Clients</div>
+                                        <div className='time-bt' >
+                                          
+                                        </div>
+                                    </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                            <th>ID</th>
+                                           
+                                            <th>Name</th>
+                                            <th>Organization</th>
+                                            <th>Hourly rate</th>
+                                            
+                                            {/* Add more columns as needed */}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {clients.map((employee) => (
+                                            <tr key={employee.id}>
+                                                <td>#{employee.organization}{employee.id}</td>
+                                                <td>{employee.name}</td>
+                                                <td>{employee.organization}</td>
+                                                <td>${employee.hourly_rate}/hr</td>
+                                               
                                         
-                                    
-                                    </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                         </div>
+                                                
+                                            
+                                            </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                 </div>
+                                )}
+                            </>
                        )}
                         
                        
