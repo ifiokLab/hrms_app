@@ -451,9 +451,9 @@ const EmployeeOrganizationDashboard = ()=>{
                                 {timeSheet.length === 0 ? (
                                     <div className='organization-body'>
                                         <div className = 'timesheet'>
-                                            <div className='body-title'>Create TimeSheet</div>
-                                            <div className='time-btn' >
-                                            
+                                            <div className='body-title'>You haven't created any timesheets yet.</div>
+                                            <div className='time-btn' onClick={toggleTimeSheetModal}>
+                                                Create TimeSheet
                                             </div>
                                         
                                         </div> 
