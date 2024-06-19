@@ -222,7 +222,7 @@ const EmployeeTimesheetList = ()=>{
                         </div>
                         
                        </div>
-                       {timeSheet.length > 0 ?  (
+                       {timeSheet.length === 0 ?  (
                             <div className='organization-body'>
                                 <div className = 'timesheet'>
                                     <div className='body-title'>Employee TimeSheet</div>
