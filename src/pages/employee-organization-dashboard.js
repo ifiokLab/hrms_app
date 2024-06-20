@@ -763,13 +763,13 @@ const EmployeeOrganizationDashboard = ()=>{
                 <div className="form-group">
                     {organization.organization_type === 'HEALTH' ? (
                             <>
-                                <label htmlFor="client">Client:</label>
+                                
                                 <select
                                     id="client"
                                     name="client"
                                     value={formData.client}
                                     onChange={handleChange}
-                                    required
+                                    
                                 >
                                     <option value="" disabled>Select Clients</option>
                                     {clients.map((client) => (
