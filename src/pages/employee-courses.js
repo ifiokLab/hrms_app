@@ -13,6 +13,9 @@ import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
 import logo from '../images/logo192.png';
 import apiUrl from '../components/api-url';
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 import { useDispatch } from 'react-redux';
 import { setUser } from '../actions/user-action'; // Import actions
 import DesktopLogout from './desktop-logout';
@@ -21,7 +24,10 @@ import DesktopLogout from './desktop-logout';
 const EmployeeCourses = ()=>{
     const user = useSelector((state) => state.user.user);
     const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [employeeProfile,setEmployeeProfile] = useState({});
+
+
     useEffect(() => {
         const fetchCourses = async () => {
             console.log('user.auth_token:',user);
@@ -32,8 +38,10 @@ const EmployeeCourses = ()=>{
                 },
             });
             setCourses(response.data.all_courses);
+            setLoading(false);
           } catch (error) {
             console.error('Error fetching courses:', error);
+            setLoading(false);
           }
         };
         const fetchProfileData = async () => {
@@ -101,26 +109,40 @@ const EmployeeCourses = ()=>{
                 </div>
                 <div className='container-2'>
                     <div className = "container-2-wrapper">
-                    <div className='course-wrapper'>
-                        <div className='popular'>
-                            <h2>My Learning</h2>
-                            <div className='time-text'>Learning a little each day adds up. Research shows that students who make learning a habit are more likely to reach their goals.</div>
-                        </div>
-                        <div className='course-container'>
-                        {courses.map((course) => (
-                            <Link to={`/course-view-page/${course.id}/${course.title}/`}  className='card'>
-                                <img src = {`${course.thumbnail}`} alt='' />
-                                <div className='card-details'>
-                                    <h2>{course.title}</h2>
-                                    <div className='author-name'>{course.instructor}r</div>
-                                    
-                                </div>
-                            </Link>
-                        ))}
+                        <div className='course-wrapper'>
+                            <div className='popular'>
+                                <h2>My Learning</h2>
+                                <div className='time-text'>Learning a little each day adds up. Research shows that students who make learning a habit are more likely to reach their goals.</div>
+                            </div>
+                            <div className='course-container'>
+                                {loading ? (
+                                    <>
+                                        <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                                    </>
+                                ):(
+                                    <>
+                                        {courses.length === 0 ? (
+                                            <h2>No courses have been assigned yet. Please check back later or contact your administrator.</h2>
+                                        ):(
+                                            <>
+                                                {courses.map((course) => (
+                                                    <Link to={`/course-view-page/${course.id}/${course.title}/`}  className='card'>
+                                                        <img src = {`${course.thumbnail}`} alt='' />
+                                                        <div className='card-details'>
+                                                            <h2>{course.title}</h2>
+                                                            <div className='author-name'>{course.instructor}r</div>
+                                                            
+                                                        </div>
+                                                    </Link>
+                                                ))}
+                                            </>
+                                        )}
+                                    </>
+                                )}
+                                
                             
-                        
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
