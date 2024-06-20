@@ -1187,7 +1187,7 @@ const OrganizationDashboard = ()=>{
                        {openSlideSections === 5 && (
                          <div className='organization-body'>
                             {offboardingList.length === 0 ? (
-                                <div className='body-title'>offboarding List</div>
+                                <div className='body-title'>No data available.</div>
                             ):(
                                 <>
                                     <div className='body-title'>offboarding List</div>
