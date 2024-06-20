@@ -865,54 +865,64 @@ const OrganizationDashboard = ()=>{
                        {openSlideSections === 0 && (
                          <div className='organization-body'>
                             <div className='body-title'>Employee List</div>
-                            <table>
-                                <thead>
-                                    <tr>
-                                    <th>ID</th>
-                                    <th>First name</th>
-                                    <th>Last name</th>
-                                    <th>Department</th>
-                                    <th>Timesheet</th>
-                                    <th>Status</th>
-                                    {/* Add more columns as needed */}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {employees.map((employee) => (
-                                    <tr key={employee.id}>
-                                        <td>#{employee.organization}{employee.id}</td>
-                                        <td>{employee.first_name}</td>
-                                        <td>{employee.last_name}</td>
-                                        <td>{employee.department}</td>
-                                        <td>
-                                            <Link to = {`/employee/timesheet/${Id}/${employee.userId}/${employee.first_name}${employee.last_name}/list/`} >view timesheet</Link>
-                                        </td>
-                                        <td className={`status ${StatusModal === 0 ? 'show' :''}`} onClick={() => toggleStatusModal(employee.id)} >
-                                            <span>{employee.status}</span>
-                                            <i class="fa-solid fa-ellipsis-vertical"></i>
-                                            {StatusModal === employee.id && (
-                                                <div className = 'status-modal'>
-                                                    {employee.status === 'Inactive' && (
-                                                        <div className='card' onClick={()=>toggleRemoveEmployeeModal(employee.id,employee.first_name,'Active')}>Reinstate Employee</div>
-                                                        
-                                                    )}
-                                                    {employee.status === 'Suspended' && (
-                                                        <div className='card' onClick={()=>toggleRemoveEmployeeModal(employee.id,employee.first_name,'Active')}>Reinstate Employee</div>
-                                                        
-                                                    )}
-                                                    <div className='card' onClick={()=>toggleMemberModal(employee.id,employee.first_name)}>Change Department</div>
-                                                    <div className='card' onClick={()=>toggleRemoveEmployeeModal(employee.id,employee.first_name,'Inactive')}>Remove employee</div>
-                                                    <div className='card' onClick={()=>toggleRemoveEmployeeModal(employee.id,employee.first_name,'Suspended')}>Suspend</div>
-                                                   
-                                                </div>
-                                            )}
-                                            
-                                        </td>
+                           {loading ? (
+                                   <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                           ):(
+                                <>
+                                  {employees.length === 0 ? (
+                                       <h5>No employee data available. Click here to add employees</h5>
+                                  ):(
+                                    <table>
+                                    <thead>
+                                        <tr>
+                                        <th>ID</th>
+                                        <th>First name</th>
+                                        <th>Last name</th>
+                                        <th>Department</th>
+                                        <th>Timesheet</th>
+                                        <th>Status</th>
                                         {/* Add more columns as needed */}
-                                    </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {employees.map((employee) => (
+                                        <tr key={employee.id}>
+                                            <td>#{employee.organization}{employee.id}</td>
+                                            <td>{employee.first_name}</td>
+                                            <td>{employee.last_name}</td>
+                                            <td>{employee.department}</td>
+                                            <td>
+                                                <Link to = {`/employee/timesheet/${Id}/${employee.userId}/${employee.first_name}${employee.last_name}/list/`} >view timesheet</Link>
+                                            </td>
+                                            <td className={`status ${StatusModal === 0 ? 'show' :''}`} onClick={() => toggleStatusModal(employee.id)} >
+                                                <span>{employee.status}</span>
+                                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                {StatusModal === employee.id && (
+                                                    <div className = 'status-modal'>
+                                                        {employee.status === 'Inactive' && (
+                                                            <div className='card' onClick={()=>toggleRemoveEmployeeModal(employee.id,employee.first_name,'Active')}>Reinstate Employee</div>
+                                                            
+                                                        )}
+                                                        {employee.status === 'Suspended' && (
+                                                            <div className='card' onClick={()=>toggleRemoveEmployeeModal(employee.id,employee.first_name,'Active')}>Reinstate Employee</div>
+                                                            
+                                                        )}
+                                                        <div className='card' onClick={()=>toggleMemberModal(employee.id,employee.first_name)}>Change Department</div>
+                                                        <div className='card' onClick={()=>toggleRemoveEmployeeModal(employee.id,employee.first_name,'Inactive')}>Remove employee</div>
+                                                        <div className='card' onClick={()=>toggleRemoveEmployeeModal(employee.id,employee.first_name,'Suspended')}>Suspend</div>
+                                                    
+                                                    </div>
+                                                )}
+                                                
+                                            </td>
+                                            {/* Add more columns as needed */}
+                                        </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                                  )}
+                                </>
+                           )}
                          </div>
                        )}
                        
