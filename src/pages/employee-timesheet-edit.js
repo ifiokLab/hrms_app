@@ -9,6 +9,9 @@ import 'swiper/swiper-bundle.css';
 import '../styles/employer-dashboard.css';
 import Header from '../components/header';
 import '../styles/snackbar.css';
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 import DesktopLogout from './desktop-logout';
 
 //import hero1 from '../styles/hero1.jpg';
