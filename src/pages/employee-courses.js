@@ -122,7 +122,7 @@ const EmployeeCourses = ()=>{
                                 ):(
                                     <>
                                         {courses.length === 0 ? (
-                                            <h2>No courses have been assigned yet. Please check back later or contact your administrator.</h2>
+                                            <h5>No courses have been assigned yet. Please check back later or contact your administrator.</h5>
                                         ):(
                                             <>
                                                 {courses.map((course) => (
