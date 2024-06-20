@@ -10,6 +10,8 @@ import '../styles/snackbar.css';
 import '../styles/employer-dashboard.css';
 import Header from '../components/header';
 import DesktopLogout from './desktop-logout';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 //import hero1 from '../styles/hero1.jpg';
 
@@ -62,6 +64,7 @@ const OrganizationDashboard = ()=>{
     const [paidModal,setPaidModal] = useState(0);
     const [showSnackbar, setShowSnackbar] = useState(false);
     const [snackbarStatus, setsnackbarStatus] = useState('');
+    const [loading, setLoading] = useState(true);
 
 
     const togglePaidModal = (index)=>{
@@ -556,7 +559,9 @@ const OrganizationDashboard = ()=>{
           const response = await axios.get(`${apiUrl}/employees/list/${Id}/`);
           
           setEmployees(response.data);
+          setLoading(false);
         } catch (error) {
+          setLoading(false);
           console.error('Error fetching employees:', error.message);
         }
     };

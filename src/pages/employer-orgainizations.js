@@ -12,6 +12,8 @@ import '../styles/organizations.css';
 import '../styles/snackbar.css';
 import DesktopLogout from './desktop-logout';
 import Header from '../components/header';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import hero1 from '../images/designer1.svg';
 import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
@@ -614,7 +616,7 @@ const EmployerOrganizations = ()=>{
                             <div className='create-btn' onClick={toggleOrgModal}>create</div>
                         </div>
                         {loadOrg ? (
-                           <h4>Loading....</h4>
+                           <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
                         ):
                         (
                             <>
