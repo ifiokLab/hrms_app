@@ -562,52 +562,60 @@ const EmployeeOrganizationDashboard = ()=>{
                        )}
                         {openSlideSections === 1 && (
                             <>
-                                {requestList.length === 0 ? (
-                                    <div className='organization-body'>
-                                        `<div className = 'timesheet'>
-                                            <div className='body-title'> You have not made any requests yet. Start by submitting a new request or contact support if you need assistance.</div>
+                                {loading ? (
+                                <>
+                                    <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                                </>
+                            ):(
+                                <>
+                                    {requestList.length === 0 ? (
+                                        <div className='organization-body'>
+                                            `<div className = 'timesheet'>
+                                                <div className='body-title'> You have not made any requests yet. Start by submitting a new request or contact support if you need assistance.</div>
+                                                <div className='time-btn' onClick={toggleRequestModal}>
+                                                    Create Request
+                                                </div>`
+                                            </div>
+                                        </div>
+                                    ):(
+                                        <div className='organization-body'>
+                                        <div className = 'timesheet'>
+                                            <div className='body-title'>My Requests</div>
                                             <div className='time-btn' onClick={toggleRequestModal}>
                                                 Create Request
-                                            </div>`
+                                            </div>
                                         </div>
-                                    </div>
-                                ):(
-                                    <div className='organization-body'>
-                                    <div className = 'timesheet'>
-                                        <div className='body-title'>My Requests</div>
-                                        <div className='time-btn' onClick={toggleRequestModal}>
-                                            Create Request
-                                        </div>
-                                    </div>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                            <th>ID</th>
-                                            <th>Start date</th>
-                                            <th>End date</th>
-                                            <th>Organization</th>
-                                            <th>Request type</th>
-                                           
-                                            <th>Status</th>
-                                            {/* Add more columns as needed */}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {requestList.map((employee) => (
-                                            <tr key={employee.id}>
-                                                <td>#{employee.organization}{employee.id}</td>
-                                                <td>{employee.start_date}</td>
-                                                <td>{employee.end_date}</td>
-                                                <td>{employee.organization}</td>
-                                                <td>{employee.request_type}</td>
-                                                <td>{employee.status}</td>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                <th>ID</th>
+                                                <th>Start date</th>
+                                                <th>End date</th>
+                                                <th>Organization</th>
+                                                <th>Request type</th>
                                             
-                                            </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                 </div>
-                                )}
+                                                <th>Status</th>
+                                                {/* Add more columns as needed */}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {requestList.map((employee) => (
+                                                <tr key={employee.id}>
+                                                    <td>#{employee.organization}{employee.id}</td>
+                                                    <td>{employee.start_date}</td>
+                                                    <td>{employee.end_date}</td>
+                                                    <td>{employee.organization}</td>
+                                                    <td>{employee.request_type}</td>
+                                                    <td>{employee.status}</td>
+                                                
+                                                </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    )}
+                                </>
+                            )}
                             </>
                        )}
                         {openSlideSections === 3 && (
@@ -651,54 +659,62 @@ const EmployeeOrganizationDashboard = ()=>{
                       </div>
                         )}
                         {openSlideSections === 4 && (
-                            <>
-                                {clients.length === 0 ? (
-                                    <div className='organization-body'>
+                          <>
+                            {loading ? (
+                                <>
+                                <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                            </>
+                            ):(
+                                <>
+                                    {clients.length === 0 ? (
+                                        <div className='organization-body'>
+                                            <div className = 'timesheet'>
+                                                <div className='body-title'> No clients have been assigned to you at this time. Please check back later or contact your administrator for more information.</div>
+                                                <div className='time-bt' >
+                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className='organization-body'>
                                         <div className = 'timesheet'>
-                                            <div className='body-title'> No clients have been assigned to you at this time. Please check back later or contact your administrator for more information.</div>
+                                            <div className='body-title'>Clients</div>
                                             <div className='time-bt' >
                                             
                                             </div>
                                         </div>
-                                    </div>
-                                ) : (
-                                    <div className='organization-body'>
-                                    <div className = 'timesheet'>
-                                        <div className='body-title'>Clients</div>
-                                        <div className='time-bt' >
-                                          
-                                        </div>
-                                    </div>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                            <th>ID</th>
-                                           
-                                            <th>Name</th>
-                                            <th>Organization</th>
-                                            <th>Hourly rate</th>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                <th>ID</th>
                                             
-                                            {/* Add more columns as needed */}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {clients.map((employee) => (
-                                            <tr key={employee.id}>
-                                                <td>#{employee.organization}{employee.id}</td>
-                                                <td>{employee.name}</td>
-                                                <td>{employee.organization}</td>
-                                                <td>${employee.hourly_rate}/hr</td>
-                                               
-                                        
+                                                <th>Name</th>
+                                                <th>Organization</th>
+                                                <th>Hourly rate</th>
+                                                
+                                                {/* Add more columns as needed */}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {clients.map((employee) => (
+                                                <tr key={employee.id}>
+                                                    <td>#{employee.organization}{employee.id}</td>
+                                                    <td>{employee.name}</td>
+                                                    <td>{employee.organization}</td>
+                                                    <td>${employee.hourly_rate}/hr</td>
                                                 
                                             
-                                            </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                 </div>
-                                )}
-                            </>
+                                                    
+                                                
+                                                </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    )}
+                                </>
+                            )}
+                          </>
                        )}
                         
                        
