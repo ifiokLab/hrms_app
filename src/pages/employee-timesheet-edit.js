@@ -21,6 +21,7 @@ const EmployeeTimesheetEdit= ()=>{
     const [isLoading, setIsLoading] = useState(false);
     const [isLoading2, setIsLoading2] = useState(false);
     const [isLoading3, setIsLoading3] = useState(false);
+    const [loading,setLoading] = useState(true);
    
     const navigate = useNavigate();
    
@@ -222,8 +223,10 @@ const EmployeeTimesheetEdit= ()=>{
           console.log('response.data:',response.data[0]);
           setFormData(response.data[0]);
           setTimeSheet(response.data);
+          setLoading(false);
         } catch (error) {
           console.error('Error offboarding list:', error.message);
+          setLoading(false);
         }
     };
   
@@ -344,7 +347,10 @@ const EmployeeTimesheetEdit= ()=>{
                     <div className = "container-2-wrapper">
                        
                     <form id='organization-form-edit' className="organization-form timesheet-modal" onSubmit={handleGeneralTimesheetSubmit}>
-                        <div className="form-wrappe" >
+                        {loading ? (
+                            <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                        ):(
+                            <div className="form-wrappe" >
                             <div className="form-header">
                                 <div className="title">TimeSheet</div>
                                 <div className="icon" >
@@ -637,6 +643,7 @@ const EmployeeTimesheetEdit= ()=>{
                                 
                             </div>
                         </div>
+                        )}
                     </form>
                       
                       
