@@ -548,41 +548,54 @@ const EmployeeOrganizationDashboard = ()=>{
                             </>
                        )}
                         {openSlideSections === 1 && (
-                        <div className='organization-body'>
-                            <div className = 'timesheet'>
-                                <div className='body-title'>My Requests</div>
-                                <div className='time-btn' onClick={toggleRequestModal}>
-                                    Create Request
-                                </div>
-                            </div>
-                            <table>
-                                <thead>
-                                    <tr>
-                                    <th>ID</th>
-                                    <th>Start date</th>
-                                    <th>End date</th>
-                                    <th>Organization</th>
-                                    <th>Request type</th>
-                                   
-                                    <th>Status</th>
-                                    {/* Add more columns as needed */}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {requestList.map((employee) => (
-                                    <tr key={employee.id}>
-                                        <td>#{employee.organization}{employee.id}</td>
-                                        <td>{employee.start_date}</td>
-                                        <td>{employee.end_date}</td>
-                                        <td>{employee.organization}</td>
-                                        <td>{employee.request_type}</td>
-                                        <td>{employee.status}</td>
-                                    
-                                    </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                         </div>
+                            <>
+                                {requestList.length === 0 ? (
+                                    <div className='organization-body'>
+                                        `<div className = 'timesheet'>
+                                            <div className='body-title'> You have not made any requests yet. Start by submitting a new request or contact support if you need assistance.</div>
+                                            <div className='time-btn' onClick={toggleRequestModal}>
+                                                Create Request
+                                            </div>`
+                                        </div>
+                                    </div>
+                                ):(
+                                    <div className='organization-body'>
+                                    <div className = 'timesheet'>
+                                        <div className='body-title'>My Requests</div>
+                                        <div className='time-btn' onClick={toggleRequestModal}>
+                                            Create Request
+                                        </div>
+                                    </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                            <th>ID</th>
+                                            <th>Start date</th>
+                                            <th>End date</th>
+                                            <th>Organization</th>
+                                            <th>Request type</th>
+                                           
+                                            <th>Status</th>
+                                            {/* Add more columns as needed */}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {requestList.map((employee) => (
+                                            <tr key={employee.id}>
+                                                <td>#{employee.organization}{employee.id}</td>
+                                                <td>{employee.start_date}</td>
+                                                <td>{employee.end_date}</td>
+                                                <td>{employee.organization}</td>
+                                                <td>{employee.request_type}</td>
+                                                <td>{employee.status}</td>
+                                            
+                                            </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                 </div>
+                                )}
+                            </>
                        )}
                         {openSlideSections === 3 && (
                         <div className='organization-body'>
