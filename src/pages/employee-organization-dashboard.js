@@ -9,6 +9,8 @@ import 'swiper/swiper-bundle.css';
 import '../styles/employer-dashboard.css';
 import Header from '../components/header';
 import '../styles/snackbar.css';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import DesktopLogout from './desktop-logout';
 
 //import hero1 from '../styles/hero1.jpg';
@@ -41,6 +43,7 @@ const EmployeeOrganizationDashboard = ()=>{
     const [payrollHistory,setPayrollHistory] = useState([]);
     const [employeeProfile,setEmployeeProfile] = useState({});
     const [clients,setClients] = useState([]);
+    const [loading,setLoading] = useState(true);
     const [formData, setFormData] = useState({
         client: '',
         organization:Id,
@@ -288,8 +291,10 @@ const EmployeeOrganizationDashboard = ()=>{
           
           //console.log(response.data);
           setTimeSheet(response.data);
+          setLoading(false);
         } catch (error) {
           console.error('Error offboarding list:', error.message);
+          setLoading(false);
         }
     };
     const fetchRequest = async () => {
@@ -447,105 +452,113 @@ const EmployeeOrganizationDashboard = ()=>{
                         </div>
                        </div>
                        {openSlideSections === 0 && (
-                            <>
-                                {timeSheet.length === 0 ? (
-                                    <div className='organization-body'>
+                           <>
+                                {loading ? (
+                                    <>
+                                        <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                                    </>
+                                ):(
+                                  <>     
+                                    {timeSheet.length === 0 ? (
+                                        <div className='organization-body'>
+                                            <div className = 'timesheet'>
+                                                <div className='body-title'>You haven't created any timesheets yet.</div>
+                                                <div className='time-btn' onClick={toggleTimeSheetModal}>
+                                                    Create TimeSheet
+                                                </div>
+                                            
+                                            </div> 
+                                        </div>
+                                    ) : ( 
+                                    
+                                        <div className='organization-body'>
                                         <div className = 'timesheet'>
-                                            <div className='body-title'>You haven't created any timesheets yet.</div>
+                                            <div className='body-title'>My TimeSheet</div>
                                             <div className='time-btn' onClick={toggleTimeSheetModal}>
                                                 Create TimeSheet
                                             </div>
                                         
-                                        </div> 
-                                     </div>
-                                ) : ( 
-                                   
-                                    <div className='organization-body'>
-                                    <div className = 'timesheet'>
-                                        <div className='body-title'>My TimeSheet</div>
-                                        <div className='time-btn' onClick={toggleTimeSheetModal}>
-                                            Create TimeSheet
                                         </div>
-                                    
-                                    </div>
-                                    {organization.organization_type === 'HEALTH' ? (
-                                        <table>
-                                        <thead>
-                                            <tr>
-                                            <th>ID</th>
-                                            <th>Start date</th>
-                                            <th>End date</th>
-                                            <th>Organization</th>
-                                            <th>Client</th>
-                                            <th>Hours worked</th>
-                                            <th>Client Approved</th>
-                                            <th>Organization Approved</th>
-                                            <th>Detail</th>
-                                            {/* Add more columns as needed */}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {timeSheet.map((employee) => (
-                                            <tr key={employee.id}>
-                                                <td>#{employee.id}</td>
-                                                <td>{employee.start_date}</td>
-                                                <td>{employee.end_date}</td>
+                                        {organization.organization_type === 'HEALTH' ? (
+                                            <table>
+                                            <thead>
+                                                <tr>
+                                                <th>ID</th>
+                                                <th>Start date</th>
+                                                <th>End date</th>
+                                                <th>Organization</th>
+                                                <th>Client</th>
+                                                <th>Hours worked</th>
+                                                <th>Client Approved</th>
+                                                <th>Organization Approved</th>
+                                                <th>Detail</th>
+                                                {/* Add more columns as needed */}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {timeSheet.map((employee) => (
+                                                <tr key={employee.id}>
+                                                    <td>#{employee.id}</td>
+                                                    <td>{employee.start_date}</td>
+                                                    <td>{employee.end_date}</td>
+                                                
+                                                    <td>{employee.organization}</td>
+                                                    <td>{employee.client}</td>
+                                                
+                            
+                                                    <td>{employee.hours_worked}</td>
+                                                    <td>{employee.client_approved}</td>
+                                                    <td>{employee.organization_approved}</td>
+                                                    <td><Link to ={`/employee/timesheet/edit/${employee.id}/${Id}/${name}/`}>view</Link></td>
+                                                
+                                                </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                        ):
+                                        (
+                                            <table>
+                                            <thead>
+                                                <tr>
+                                                <th>ID</th>
+                                                <th>Start date</th>
+                                                <th>End date</th>
+                                                <th>Organization</th>
                                             
-                                                <td>{employee.organization}</td>
-                                                <td>{employee.client}</td>
+                                                <th>Hours worked</th>
                                             
-                        
-                                                <td>{employee.hours_worked}</td>
-                                                <td>{employee.client_approved}</td>
-                                                <td>{employee.organization_approved}</td>
-                                                <td><Link to ={`/employee/timesheet/edit/${employee.id}/${Id}/${name}/`}>view</Link></td>
-                                            
-                                            </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                    ):
-                                    (
-                                        <table>
-                                        <thead>
-                                            <tr>
-                                            <th>ID</th>
-                                            <th>Start date</th>
-                                            <th>End date</th>
-                                            <th>Organization</th>
-                                        
-                                            <th>Hours worked</th>
-                                        
-                                            <th>Organization Approved</th>
-                                            <th>Detail</th>
-                                            {/* Add more columns as needed */}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {timeSheet.map((employee) => (
-                                            <tr key={employee.id}>
-                                                <td>#{employee.id}</td>
-                                                <td>{employee.start_date}</td>
-                                                <td>{employee.end_date}</td>
-                                            
-                                                <td>{employee.organization}</td>
-                                            
-                                            
-                        
-                                                <td>{employee.hours_worked}</td>
-                                            
-                                                <td>{employee.organization_approved}</td>
-                                                <td><Link to ={`/employee/timesheet/edit/${employee.id}/${Id}/${name}/`}>view</Link></td>
-                                            
-                                            </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                    )
-                                }
-                                    </div>
+                                                <th>Organization Approved</th>
+                                                <th>Detail</th>
+                                                {/* Add more columns as needed */}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {timeSheet.map((employee) => (
+                                                <tr key={employee.id}>
+                                                    <td>#{employee.id}</td>
+                                                    <td>{employee.start_date}</td>
+                                                    <td>{employee.end_date}</td>
+                                                
+                                                    <td>{employee.organization}</td>
+                                                
+                                                
+                            
+                                                    <td>{employee.hours_worked}</td>
+                                                
+                                                    <td>{employee.organization_approved}</td>
+                                                    <td><Link to ={`/employee/timesheet/edit/${employee.id}/${Id}/${name}/`}>view</Link></td>
+                                                
+                                                </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                        )
+                                    }
+                                        </div>
+                                    )}
+                                  </>
                                 )}
-                            </>
+                           </>
                        )}
                         {openSlideSections === 1 && (
                             <>
