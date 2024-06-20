@@ -1080,8 +1080,13 @@ const OrganizationDashboard = ()=>{
                        )}
                        {openSlideSections === 3 && (
                          <div className='organization-body'>
-                            <div className='body-title'>Employee Requests</div>
-                            <table>
+                            
+                           {requestList.length === 0 ? (
+                                <div className='body-title'>No employee requests available at this moment. Please check back later</div>
+                           ) : (
+                            <>
+                                <div className='body-title'>Employee Requests</div>
+                                 <table>
                                 <thead>
                                     <tr>
                                     <th>Employee</th>
@@ -1134,82 +1139,98 @@ const OrganizationDashboard = ()=>{
                                     ))}
                                 </tbody>
                             </table>
+                            </>
+                           )}
                          </div>
                        )}
                         {openSlideSections === 4 && (
                          <div className='organization-body'>
-                            <div className='body-title'>Invite List</div>
-                            <table>
-                                <thead>
-                                    <tr>
-                                    <th>ID</th>
-                                    <th>invited_by</th>
-                                    <th>invited_user</th>
-                                    
-                                    <th>Department</th>
-                                    <th>Status</th>
-                                    {/* Add more columns as needed */}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {onboardingList.map((employee) => (
-                                    <tr key={employee.id}>
-                                        <td>#{employee.organization}{employee.id}</td>
-                                        <td>{employee.invited_by}</td>
-                                        <td>{employee.invited_user}</td>
-                                        <td>{employee.department}</td>
-                                        <td className={`status}`} onClick={() => toggleStatusModal(employee.id)} >
-                                            <span>{employee.status}</span>
-                                           
+                            
+                            {onboardingList.length === 0 ? (
+                                <div className='body-title'>No data available.</div>
+                            ) : (
+                                <>
+                                    <div className='body-title'>Invite List</div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                            <th>ID</th>
+                                            <th>invited_by</th>
+                                            <th>invited_user</th>
                                             
-                                        </td>
-                                        {/* Add more columns as needed */}
-                                    </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                            <th>Department</th>
+                                            <th>Status</th>
+                                            {/* Add more columns as needed */}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {onboardingList.map((employee) => (
+                                            <tr key={employee.id}>
+                                                <td>#{employee.organization}{employee.id}</td>
+                                                <td>{employee.invited_by}</td>
+                                                <td>{employee.invited_user}</td>
+                                                <td>{employee.department}</td>
+                                                <td className={`status}`} onClick={() => toggleStatusModal(employee.id)} >
+                                                    <span>{employee.status}</span>
+                                                
+                                                    
+                                                </td>
+                                                {/* Add more columns as needed */}
+                                            </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </>
+                            )}
                          </div>
                        )}
                        {openSlideSections === 5 && (
                          <div className='organization-body'>
-                            <div className='body-title'>Employee List</div>
-                            <table>
-                                <thead>
-                                    <tr>
-                                    <th>ID</th>
-                                    <th>First name</th>
-                                    <th>Last name</th>
-                                    <th>Department</th>
-                                    <th>Status</th>
-                                    {/* Add more columns as needed */}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {offboardingList.map((employee) => (
-                                    <tr key={employee.id}>
-                                        <td>#{employee.organization}{employee.id}</td>
-                                        <td>{employee.first_name}</td>
-                                        <td>{employee.last_name}</td>
-                                        <td>{employee.department}</td>
-                                        <td className={`status ${StatusModal === 0 ? 'show' :''}`} onClick={() => toggleStatusModal(employee.id)} >
-                                            <span>{employee.status}</span>
-                                            <i class="fa-solid fa-ellipsis-vertical"></i>
-                                            {StatusModal === employee.id && (
-                                                <div className = 'status-modal'>
-                                                    {employee.status === 'Inactive' && (
-                                                        <div className='card' onClick={()=>toggleRemoveEmployeeModal(employee.id,employee.first_name,'Active')}>Reinstate Employee</div>
+                            {offboardingList.length === 0 ? (
+                                <div className='body-title'>offboarding List</div>
+                            ):(
+                                <>
+                                    <div className='body-title'>offboarding List</div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                            <th>ID</th>
+                                            <th>First name</th>
+                                            <th>Last name</th>
+                                            <th>Department</th>
+                                            <th>Status</th>
+                                            {/* Add more columns as needed */}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {offboardingList.map((employee) => (
+                                            <tr key={employee.id}>
+                                                <td>#{employee.organization}{employee.id}</td>
+                                                <td>{employee.first_name}</td>
+                                                <td>{employee.last_name}</td>
+                                                <td>{employee.department}</td>
+                                                <td className={`status ${StatusModal === 0 ? 'show' :''}`} onClick={() => toggleStatusModal(employee.id)} >
+                                                    <span>{employee.status}</span>
+                                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                    {StatusModal === employee.id && (
+                                                        <div className = 'status-modal'>
+                                                            {employee.status === 'Inactive' && (
+                                                                <div className='card' onClick={()=>toggleRemoveEmployeeModal(employee.id,employee.first_name,'Active')}>Reinstate Employee</div>
+                                                                
+                                                            )}
                                                         
+                                                        </div>
                                                     )}
-                                                   
-                                                </div>
-                                            )}
-                                            
-                                        </td>
-                                        {/* Add more columns as needed */}
-                                    </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                                    
+                                                </td>
+                                                {/* Add more columns as needed */}
+                                            </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </>
+                            )}
+                            
                          </div>
                        )}
                       {/* {openSlideSections === 7 && (
