@@ -11,6 +11,8 @@ import '../styles/employer-dashboard.css';
 import '../styles/organizations.css';
 import Header from '../components/header';
 import DesktopLogout from './desktop-logout';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import hero1 from '../images/designer1.svg';
 import hero2 from '../images/designer2.svg';
 import hero3 from '../images/designer3.svg';
@@ -23,6 +25,7 @@ const EmployeeDashboard = ()=>{
     const navigate = useNavigate();
     const [openModalIndex, setOpenModalIndex] = useState(null);
     const [employeeProfile,setEmployeeProfile] = useState({});
+    const [loading,setLoading] = useState(true);
    
     
 
@@ -43,10 +46,10 @@ const EmployeeDashboard = ()=>{
             });
             //console.log(response.data.all_courses)
             setOrganizations(response.data.all_organizations);
-            //setLoading(false);
+            setLoading(false);
         } catch (error) {
             console.error('Error fetching user courses:', error);
-            //setLoading(false);
+            setLoading(false);
         }
     };
     useEffect(() => {
@@ -137,41 +140,49 @@ const EmployeeDashboard = ()=>{
                             </div>
                            <div></div>
                         </div>
-                        {organizations.length > 0 ? (
-                            <div className='apps-container'>
-                            {organizations.map((data, index) => (
-                                <Link to={`/employee/organization/dashboard/${data.id}/${data.organization}/`} className='cards organization-card' key={index}>
-                                <div className='icon hrms-icon'>
-                                    <img src={`${apiUrl}${data.logo}`} alt={data.name} />
-                                </div>
-                                <div className='text-wrapper'>
-                                    <div className='title-header'>{data.organization}</div>
-                                    <p>{data.overview}</p>
-                                    <div className='employee-count'>
-                                        <i class="fa-solid fa-users"></i>
-                                        <span>({data.department})</span>
-                                   
+                        <>
+                            {loading ? (
+                                 <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                            ) : (
+                                <>
+                                    {organizations.length > 0 ? (
+                                    <div className='apps-container'>
+                                    {organizations.map((data, index) => (
+                                        <Link to={`/employee/organization/dashboard/${data.id}/${data.organization}/`} className='cards organization-card' key={index}>
+                                        <div className='icon hrms-icon'>
+                                            <img src={`${apiUrl}${data.logo}`} alt={data.name} />
+                                        </div>
+                                        <div className='text-wrapper'>
+                                            <div className='title-header'>{data.organization}</div>
+                                            <p>{data.overview}</p>
+                                            <div className='employee-count'>
+                                                <i class="fa-solid fa-users"></i>
+                                                <span>({data.department})</span>
+                                        
+                                            </div>
+                                            
+                                            
+                                        </div>
+                                        <div className='chevron-card' onClick={(event) => handleEllipsisClick(event,index)}>
+                                            <i className="fa-solid fa-ellipsis-vertical"></i>
+                                        </div>
+                                        {openModalIndex === index && (
+                                            <div className='option-modal'>
+                                            {/* Users should be able to click on edit tab to edit the specific organization */}
+                                            <div className='option-card' >Request</div>
+                                            <div className='option-card' >View</div>
+                                        
+                                            </div>
+                                        )}
+                                        </Link>
+                                    ))}
                                     </div>
-                                    
-                                    
-                                </div>
-                                <div className='chevron-card' onClick={(event) => handleEllipsisClick(event,index)}>
-                                    <i className="fa-solid fa-ellipsis-vertical"></i>
-                                </div>
-                                {openModalIndex === index && (
-                                    <div className='option-modal'>
-                                    {/* Users should be able to click on edit tab to edit the specific organization */}
-                                    <div className='option-card' >Request</div>
-                                    <div className='option-card' >View</div>
-                                   
-                                    </div>
+                                ) : (
+                                    <h4>Loading...</h4>
                                 )}
-                                </Link>
-                            ))}
-                            </div>
-                        ) : (
-                            <h4>Loading...</h4>
-                        )}
+                                </>
+                            )}
+                        </>
                     </div>
                 </div>
             </div>
