@@ -277,7 +277,13 @@ const EmployeeTimesheetList = ()=>{
                                          <td>{employee.end_date}</td>
                                          
                                          <td>{employee.organization}</td>
-                                         <td>{employee.client}</td>
+                                         <td>{employee.client ? (
+                                            <>
+                                                {employee.client}
+                                            </>
+                                         ):(
+                                            <>Not assigned</>
+                                         )}</td>
                                          
                  
                                          <td>{employee.hours_worked}</td>
