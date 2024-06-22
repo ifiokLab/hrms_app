@@ -944,7 +944,7 @@ const OrganizationDashboard = ()=>{
                        
                         {openSlideSections === 2 && (
                         <div className='organization-body'>
-                            {loading3 ? (
+                            {loading2 ? (
                                <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
                             ):(
                                 <div>
@@ -1176,7 +1176,13 @@ const OrganizationDashboard = ()=>{
                         {openSlideSections === 4 && (
                          <div className='organization-body'>
                             
-                            {onboardingList.length === 0 ? (
+                            {loading3 ? (
+                                <>
+                                    <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                                </>
+                            ):(
+                                <>
+                                    {onboardingList.length === 0 ? (
                                 <div className='body-title'>No data available.</div>
                             ) : (
                                 <>
@@ -1212,11 +1218,19 @@ const OrganizationDashboard = ()=>{
                                     </table>
                                 </>
                             )}
+                                </>
+                            )}
                          </div>
                        )}
                        {openSlideSections === 5 && (
                          <div className='organization-body'>
-                            {offboardingList.length === 0 ? (
+                           {loading4 ? (
+                                <>
+                                    <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                                </>
+                           ):(
+                                <>
+                                     {offboardingList.length === 0 ? (
                                 <div className='body-title'>No data available.</div>
                             ):(
                                 <>
@@ -1260,6 +1274,8 @@ const OrganizationDashboard = ()=>{
                                     </table>
                                 </>
                             )}
+                                </>
+                           )}
                             
                          </div>
                        )}
