@@ -259,11 +259,21 @@ const EmployeeTimesheetList = ()=>{
                                      <th>Start date</th>
                                      <th>End date</th>
                                      <th>Organization</th>
-                                     <th>Client</th>
+                                     {employee.client ? (
+                                        <th>Client</th>
+                                     ):(
+                                        ""
+                                     )}
+                                     
                                      <th>Hours worked</th>
                                      <th>Hourly rate</th>
                                      <th>Bill amount</th>
-                                     <th>Client Approved</th>
+                                     {employee.client ? (
+                                        <th>Client Approved</th>
+                                     ):(
+                                        ""
+                                     )}
+                                     
                                      <th>Organization Approved</th>
                                      <th>Detail</th>
                                      {/* Add more columns as needed */}
@@ -287,9 +297,7 @@ const EmployeeTimesheetList = ()=>{
                                          
                  
                                          <td>{employee.hours_worked}</td>
-                                         <td>£{employee.hourly_rate}/hr
                                          
-                                         </td>
                                          <td>{employee.hourly_rate ? (
                                             <>
                                                 £{employee.hourly_rate}
@@ -298,8 +306,13 @@ const EmployeeTimesheetList = ()=>{
                                             <>Not set</>
                                          )}</td>
                                          <td>{employee.bill}</td>
+                                        {employee.client ? (
+                                            <td>{employee.client_approved}</td>
+                                            ):(
+                                                ""
+                                        )}
+                                            
                                          
-                                         <td>{employee.client_approved}</td>
              
                                          <td className={`status ${employeesTimesheetModal === 0 ? 'show' :''}`} onClick={() => toggleEmployeesTimesheetModal(employee.id)} >
                                              <span>{employee.organization_approved}</span>
