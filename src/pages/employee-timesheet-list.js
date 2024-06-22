@@ -260,7 +260,7 @@ const EmployeeTimesheetList = ()=>{
                                      <th>End date</th>
                                      <th>Organization</th>
                                      {employee.client ? (
-                                        <th>Client</th>
+                                        <th>sClient</th>
                                      ):(
                                         ""
                                      )}
@@ -268,11 +268,8 @@ const EmployeeTimesheetList = ()=>{
                                      <th>Hours worked</th>
                                      <th>Hourly rate</th>
                                      <th>Bill amount</th>
-                                     {employee.client ? (
-                                        <th>Client Approved</th>
-                                     ):(
-                                        ""
-                                     )}
+                                     <th>Client Approved</th>
+                                    
                                      
                                      <th>Organization Approved</th>
                                      <th>Detail</th>
@@ -289,7 +286,7 @@ const EmployeeTimesheetList = ()=>{
                                          <td>{employee.organization}</td>
                                          <td>{employee.client ? (
                                             <>
-                                                d{employee.client}
+                                                {employee.client}
                                             </>
                                          ):(
                                             <>Not assigned</>
