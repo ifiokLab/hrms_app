@@ -279,7 +279,7 @@ const EmployeeTimesheetList = ()=>{
                                          <td>{employee.organization}</td>
                                          <td>{employee.client ? (
                                             <>
-                                                {employee.client}
+                                                d{employee.client}
                                             </>
                                          ):(
                                             <>Not assigned</>
@@ -290,6 +290,13 @@ const EmployeeTimesheetList = ()=>{
                                          <td>£{employee.hourly_rate}/hr
                                          
                                          </td>
+                                         <td>{employee.hourly_rate ? (
+                                            <>
+                                                £{employee.hourly_rate}
+                                            </>
+                                         ):(
+                                            <>Not set</>
+                                         )}</td>
                                          <td>{employee.bill}</td>
                                          
                                          <td>{employee.client_approved}</td>
