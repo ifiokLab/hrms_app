@@ -259,11 +259,7 @@ const EmployeeTimesheetList = ()=>{
                                      <th>Start date</th>
                                      <th>End date</th>
                                      <th>Organization</th>
-                                     {employee.client ? (
-                                        <th>slllClient</th>
-                                     ):(
-                                        ""
-                                     )}
+                                     <th>slllClient</th>
                                      
                                      <th>Hours worked</th>
                                      <th>Hourly rate</th>
