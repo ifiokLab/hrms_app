@@ -300,12 +300,14 @@ const EmployeeTimesheetList = ()=>{
                                             <>Not set</>
                                          )}
                                          </td>
-                                         <td>koi{employee.bill}</td>
+                                         <td>{employee.bill}</td>
                                          <td>
                                             {employee.client ? (
                                                 <>{employee.client_approved}</>
                                                 ):(
-                                                    ""
+                                                   <>
+                                                    No client aasigned.
+                                                    </>
                                             )}
                                         </td>
                                             

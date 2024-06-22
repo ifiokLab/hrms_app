@@ -50,6 +50,7 @@ const EmployerOrganizations = ()=>{
 
     const [email,setEmail] = useState('');
     const [hourlyRate,setHourlyRate] = useState('');
+    const [hourly_rate,setHourly_rate] = useState('');
     const [departments,setDepartments] = useState([]);
     const [department, setDepartment] = useState('');
     const [organizationId,setOrganizationId] = useState('');
@@ -246,6 +247,7 @@ const EmployerOrganizations = ()=>{
             formData.append('invited_user', email);
             formData.append('organization', organizationId);
             formData.append('department', department);
+            formData.append('hourly_rate', hourly_rate);
             //console.log('formData :',apiUrl,formData );
     
             // Check if thumbnail is a file (not a base64 string)
@@ -755,6 +757,10 @@ const EmployerOrganizations = ()=>{
                         <div className={`form-group ${email ? 'active' : ''}`}>
                             <input type="email" id="email" value={email} onChange = {(e)=>setEmail(e.target.value)} required />
                             <label htmlFor="email">Email</label>
+                        </div>
+                        <div className={`form-group ${hourly_rate ? 'active' : ''}`}>
+                            <input type="hourly_rate" id="hourly_rate" value={hourly_rate} onChange = {(e)=>setHourly_rate(e.target.value)} required />
+                            <label htmlFor="hourly_rate">Hourly rate</label>
                         </div>
                         <div className={`form-group`}>
                             <select value={department} onChange={(e) => setDepartment(e.target.value)} required>
