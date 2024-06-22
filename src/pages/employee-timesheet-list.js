@@ -259,7 +259,7 @@ const EmployeeTimesheetList = ()=>{
                                      <th>Start date</th>
                                      <th>End date</th>
                                      <th>Organization</th>
-                                     <th>slllClient</th>
+                                     <th>Client</th>
                                      
                                      <th>Hours worked</th>
                                      <th>Hourly rate</th>
