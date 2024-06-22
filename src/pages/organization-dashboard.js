@@ -65,6 +65,12 @@ const OrganizationDashboard = ()=>{
     const [showSnackbar, setShowSnackbar] = useState(false);
     const [snackbarStatus, setsnackbarStatus] = useState('');
     const [loading, setLoading] = useState(true);
+    const [loading2, setLoading2] = useState(true);
+    const [loading3, setLoading3] = useState(true);
+    const [loading4, setLoading4] = useState(true);
+    const [loading5, setLoading5] = useState(true);
+    const [loading6, setLoading6] = useState(true);
+   
 
 
     const togglePaidModal = (index)=>{
@@ -579,8 +585,10 @@ const OrganizationDashboard = ()=>{
           const response = await axios.get(`${apiUrl}/off-boarding-list/${Id}/`);
           console.log(response.data);
           setOffboardingList(response.data);
+          setLoading4(false);
         } catch (error) {
           console.error('Error offboarding list:', error.message);
+          setLoading4(false);
         }
     };
     const fetchTimeSheet = async () => {
@@ -609,9 +617,10 @@ const OrganizationDashboard = ()=>{
           
           //console.log(response.data);
           setEmployeesTimesheet(response.data);
-          setLoading(false);
+          setLoading2(false);
         } catch (error) {
           console.error('Error offboarding list:', error.message);
+          setLoading2(false);
         }
     };
     const fetchOrganizationTimeSheet = async () => {
@@ -623,7 +632,7 @@ const OrganizationDashboard = ()=>{
                 },
             });
           
-          console.log('$$$$$$$$$:',response.data.timesheets);
+         
           setOrganizationTimeSheet(response.data.timesheets);
         } catch (error) {
           console.error('Error offboarding list:', error.message);
@@ -634,8 +643,10 @@ const OrganizationDashboard = ()=>{
           const response = await axios.get(`${apiUrl}/on-boarding-list/${Id}/`);
           //console.log(response.data);
           setOnboardingList(response.data);
+          setLoading3(false);
         } catch (error) {
           console.error('Error offboarding list:', error.message);
+          setLoading3(false);
         }
     };
   
@@ -653,8 +664,10 @@ const OrganizationDashboard = ()=>{
           const response = await axios.get(`${apiUrl}/invoice-list/${Id}/`);
           //console.log(response.data);
           setInvoiceList(response.data.all_invoice);
+          setLoading5(false);
         } catch (error) {
           console.error('Error offboarding list:', error.message);
+          setLoading5(false);
         }
     };
 
@@ -663,8 +676,10 @@ const OrganizationDashboard = ()=>{
           const response = await axios.get(`${apiUrl}/organization/requests/${Id}/`);
           console.log(response.data);
           setRequestList(response.data.all_requests);
+          setLoading6(false);
         } catch (error) {
           console.error('Error fetching organization:', error.message);
+          setLoading6(false);
         }
     };
 
@@ -929,7 +944,7 @@ const OrganizationDashboard = ()=>{
                        
                         {openSlideSections === 2 && (
                         <div className='organization-body'>
-                            {loading ? (
+                            {loading3 ? (
                                <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
                             ):(
                                 <div>
@@ -1087,9 +1102,14 @@ const OrganizationDashboard = ()=>{
                        )}
                        {openSlideSections === 3 && (
                          <div className='organization-body'>
-                            
-                           {requestList.length === 0 ? (
-                                <div className='body-title'>No employee requests available at this moment. Please check back later</div>
+                            {loading6 ? (
+                                <>
+                                    <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                                </>
+                            ):(
+                                <>
+                                    {requestList.length === 0 ? (
+                                        <div className='body-title'>No employee requests available at this moment. Please check back later</div>
                            ) : (
                             <>
                                 <div className='body-title'>Employee Requests</div>
@@ -1148,6 +1168,9 @@ const OrganizationDashboard = ()=>{
                             </table>
                             </>
                            )}
+                                </>
+                            )}
+                           
                          </div>
                        )}
                         {openSlideSections === 4 && (
