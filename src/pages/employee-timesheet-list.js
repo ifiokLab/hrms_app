@@ -292,14 +292,22 @@ const EmployeeTimesheetList = ()=>{
                                          <td>{employee.hours_worked}</td>
                                          
                                          <td>
-                                           
+                                            {employee.hourly_rate ? (
+                                            <>
+                                                £{employee.hourly_rate}
+                                            </>
+                                         ):(
+                                            <>Not set</>
+                                         )}
                                          </td>
                                          <td>{employee.bill}</td>
-                                        {employee.client ? (
-                                            <td>{employee.client_approved}</td>
-                                            ):(
-                                                ""
-                                        )}
+                                         <td>
+                                            {employee.client ? (
+                                                <>{employee.client_approved}</>
+                                                ):(
+                                                    ""
+                                            )}
+                                        </td>
                                             
                                          
              
