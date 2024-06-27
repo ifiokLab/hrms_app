@@ -993,15 +993,7 @@ const OrganizationDashboard = ()=>{
                                                         <td>{employee.organization}</td>
                                                         <td>{employee.client}</td>
                                                         <td className='ta'>
-                                                            {employee.hourly_rate ? (
-                                                                <>
-                                                                    £{employee.hourly_rate}/hr
-                                                                </>
-                                                            ):(
-                                                                <>
-                                                                    £{employee.rate}/hr
-                                                                </>
-                                                            )}
+                                                            £{employee.hourly_rate}/hr
                                                             
                                                         
                                                             <i class="fa-solid fa-pen-to-square" style={{marginLeft:'2px'}} onClick={()=>toggleRateModal(employee.client,employee.hourly_rate,employee.clientId)}></i>
@@ -1041,7 +1033,7 @@ const OrganizationDashboard = ()=>{
                                                     <th>Name</th>
                                                     <th>Organization</th>
                                                 
-                                                
+                                                    <th>Hourly Rate</th>
                                                     <th>Total hours</th>
                                                     <th>Bill</th>
                                                     
@@ -1060,12 +1052,14 @@ const OrganizationDashboard = ()=>{
                                                         <td>{employee.organization}</td>
                                                     
                                                         
-                                                        <td className='table-description'>{employee.hours_worked}</td>
+                                                        
                                                         <td >
-                                                            £{employee.rate}
+                                                            £{employee.hourly_rate}
                                                             <i class="fa-solid fa-pen-to-square" style={{marginLeft:'2px'}} onClick={toggleOrganizationModal}></i>
                                                         </td>
-                                                    
+                                                        <td className='table-description'>{employee.hours_worked}</td>
+                                                        <td className='table-description'>{employee.bill}</td>
+
                                                         <td className={`status ${employeesTimesheetModal === 0 ? 'show' :''}`} onClick={() => toggleEmployeesTimesheetModal(employee.id)} >
                                                             <span>{employee.organization_approved}</span>
                                                             <i class="fa-solid fa-ellipsis-vertical"></i>
