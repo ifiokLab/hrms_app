@@ -1052,7 +1052,7 @@ const OrganizationDashboard = ()=>{
                                                         
                                                         <td className='table-description'>{employee.hours_worked}</td>
                                                         <td >
-                                                            £{employee.rate}
+                                                            £ppp{employee.rate}
                                                             <i class="fa-solid fa-pen-to-square" style={{marginLeft:'2px'}} onClick={toggleOrganizationModal}></i>
                                                         </td>
                                                     
