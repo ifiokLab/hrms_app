@@ -991,7 +991,14 @@ const OrganizationDashboard = ()=>{
                                                         <td>{employee.end_date}</td>
                                                         <td>{employee.user}</td>
                                                         <td>{employee.organization}</td>
-                                                        <td>{employee.client}</td>
+                                                        <td>
+                                                            {employee.client ? (
+                                                                <>{employee.client}</>
+                                                            ):(
+                                                                <>No client assigned</>
+                                                            )}
+                                                        </td>
+                                                            
                                                         <td className='ta'>
                                                             £{employee.hourly_rate}/hr
                                                             
@@ -1003,7 +1010,7 @@ const OrganizationDashboard = ()=>{
                                                         <td>
                                                             
                                                             {employee.client ? (
-                                                                <>employee.client_approved</>
+                                                                <>{employee.client_approved}</>
                                                             ):(
                                                                 <>No client assigned</>
                                                             )}
