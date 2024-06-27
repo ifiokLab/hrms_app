@@ -992,7 +992,17 @@ const OrganizationDashboard = ()=>{
                                                         <td>{employee.user}</td>
                                                         <td>{employee.organization}</td>
                                                         <td>{employee.client}</td>
-                                                        <td className='ta'>£{employee.hourly_rate}/hr
+                                                        <td className='ta'>
+                                                            {employee.hourly_rate ? (
+                                                                <>
+                                                                    £{employee.hourly_rate}/hr
+                                                                </>
+                                                            ):(
+                                                                <>
+                                                                    £{employee.rate}/hr
+                                                                </>
+                                                            )}
+                                                            
                                                         
                                                             <i class="fa-solid fa-pen-to-square" style={{marginLeft:'2px'}} onClick={()=>toggleRateModal(employee.client,employee.hourly_rate,employee.clientId)}></i>
                                                         </td>
@@ -1052,7 +1062,7 @@ const OrganizationDashboard = ()=>{
                                                         
                                                         <td className='table-description'>{employee.hours_worked}</td>
                                                         <td >
-                                                            £ppp{employee.rate}
+                                                            £{employee.rate}
                                                             <i class="fa-solid fa-pen-to-square" style={{marginLeft:'2px'}} onClick={toggleOrganizationModal}></i>
                                                         </td>
                                                     
