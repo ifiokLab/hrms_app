@@ -1000,7 +1000,14 @@ const OrganizationDashboard = ()=>{
                                                         </td>
                                                         <td className='table-description'>{employee.hours_worked}</td>
                                                         <td >£{employee.bill}</td>
-                                                        <td>{employee.client_approved}</td>
+                                                        <td>
+                                                            
+                                                            {employee.client ? (
+                                                                <>employee.client_approved</>
+                                                            ):(
+                                                                <>No client assigned</>
+                                                            )}
+                                                        </td>
                                                         <td className={`status ${employeesTimesheetModal === 0 ? 'show' :''}`} onClick={() => toggleEmployeesTimesheetModal(employee.id)} >
                                                             <span>{employee.organization_approved}</span>
                                                             <i class="fa-solid fa-ellipsis-vertical"></i>
