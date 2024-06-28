@@ -30,7 +30,7 @@ const OrganizationDashboard = ()=>{
     const [memberModal,setMemberModal] = useState(false);
     const [department, setDepartment] = useState('');
     const [departments,setDepartments] = useState([]);
-    const [employeeId,setEmployeeId] = useState('');
+   
     const [date,setDate] = useState('');
     const [reason,setReason] = useState('');
     const [actionType,setActionType] = useState('');
@@ -59,6 +59,7 @@ const OrganizationDashboard = ()=>{
     const [rate,setRate] = useState('');
     const [client,setClient] = useState('');
     const [clientId,setClientId] = useState('');
+    const [employeeId,setEmployeeId] = useState('');
     const [scheduleType,setScheduleType] = useState('');
     const [invoiceList,setInvoiceList] = useState([]);
     const [paidModal,setPaidModal] = useState(0);
@@ -419,6 +420,7 @@ const OrganizationDashboard = ()=>{
         try {
             const formData = new FormData();
             formData.append('clientId', clientId);
+            formData.append('employeeId', employeeId);
             formData.append('organizationId', Id);
             formData.append('hourly_rate', rate);
             const response = await axios.put(`${apiUrl}/client-rate-update/`, formData, {
@@ -1003,7 +1005,7 @@ const OrganizationDashboard = ()=>{
                                                             £{employee.hourly_rate}/hr
                                                             
                                                         
-                                                            <i class="fa-solid fa-pen-to-square" style={{marginLeft:'2px'}} onClick={()=>toggleRateModal(employee.client,employee.hourly_rate,employee.clientId)}></i>
+                                                            <i class="fa-solid fa-pen-to-square" style={{marginLeft:'2px'}} onClick={()=>toggleRateModal(employee.client,employee.hourly_rate,employee.clientId,employee.userId)}></i>
                                                         </td>
                                                         <td className='table-description'>{employee.hours_worked}</td>
                                                         <td >£{employee.bill}</td>
