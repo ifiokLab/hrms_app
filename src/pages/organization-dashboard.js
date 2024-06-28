@@ -89,6 +89,7 @@ const OrganizationDashboard = ()=>{
         setRate(hourly_rate);
         setClientId(clientId);
         setEmployeeId(userId);
+        
         setRateModal(!rateModal);
     }
     const closeRateModal = ()=>{
@@ -96,6 +97,7 @@ const OrganizationDashboard = ()=>{
         setRate('');
         setClientId('');
         setEmployeeId('');
+        setErrorMessage('');
         setRateModal(!rateModal);
     }
     
@@ -1005,7 +1007,7 @@ const OrganizationDashboard = ()=>{
                                                             
                                                         <td className='ta'>
                                                             £{employee.hourly_rate}/hr
-                                                            ({employee.userId})
+                                                           
                                                             
                                                         
                                                             <i class="fa-solid fa-pen-to-square" style={{marginLeft:'2px'}} onClick={()=>toggleRateModal(employee.client,employee.hourly_rate,employee.clientId,employee.userId)}></i>
@@ -1604,7 +1606,7 @@ const OrganizationDashboard = ()=>{
                     <div className='form-body'>
                         
                         <div className={`form-group`}>
-                            <div className='client' >Client:{client}</div>
+                            <div className='client' ></div>
                         </div>
                         <div className={`form-group ${rate ? 'active' : ''}`}>
                             <input id='hours-worked'  type='number' value={rate} onChange = {(event)=>setRate(event.target.value)} required />
