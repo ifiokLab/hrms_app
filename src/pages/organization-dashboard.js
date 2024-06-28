@@ -1005,6 +1005,7 @@ const OrganizationDashboard = ()=>{
                                                             
                                                         <td className='ta'>
                                                             £{employee.hourly_rate}/hr
+                                                            (employee.userId)
                                                             
                                                         
                                                             <i class="fa-solid fa-pen-to-square" style={{marginLeft:'2px'}} onClick={()=>toggleRateModal(employee.client,employee.hourly_rate,employee.clientId,employee.userId)}></i>
