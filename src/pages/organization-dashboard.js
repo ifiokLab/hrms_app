@@ -84,16 +84,18 @@ const OrganizationDashboard = ()=>{
         setErrorMessage('');
         setOrganizationRateModal(!organizationRateModal);
     }
-    const toggleRateModal = (client,hourly_rate,clientId)=>{
+    const toggleRateModal = (client,hourly_rate,clientId,userId)=>{
         setClient(client);
         setRate(hourly_rate);
         setClientId(clientId);
+        setEmployeeId(userId);
         setRateModal(!rateModal);
     }
     const closeRateModal = ()=>{
         setClient('');
         setRate('');
         setClientId('');
+        setEmployeeId('');
         setRateModal(!rateModal);
     }
     
