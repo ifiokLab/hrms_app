@@ -33,6 +33,7 @@ const EmployeeOrganizationDashboard = ()=>{
     const [hoursWorked,setHoursWorked] = useState('');
     const [timeSheet,setTimeSheet] = useState([]);
     const [requestModal,setRequestModal] = useState(false);
+    const [reportModal,setReportModal] = useState(false);
     const [requestType, setRequestType] = useState('Vacation');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -44,6 +45,16 @@ const EmployeeOrganizationDashboard = ()=>{
     const [employeeProfile,setEmployeeProfile] = useState({});
     const [clients,setClients] = useState([]);
     const [loading,setLoading] = useState(true);
+
+    const [title,setTitle] = useState('');
+    const [date,setDate] = useState('');
+    const [content,setContent] = useState('');
+    const [city,setCity] = useState('');
+    const [country,setCountry] = useState('');
+    const [cities, setCities] = useState([]);
+    const [countries, setCountries] = useState([]);
+
+
     const [formData, setFormData] = useState({
         client: '',
         organization:Id,
@@ -149,6 +160,10 @@ const EmployeeOrganizationDashboard = ()=>{
     const toggleRequestModal = ()=>{
         setErrorMessage('');
         setRequestModal(!requestModal);
+    };
+    const toggleReportModal = ()=>{
+        setErrorMessage('');
+        setReportModal(!reportModal);
     };
     const handleTimeSheet = async (event) => {
         event.preventDefault();
@@ -275,6 +290,62 @@ const EmployeeOrganizationDashboard = ()=>{
             // Handle unexpected errors
         }
     };
+    const handleReport = async (event) => {
+        event.preventDefault();
+        setIsLoading(!isLoading);
+        setShowSnackbar(false);
+        
+        try {
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('date', date);
+            formData.append('content', content);
+            formData.append('organization',Id );
+            formData.append('city',city );
+            
+            const response = await axios.post(`${apiUrl}/report/create/`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                },
+            });
+    
+            if (response.data.success) {
+                setTimeout(() => {
+                    setIsLoading(isLoading);
+                    
+                    setDate('');
+                    setTitle('');
+                    setContent('');
+                    setCity('');
+                    setReportModal(!reportModal);
+                    //fetchRequest();
+                   
+                    //fetchTimeSheet();
+                   
+                }, 2000);
+                setShowSnackbar(true);
+                setsnackbarStatus('success');
+                //console.log('org created successfully:', response.data.course);
+                // Redirect to the home page or do any other actions
+            } else {
+                setShowSnackbar(false);
+                setsnackbarStatus('fail');
+                setErrorMessage(response.data.message);
+                setIsLoading(isLoading);
+                //console.error('Course creation failed:', response.data.message);
+                // Handle failed course creation, e.g., show error messages to the user
+            }
+        } catch (error) {
+            console.error('An error occurred during course creation:', error);
+            setTimeout(() => {
+                setIsLoading(isLoading);
+                setErrorMessage('An error occurred');
+               
+            }, 2000);
+            // Handle unexpected errors
+        }
+    };
     const toggleSlider = (index) => {
         setOpenSlideSections((prevOpenSection) => (prevOpenSection === index ? null : index));
     };
@@ -375,9 +446,28 @@ const EmployeeOrganizationDashboard = ()=>{
             }
         };
         
+        const fetchCity = async () => {
+            try {
+                const response = await axios.get('http://127.0.0.1:8000/api/cities/', {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                setCities(response.data);
+                console.log('response.data:',response.data);
+               
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                
+            }
+        };
+            
+       
+        
        
        
-      
+        
+        fetchCity();
         fetchProfileData();
         fetchOrganization();
         fetchRequest();
@@ -443,7 +533,7 @@ const EmployeeOrganizationDashboard = ()=>{
                                 ""
                             ) 
                             }
-                           
+                           <div className={`tabs ${openSlideSections === 5 ? 'active' :''}`} onClick={() => toggleSlider(5)}>Reports</div> 
                             <div className={`tabs ${openSlideSections === 1 ? 'active' :''}`} onClick={() => toggleSlider(1)}>Requests</div>
                            {/* <div className={`tabs ${openSlideSections === 2 ? 'active' :''}`} onClick={() => toggleSlider(2)}>Notifications</div>
                             <div className={`tabs ${openSlideSections === 3 ? 'active' :''}`} onClick={() => toggleSlider(3)}>Payroll History</div> */}
@@ -716,6 +806,64 @@ const EmployeeOrganizationDashboard = ()=>{
                             )}
                           </>
                        )}
+                       {openSlideSections === 5 && (
+                            <>
+                                {loading ? (
+                                <>
+                                    <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                                </>
+                            ):(
+                                <>
+                                    {requestList.length === 0 ? (
+                                        <div className='organization-body'>
+                                            `<div className = 'timesheet'>
+                                                <div className='body-title'> You have not made any requests yet. Start by submitting a new request or contact support if you need assistance.</div>
+                                                <div className='time-btn' onClick={toggleReportModal}>
+                                                    Create Report
+                                                </div>`
+                                            </div>
+                                        </div>
+                                    ):(
+                                        <div className='organization-body'>
+                                        <div className = 'timesheet'>
+                                            <div className='body-title'>Report List</div>
+                                            <div className='time-btn' onClick={toggleReportModal}>
+                                                Create Report
+                                            </div>
+                                        </div>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                <th>ID</th>
+                                                <th>Start date</th>
+                                                <th>End date</th>
+                                                <th>Organization</th>
+                                                <th>Request type</th>
+                                            
+                                                <th>Status</th>
+                                                {/* Add more columns as needed */}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {requestList.map((employee) => (
+                                                <tr key={employee.id}>
+                                                    <td>#{employee.organization}{employee.id}</td>
+                                                    <td>{employee.start_date}</td>
+                                                    <td>{employee.end_date}</td>
+                                                    <td>{employee.organization}</td>
+                                                    <td>{employee.request_type}</td>
+                                                    <td>{employee.status}</td>
+                                                
+                                                </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    )}
+                                </>
+                            )}
+                            </>
+                       )}
                         
                        
                       
@@ -726,6 +874,63 @@ const EmployeeOrganizationDashboard = ()=>{
             </div>
 
            
+           
+            <form className={`organization-form ${reportModal ? 'timesheet-modal' : ''}`} onSubmit = {handleReport} >
+                <div className='form-wrapper'>
+                    <div className='form-header'>
+                        <div className='title'>Create report</div>
+                        <div className='icon' onClick={toggleReportModal}>
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </div>
+                    </div>
+                    {errorMessage && <div className="error-message">{errorMessage}</div>}
+                    <div className='form-body'>
+                        
+                        <div className={`form-group ${title ? 'active' : ''}`}>
+                            <input id="title" value={title}  onChange={(e) => setTitle(e.target.value)} required />
+                            <label htmlFor="title">Title</label>
+                        </div>
+                        <div className={`form-group ${content ? 'active' : ''}`}>
+                            <textarea id="content" value={content}  onChange={(e) => setContent(e.target.value)} required></textarea>
+                        
+                            <label htmlFor="content">Description</label>
+                        </div>
+                    
+                        <div className={`form-group ${date ? 'active' : ''}`}>
+                            <div className='date'>Date:</div>
+                            <input id='date'  type='date' value={date} onChange = {(event)=>setDate(event.target.value)} required />
+                        
+                        </div>
+                        
+                        <div className={`form-group ${city ? 'active' : ''}`}>
+                            <select
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                            
+                            >
+                                <option value="">Location(optional):</option>
+                                {cities.map((city) => (
+                                <option key={city.id} value={city.id}>
+                                    {city.name}
+                                </option>
+                                ))}
+                            </select>
+                            
+                        </div>
+                        
+                        
+                        
+
+                        <div className='btn-wrapper'>
+                            <button type="submit">
+                                Create report
+                                {isLoading ? <div className="loader"></div> : '' }
+                                    
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
             <form className={`organization-form ${requestModal ? 'timesheet-modal' : ''}`} onSubmit = {handleRequest} >
                 <div className='form-wrapper'>
                     <div className='form-header'>
