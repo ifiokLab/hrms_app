@@ -71,6 +71,7 @@ const OrganizationDashboard = ()=>{
     const [loading4, setLoading4] = useState(true);
     const [loading5, setLoading5] = useState(true);
     const [loading6, setLoading6] = useState(true);
+    const [reportList,setReportList] = useState([]);
    
 
 
@@ -742,9 +743,26 @@ const OrganizationDashboard = ()=>{
               console.error('Errors:', error);
             }
         };
+        const fetchReport = async () => {
+            try {
+                
+                const response = await axios.get(`${apiUrl}/employee/report/${Id}/list/`,{
+                    headers: {
+                        'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                    },
+                });
+              
+              console.log(response.data);
+              setReportList(response.data)
+             
+            } catch (error) {
+              console.error('Error fetching request:', error.message);
+            }
+        };
 
       
         fetchDepartments();
+        fetchReport();
         fetchOnboardingList();
         fetchOffboardingList();
         fetchEmployees();
@@ -878,8 +896,10 @@ const OrganizationDashboard = ()=>{
                            
                             <div className={`tabs ${openSlideSections === 2 ? 'active' :''}`} onClick={() => toggleSlider(2)}>Employee TimeSheet</div>
                             <div className={`tabs ${openSlideSections === 3 ? 'active' :''}`} onClick={() => toggleSlider(3)}>Requests</div>
+                            <div className={`tabs ${openSlideSections === 6 ? 'active' :''}`} onClick={() => toggleSlider(6)}>Reportd</div>
                             <div className={`tabs ${openSlideSections === 4 ? 'active' :''}`} onClick={() => toggleSlider(4)}>Onboarding</div>
                             <div className={`tabs ${openSlideSections === 5 ? 'active' :''}`} onClick={() => toggleSlider(5)}>Offboarding</div>
+                            
                            {/* <div className={`tabs ${openSlideSections === 6 ? 'active' :''}`} onClick={() => toggleSlider(6)}>Performance</div> */}
                             {/*        <div className={`tabs ${openSlideSections === 7 ? 'active' :''}`} onClick={() => toggleSlider(7)}>Payroll</div> */}
                         </div>
@@ -1296,6 +1316,51 @@ const OrganizationDashboard = ()=>{
                                 </>
                            )}
                             
+                         </div>
+                       )}
+                        {openSlideSections === 6 && (
+                         <div className='organization-body'>
+                            {loading6 ? (
+                                <>
+                                    <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                                </>
+                            ):(
+                                <>
+                                    {reportList.length === 0 ? (
+                                        <div className='body-title'>No employee reports available at this moment. Please check back later</div>
+                           ) : (
+                            <>
+                                <div className='body-title'>Employee Reports</div>
+                                 <table>
+                                <thead>
+                                    <tr>
+                                    <th>Employee</th>
+                                    <th>Organization</th>
+                                    <th>Title</th>
+                                    <th>Date</th>
+                                    <th>Content</th>
+                                    
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {reportList.map((employee) => (
+                                    <tr key={employee.id}>
+                                        <td>{employee.user}</td>
+                                        <td>#{employee.organization}</td>
+                                        <td>{employee.title}</td>
+                                        <td>{employee.date}</td>
+                                        <td>{employee.content}</td>
+                                        
+                                        
+                                    </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            </>
+                           )}
+                                </>
+                            )}
+                           
                          </div>
                        )}
                       {/* {openSlideSections === 7 && (

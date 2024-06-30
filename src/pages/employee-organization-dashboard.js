@@ -39,6 +39,7 @@ const EmployeeOrganizationDashboard = ()=>{
     const [endDate, setEndDate] = useState('');
     const [reason, setReason] = useState('');
     const [requestList, setRequestList] = useState([]);
+    const [reportList, setReportList] = useState([]);
     const [showSnackbar, setShowSnackbar] = useState(false);
     const [snackbarStatus, setsnackbarStatus] = useState('');
     const [payrollHistory,setPayrollHistory] = useState([]);
@@ -383,6 +384,22 @@ const EmployeeOrganizationDashboard = ()=>{
           console.error('Error fetching request:', error.message);
         }
     };
+    const fetchReport = async () => {
+        try {
+            
+            const response = await axios.get(`${apiUrl}/user/report/list/`,{
+                headers: {
+                    'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                },
+            });
+          
+          console.log(response.data);
+          setReportList(response.data)
+         
+        } catch (error) {
+          console.error('Error fetching request:', error.message);
+        }
+    };
    
    
 
@@ -474,6 +491,7 @@ const EmployeeOrganizationDashboard = ()=>{
         fetchTimeSheet();
         fetchPayrollHistory();
         fetchClients();
+        fetchReport();
         
         
     }, [Id,user,navigate]);
@@ -814,10 +832,10 @@ const EmployeeOrganizationDashboard = ()=>{
                                 </>
                             ):(
                                 <>
-                                    {requestList.length === 0 ? (
+                                    {reportList.length === 0 ? (
                                         <div className='organization-body'>
                                             `<div className = 'timesheet'>
-                                                <div className='body-title'> You have not made any requests yet. Start by submitting a new request or contact support if you need assistance.</div>
+                                                <div className='body-title'> You have not made any reports yet. Start by submitting a new report or contact support if you need assistance.</div>
                                                 <div className='time-btn' onClick={toggleReportModal}>
                                                     Create Report
                                                 </div>`
@@ -835,24 +853,23 @@ const EmployeeOrganizationDashboard = ()=>{
                                             <thead>
                                                 <tr>
                                                 <th>ID</th>
-                                                <th>Start date</th>
-                                                <th>End date</th>
+                                                <th>Date</th>
+                                                <th>Title</th>
+                                                <th>Content</th>
                                                 <th>Organization</th>
-                                                <th>Request type</th>
-                                            
-                                                <th>Status</th>
+                                                
                                                 {/* Add more columns as needed */}
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {requestList.map((employee) => (
-                                                <tr key={employee.id}>
-                                                    <td>#{employee.organization}{employee.id}</td>
-                                                    <td>{employee.start_date}</td>
-                                                    <td>{employee.end_date}</td>
-                                                    <td>{employee.organization}</td>
-                                                    <td>{employee.request_type}</td>
-                                                    <td>{employee.status}</td>
+                                                {reportList.map((data) => (
+                                                <tr key={data.id}>
+                                                    <td>#{data.organization}{data.id}</td>
+                                                    <td>{data.date}</td>
+                                                    <td>{data.title}</td>
+                                                    <td>{data.content}</td>
+                                                    <td>{data.organization}</td>
+                                                   
                                                 
                                                 </tr>
                                                 ))}
