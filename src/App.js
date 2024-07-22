@@ -53,12 +53,16 @@ import StaffsTimesheetList from './pages/staff-timesheet-list';
 import ForgotPassword from './pages/forgot-password';
 import PasswordConfirm from './pages/password-confirm';
 import ClientViaLink from './pages/register-client';
+import SalesFunnel from './pages/sales-funnel';
+import Leads from './pages/leads';
 
 function App() {
   return (
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<AdminLogin />} />
+      <Route path="organization/:Id/leads/" element={<Leads  />} />
+      <Route path="organization/:Id/sales-funnel" element={<SalesFunnel  />} />
       <Route path="/forgot-password/" element={<ForgotPassword />} />
       <Route path="/password/reset/confirm/:uuid/:token/" element={<PasswordConfirm />} />
       <Route path="staffs/timesheet/:Id/:userId/:name/list/" element={<StaffsTimesheetList  />} />

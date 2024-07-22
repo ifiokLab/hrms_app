@@ -861,6 +861,10 @@ const OrganizationDashboard = ()=>{
                             </span>
                             <span className = 'title'>Apps</span>
                         </Link>
+                        <Link to={`/organization/${Id}/sales-funnel/`} className = 'card'>
+                            <i class="fa-solid fa-users"></i>
+                            <span className = 'title'>Sales Funnel</span>
+                        </Link>
                         <Link to='/organizations/' className = 'card'>
                             <i class="fa-solid fa-users"></i>
                             <span className = 'title'>Organization & users</span>

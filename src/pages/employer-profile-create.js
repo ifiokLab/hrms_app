@@ -2,10 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { Swiper, SwiperSlide, } from 'swiper/react';
-import { Autoplay,Pagination,Navigation } from 'swiper/modules';
-//import Header from '../components/header';
-import ReactQuill from 'react-quill';
+
 import "react-quill/dist/quill.snow.css";
 import 'swiper/swiper-bundle.css';
 import '../styles/employer-dashboard.css';
@@ -13,10 +10,7 @@ import '../styles/create-course.css';
 import '../styles/instructor.css';
 import Header from '../components/header';
 import DesktopLogout from './desktop-logout';
-import hero1 from '../images/designer1.svg';
-import hero2 from '../images/designer2.svg';
-import hero3 from '../images/designer3.svg';
-import logo from '../images/logo192.png';
+
 import apiUrl from '../components/api-url';
 //import hero1 from '../styles/hero1.jpg';
 

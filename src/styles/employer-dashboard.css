@@ -4,6 +4,16 @@
     justify-content: space-between;
    
 }
+.initials-cap{
+    height: 30px;
+    width: 30px;
+    border-radius: 30px;
+    font-size: .6rem;
+    background-color: gainsboro;
+    display: flex;
+   align-items: center;
+   justify-content: center;
+}
 .page-wrapper .wrapper .sidebar-container-1{
     height: 100vh;
     background-color: #03192e;
