@@ -55,12 +55,14 @@ import PasswordConfirm from './pages/password-confirm';
 import ClientViaLink from './pages/register-client';
 import SalesFunnel from './pages/sales-funnel';
 import Leads from './pages/leads';
+import LeadsDetail from './pages/leads-detail';
 
 function App() {
   return (
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<AdminLogin />} />
+      <Route path="organization/:Id/leads-detail/" element={<LeadsDetail  />} />
       <Route path="organization/:Id/leads/" element={<Leads  />} />
       <Route path="organization/:Id/sales-funnel" element={<SalesFunnel  />} />
       <Route path="/forgot-password/" element={<ForgotPassword />} />

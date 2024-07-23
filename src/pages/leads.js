@@ -98,7 +98,7 @@ const Leads = ()=>{
                     setStatus('');
                     setDate('');
                     setModal(false);
-                    //fetchTimeSheet();
+                    fetchLeads();
              
                     //navigate('/');
                    
@@ -131,7 +131,7 @@ const Leads = ()=>{
     };
     const handleLeadDelete = async (event,id) => {
         event.preventDefault();
-        setIsLoading(!isLoading);
+        //etIsLoading(!isLoading);
        
         
         try {
@@ -317,7 +317,7 @@ const Leads = ()=>{
                         </div>
                         <div className='apps-container'>
                             {Leads.map((data,index) => (
-                                <Link key={data.id} to={`/organization/${Id}/leads/`} className='cards organization-card'>
+                                <Link key={data.id} to={`/organization/${data.id}/leads-detail/`} className='cards organization-card'>
                                 <div className='icon hrms-icon initials-cap'>
                                     {data.initials.toUpperCase()}
                                 </div>
