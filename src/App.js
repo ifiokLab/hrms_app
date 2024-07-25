@@ -56,12 +56,14 @@ import ClientViaLink from './pages/register-client';
 import SalesFunnel from './pages/sales-funnel';
 import Leads from './pages/leads';
 import LeadsDetail from './pages/leads-detail';
+import Deals from './pages/deals';
 
 function App() {
   return (
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<AdminLogin />} />
+      <Route path="organization/:Id/deals/" element={<Deals  />} />
       <Route path="organization/:Id/leads-detail/" element={<LeadsDetail  />} />
       <Route path="organization/:Id/leads/" element={<Leads  />} />
       <Route path="organization/:Id/sales-funnel" element={<SalesFunnel  />} />

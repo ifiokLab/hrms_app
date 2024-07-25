@@ -16,7 +16,7 @@ import apiUrl from '../components/api-url';
 
 const LeadsDetail = ()=>{
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [leads, setLeads] = useState('');
     const { Id } = useParams();
     const user = useSelector(state => state.user.user);
@@ -87,29 +87,37 @@ const LeadsDetail = ()=>{
                 <div className = "container-2-wrapper">
                         <div className='author-container'>
                              <div className='profile-container'>
-                                <div className='caption'>Your Profile</div>
+                                <div className='caption'>Leads Detail</div>
                                 {loading ? (
                                     <p>Loading...</p>
                                 ):(
                                     <>
-                                    <div className='lead-name'>IU</div>
+                                    <div className='lead-name initials-cap-x'>{leads.initials.toUpperCase()}</div>
                                     <div className='author-details'>
                                         <div className='name'>
-                                            Ifiok Udoh
-                                            <Link className='profile-edit' to='/instructor/profile/edit/'>
-                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            {leads.name}
+                                            <Link className='profile-edit' to=''>
+                                               
                                             </Link>
                                         </div>
                                         <div className='title'>
-                                            CEO at codecampX
+                                            {leads.title} at {leads.company}
                                         </div>
                                         <div className='phone'>
                                             <i class="fa-solid fa-phone"></i>
-                                            phone
+                                            {leads.phone}
                                         </div>
                                         <div className='website'>
-                                            <i class="fa-solid fa-globe"></i>
-                                            desc
+                                            <i class="fa-solid fa-envelope"></i>
+                                           {leads.email}
+                                        </div>
+                                        <div className='website'>
+                                            <i class="fa-solid fa-signal"></i>
+                                           {leads.status}
+                                        </div>
+                                        <div className='website'>
+                                            <i class="fa-solid fa-building"></i>
+                                           {leads.company}
                                         </div>
                                     
                                         

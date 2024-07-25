@@ -104,7 +104,7 @@ const SalesFunnel = ()=>{
                                 </div>
                                     
                             </Link>
-                            <Link to={`/organization/dashboard/`} className='cards organization-card'>
+                            <Link to={`/organization/${Id}/deals/`} className='cards organization-card'>
                                 <div className='icon hrms-icon'>
                                     <i class="fa-solid fa-user"></i>
                                 </div>
