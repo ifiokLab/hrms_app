@@ -14,28 +14,28 @@ import DesktopLogout from './desktop-logout';
 import apiUrl from '../components/api-url';
 //import hero1 from '../styles/hero1.jpg';
 
-const LeadsDetail = ()=>{
+const DealsDetail = ()=>{
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    const [leads, setLeads] = useState('');
+    const [deals, setDeals] = useState('');
     const { Id } = useParams();
     const user = useSelector(state => state.user.user);
 
-    const fetchLeads = async () => {
+    const fetchDeal = async () => {
         try {
             
-            const response = await axios.get(`${apiUrl}/leads/${Id}/`, {
+            const response = await axios.get(`${apiUrl}/deal/${Id}/detail/`, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
                 },
             });
           //console.log('response.data.all_leads:',response.data.leads);
-          setLeads(response.data.leads);
+          setDeals(response.data.all_deals);
           setLoading(false);
         } catch (error) {
           setLoading(false);
-          setLeads([]);
+          setDeals([]);
           console.error('Error fetching employees:', error.message);
         }
     };  
@@ -43,7 +43,7 @@ const LeadsDetail = ()=>{
     useEffect(() => {
            
 
-        fetchLeads();
+        fetchDeal();
     }, [user,navigate]);
 
     return(
@@ -96,32 +96,32 @@ const LeadsDetail = ()=>{
                                     <p>Loading...</p>
                                 ):(
                                     <>
-                                    <div className='lead-name initials-cap-x'>{leads.initials.toUpperCase()}</div>
+                                    <div className='lead-name initials-cap-x'>{deals.initials}</div>
                                     <div className='author-details'>
                                         <div className='name'>
-                                            {leads.name}
+                                            {deals.title}
                                             <Link className='profile-edit' to=''>
                                                
                                             </Link>
                                         </div>
                                         <div className='title'>
-                                            {leads.title} at {leads.company}
+                                           
                                         </div>
                                         <div className='phone'>
-                                            <i class="fa-solid fa-phone"></i>
-                                            {leads.phone}
+                                            Deal value:  {deals.deal_value}
+                                         
                                         </div>
                                         <div className='website'>
-                                            <i class="fa-solid fa-envelope"></i>
-                                           {leads.email}
+                                            close probability:  {deals.close_probability}
+                                           
                                         </div>
                                         <div className='website'>
-                                            <i class="fa-solid fa-signal"></i>
-                                           {leads.status}
+                                            forecast value:  {deals.forecast_value}
+                                           
                                         </div>
                                         <div className='website'>
-                                            <i class="fa-solid fa-building"></i>
-                                           {leads.company}
+                                            stage:  {deals.stage}
+                                           
                                         </div>
                                     
                                         
@@ -136,4 +136,4 @@ const LeadsDetail = ()=>{
     );
 };
 
-export default LeadsDetail;
+export default DealsDetail;

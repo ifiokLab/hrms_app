@@ -57,13 +57,23 @@ import SalesFunnel from './pages/sales-funnel';
 import Leads from './pages/leads';
 import LeadsDetail from './pages/leads-detail';
 import Deals from './pages/deals';
+import DealsDetail from './pages/deals-detail';
+import Contacts from './pages/contacts';
+import ContactDetail from './pages/contact-detail';
+import Activity from './pages/activity';
+import ActivityDetail from './pages/activity-detail';
+
 
 function App() {
   return (
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<AdminLogin />} />
+      <Route path="organization/:Id/activity/" element={<Activity />} />
       <Route path="organization/:Id/deals/" element={<Deals  />} />
+      <Route path="organization/:Id/activity-detail/" element={<ActivityDetail  />} />
+      <Route path="organization/:Id/contacts/" element={<Contacts />} />
+      <Route path="organization/:Id/deals-detail/" element={<DealsDetail  />} />
       <Route path="organization/:Id/leads-detail/" element={<LeadsDetail  />} />
       <Route path="organization/:Id/leads/" element={<Leads  />} />
       <Route path="organization/:Id/sales-funnel" element={<SalesFunnel  />} />

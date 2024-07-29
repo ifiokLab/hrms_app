@@ -516,6 +516,10 @@ const EmployeeOrganizationDashboard = ()=>{
                             <i class="fa-solid fa-users"></i>
                             <span className = 'title'>Organization </span>
                         </Link>
+                        <Link to={`/organization/${Id}/sales-funnel/`} className = 'card'>
+                            <i class="fa-solid fa-users"></i>
+                            <span className = 'title'>Sales Funnel</span>
+                        </Link>
                         <Link to='/employee/courses' className = 'card'>
                              <i class="fa-solid fa-chalkboard"></i>
                             <span className = 'title'>Your Courses</span>

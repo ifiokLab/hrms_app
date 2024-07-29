@@ -63,7 +63,7 @@ const SalesFunnel = ()=>{
                 <div className = "container-2-wrapper">
                         <div className='employer-organizations'>
                             <div class = 'org'>
-                                Your organizations
+                                Sales Funnel
                             </div>
                             <div className='create-btn'>create</div>
                         </div>
@@ -82,11 +82,11 @@ const SalesFunnel = ()=>{
                                     
                                 </div>
                                 <div className='chevron-card' >
-                                    <i className="fa-solid fa-ellipsis-vertical"></i>
+                                    
                                 </div>
                                     
                             </Link>
-                            <Link to={`/organization/dashboard/`} className='cards organization-card'>
+                            <Link to={`/organization/${Id}/contacts/`} className='cards organization-card'>
                                 <div className='icon hrms-icon'>
                                     <i class="fa-solid fa-user"></i>
                                 </div>
@@ -106,7 +106,7 @@ const SalesFunnel = ()=>{
                             </Link>
                             <Link to={`/organization/${Id}/deals/`} className='cards organization-card'>
                                 <div className='icon hrms-icon'>
-                                    <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-universal-access"></i>
                                 </div>
                                 <div className='text-wrapper'>
                                     <div className='title-header'>Deals</div>
@@ -122,9 +122,9 @@ const SalesFunnel = ()=>{
                                 </div>
                                     
                             </Link>
-                            <Link to={`/organization/dashboard/`} className='cards organization-card'>
+                            <Link to={`/organization/${Id}/activity/`} className='cards organization-card'>
                                 <div className='icon hrms-icon'>
-                                    <i class="fa-solid fa-user"></i>
+                                    <i class="fa-solid fa-clock-rotate-left"></i>
                                 </div>
                                 <div className='text-wrapper'>
                                     <div className='title-header'>Activities</div>
@@ -142,7 +142,7 @@ const SalesFunnel = ()=>{
                             </Link>
                             <Link to={`/organization/dashboard/`} className='cards organization-card'>
                                 <div className='icon hrms-icon'>
-                                    <i class="fa-solid fa-user"></i>
+                                <i class="fa-solid fa-book"></i>
                                 </div>
                                 <div className='text-wrapper'>
                                     <div className='title-header'>Notes</div>

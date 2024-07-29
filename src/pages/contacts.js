@@ -14,7 +14,7 @@ import DesktopLogout from './desktop-logout';
 import apiUrl from '../components/api-url';
 //import hero1 from '../styles/hero1.jpg';
 
-const  Deals = ()=>{
+const  Contacts = ()=>{
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const { Id } = useParams();
@@ -22,21 +22,27 @@ const  Deals = ()=>{
     const [modal,setModal] = useState(false);
     const [editModal,setEditModal] = useState(false);
     const [errorMessage,setErrorMessage] = useState("");
-    const [title,setTitle] = useState("");
-    const [dealId,setDealId] = useState("");
-    const [contact,setContact] = useState([]);
-    const [contacts,setContacts] = useState([]);
-    const [dealValue,setDealValue] = useState("");
-    const [closeProbability,setCloseProbability] = useState("");
-    const [forecastValue,setForecastValue] = useState("");
-    const [stage,setStage] = useState("");
-    const [closeDate,setCloseDate] = useState("");
     const [showSnackbar, setShowSnackbar] = useState(false);
     const [snackbarStatus, setsnackbarStatus] = useState('');
-    const [Leads,setLeads] = useState([]);
-    const [deals,setDeals] = useState([]);
     const [Loading,setLoading] = useState(false);
     const [openModalIndex, setOpenModalIndex] = useState(null);
+    
+    const [type, setType] = useState('CUSTOMER');
+    const [priority, setPriority] = useState('HIGH');
+    const [title, setTitle] = useState('');
+    const [name, setName] = useState('');
+    const [comments, setComments] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [contacts, setContacts] = useState([]);
+    const [contact, setContact] = useState('');
+    const [contactId, setContactId] = useState('');
+    const [organization, setOrganization] = useState('');
+    const [accounts, setAccounts] = useState([]);
+    const [deals, setDeals] = useState([]);
+    const [organizations, setOrganizations] = useState([]);
+    const [availableAccounts, setAvailableAccounts] = useState([]);
+    const [availableDeals, setAvailableDeals] = useState([]);
 
 
     const toggleModal = ()=>{
@@ -52,37 +58,44 @@ const  Deals = ()=>{
         }
         setContact(selected);
       };
-    const toggleEditModal = (event,id,title,deal_value,close_probability,forecast_value,stage,close_date)=>{
+    const toggleEditModal = (event,id,type,priority,title,name,comments,email,phone)=>{
         event.preventDefault();
         setEditModal(!editModal);
         setErrorMessage("");
-        setDealId(id);
+        setType(type);
+        setContactId(id);
+        setPriority(priority);
         setTitle(title);
-        setDealValue(deal_value);
-        setCloseProbability(close_probability);
-        setForecastValue(forecast_value);
-        setStage(stage);
-        setCloseDate(close_date);
+        setName(name);
+        setComments(comments);
+        setEmail(email);
+        setPhone(phone);
+        //setAccounts(accounts);
+        //setDeals(deal);
+       
        
     };
    
     const closeEditModal = ()=>{
         setEditModal(false);
         setErrorMessage("");
-        setDealId('');
+        setType('');
+        setPriority('');
         setTitle('');
-        setDealValue('');
-        setCloseProbability('');
-        setForecastValue('');
-        setStage('');
-        setCloseDate('');
+        setName('');
+        setComments('');
+        setEmail('');
+        setPhone('');
+        setContactId("");
+        //setAccounts('');
+        //setDeals('');
     };
     const handleEllipsisClick = (event,index) => {
         event.preventDefault();
         setOpenModalIndex(openModalIndex === index ? null : index);
     };
 
-    const handleDeals = async (event) => {
+    const handleContacts = async (event) => {
         event.preventDefault();
         setIsLoading(!isLoading);
        
@@ -90,14 +103,17 @@ const  Deals = ()=>{
         try {
             const formData = new FormData();
             formData.append('organization', Id);
-            formData.append('contacts', contact);
-            formData.append('deal_value', dealValue );
+            formData.append('type', type);
+            formData.append('accounts', accounts);
+            formData.append('priority',priority);
+            formData.append('deals',deals);
             formData.append('title',title );
-            formData.append('stage',stage );
-            formData.append('close_date',closeDate );
-            formData.append('close_probability',closeProbability);
+            formData.append('comments',comments);
+            formData.append('email',email);
+            formData.append('phone',phone);
+            formData.append('name',name);
             //formData.append('date',date);
-            const response = await axios.post(`${apiUrl}/deals-create/`, formData, {
+            const response = await axios.post(`${apiUrl}/contacts/create/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
@@ -110,15 +126,17 @@ const  Deals = ()=>{
                 setTimeout(() => {
                     setIsLoading(isLoading);
                     setShowSnackbar(false);
-                    setContact('');
+                    fetchContacts();
+                    setType('');
+                    setPriority('');
                     setTitle('');
-                    setDealValue('');
-                    setForecastValue('');
-                    setCloseDate('');
-                    setCloseProbability('');
-                    setStage('');
-                    setModal(false);
-                    fetchDeals()
+                    setName('');
+                    setComments('');
+                    setEmail('');
+                    setPhone('');
+                    setAccounts('');
+                    setDeals('');
+                    //fetchDeals()
              
                     //navigate('/');
                    
@@ -149,7 +167,7 @@ const  Deals = ()=>{
             // Handle unexpected errors
         }
     };
-    const handleEditDeals = async (event) => {
+    const handleEditContacts = async (event) => {
         event.preventDefault();
         setIsLoading(!isLoading);
        
@@ -157,14 +175,17 @@ const  Deals = ()=>{
         try {
             const formData = new FormData();
             formData.append('organization', Id);
-            formData.append('contacts', contact);
-            formData.append('deal_value', dealValue );
+            formData.append('type', type);
+            formData.append('accounts', accounts);
+            formData.append('priority',priority);
+            formData.append('deals',deals);
             formData.append('title',title );
-            formData.append('stage',stage );
-            formData.append('close_date',closeDate );
-            formData.append('close_probability',closeProbability);
+            formData.append('comments',comments);
+            formData.append('email',email);
+            formData.append('phone',phone);
+            formData.append('name',name);
             //formData.append('date',date);
-            const response = await axios.put(`${apiUrl}/deals/${dealId}/edit/`, formData, {
+            const response = await axios.put(`${apiUrl}/contacts/${contactId}/edit/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
@@ -176,17 +197,19 @@ const  Deals = ()=>{
                 setShowSnackbar(true);
                 setTimeout(() => {
                     setIsLoading(isLoading);
-                    
+                    fetchContacts();
                     setShowSnackbar(false);
-                    setContact('');
+                    setType('');
+                    setPriority('');
                     setTitle('');
-                    setDealValue('');
-                    setForecastValue('');
-                    setCloseDate('');
-                    setCloseProbability('');
-                    setStage('');
+                    setName('');
+                    setComments('');
+                    setEmail('');
+                    setPhone('');
+                    setAccounts('');
+                    setDeals('');
                     setEditModal(false);
-                    fetchDeals()
+                    //fetchDeals()
                    // fetchLeads();
              
                     //navigate('/');
@@ -218,6 +241,26 @@ const  Deals = ()=>{
             // Handle unexpected errors
         }
     };
+    const handleDealChange = (event) => {
+        const options = event.target.options;
+        const selected = [];
+        for (let i = 0; i < options.length; i++) {
+          if (options[i].selected) {
+            selected.push(options[i].value);
+          }
+        }
+        setDeals(selected);
+    };
+    const handleAcountChange = (event) => {
+        const options = event.target.options;
+        const selected = [];
+        for (let i = 0; i < options.length; i++) {
+          if (options[i].selected) {
+            selected.push(options[i].value);
+          }
+        }
+        setAccounts(selected);
+    };
     const handleDealDelete = async (event,id) => {
         event.preventDefault();
         //etIsLoading(!isLoading);
@@ -237,7 +280,7 @@ const  Deals = ()=>{
                 setShowSnackbar(true);
                 setTimeout(() => {
                     setShowSnackbar(false);
-                    fetchDeals();
+                    //fetchDeals();
                     setOpenModalIndex(null);
                 }, 2000);
                 
@@ -264,7 +307,52 @@ const  Deals = ()=>{
             // Handle unexpected errors
         }
     };
+    const handleContactDelete = async (event,id) => {
+        event.preventDefault();
+        //etIsLoading(!isLoading);
+       
+        
+        try {
+           
+            const response = await axios.delete(`${apiUrl}/contacts/${id}/delete/`, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                },
+            });
     
+            if (response.data.success) {
+                setsnackbarStatus('success');
+                setShowSnackbar(true);
+                setTimeout(() => {
+                    setShowSnackbar(false);
+                    fetchContacts();
+                    setOpenModalIndex(null);
+                }, 2000);
+                
+                //console.log('org created successfully:', response.data.course);
+                // Redirect to the home page or do any other actions
+            } else {
+                setsnackbarStatus('fail');
+                setShowSnackbar(true);
+                setTimeout(() => {
+                    setShowSnackbar(false);
+                    //navigate('/');
+                   
+                }, 2000);
+                setErrorMessage(response.data.message);
+                //console.error('Course creation failed:', response.data.message);
+                // Handle failed course creation, e.g., show error messages to the user
+            }
+        } catch (error) {
+            console.error('An error occurred during course creation:', error);
+            setTimeout(() => {
+                setErrorMessage('An error occurred');
+               
+            }, 2000);
+            // Handle unexpected errors
+        }
+    };
    
     
     const fetchContacts = async () => {
@@ -285,6 +373,24 @@ const  Deals = ()=>{
           console.error('Error fetching employees:', error.message);
         }
     }; 
+    const fetchAccounts = async () => {
+        try {
+            
+            const response = await axios.get(`${apiUrl}/accounts/${Id}/account-list/`, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                },
+            });
+          //console.log('response.data.all_leads:',response.data.all_contacts);
+          setAccounts(response.data.all_account);
+          //setLoading(false);
+        } catch (error) {
+          //setLoading(false);
+          setAccounts([]);
+          console.error('Error fetching employees:', error.message);
+        }
+    };  
     const fetchDeals = async () => {
         try {
             
@@ -295,19 +401,20 @@ const  Deals = ()=>{
                 },
             });
           //console.log('response.data.all_leads:',response.data.all_contacts);
-          setDeals(response.data.all_deals);
+          setAvailableDeals(response.data.all_deals);
           //setLoading(false);
         } catch (error) {
           //setLoading(false);
-          setDeals([]);
+          setAvailableDeals([]);
           console.error('Error fetching employees:', error.message);
         }
     };   
   
     useEffect(() => {
-           
-        fetchContacts();
+
         fetchDeals();
+        fetchContacts();
+        fetchAccounts();
       
     }, [user,navigate]);
 
@@ -359,20 +466,19 @@ const  Deals = ()=>{
                 <div className = "container-2-wrapper">
                         <div className='employer-organizations'>
                             <div class = 'org'>
-                                Deals
+                                Contacts
                             </div>
                             <div className='create-btn' onClick={toggleModal}>create</div>
                         </div>
                         <div className='apps-container'>
-                           
-                            {deals.map((data,index) => (
-                                <Link key={data.id} to={`/organization/${data.id}/deals-detail/`} className='cards organization-card'>
+                            {contacts.map((data,index) => (
+                                <Link key={data.id} to={`/organization/${data.id}/contact-detail/`} className='cards organization-card'>
                                 <div className='icon hrms-icon initials-cap'>
-                                    {data.initials.toUpperCase()}
+                                    {data.initials}
                                 </div>
                                 <div className='text-wrapper'>
                                     <div className='title-header'>{data.title}</div>
-                                    <p>{data.deal_value} </p>
+                                    <p>{data.type} </p>
                                     <div className='employee-count'>
                                         
                                     </div>
@@ -385,8 +491,8 @@ const  Deals = ()=>{
                                 {openModalIndex === index && (
                                     <div className='option-modal'>
                                     {/* Users should be able to click on edit tab to edit the specific organization */}
-                                    <div className='option-card' onClick={(event) => toggleEditModal(event,data.id,data.title, data.deal_value, data.close_probability, data.forecast_value, data.stage, data.close_date)}>Edit</div>
-                                    <div className='option-card' onClick={(event) => handleDealDelete(event,data.id)} >Delete</div>
+                                    <div className='option-card' onClick={(event) => toggleEditModal(event,data.id,data.type, data.priority, data.title, data.name, data.comments, data.email,data.phone)}>Edit</div>
+                                    <div className='option-card' onClick={(event) => handleContactDelete(event,data.id)} >Delete</div>
                                 
                                     </div>
                                 )}
@@ -403,10 +509,10 @@ const  Deals = ()=>{
                     </div>
                 </div>
             </div>
-            <form className={`organization-form ${modal ? 'show' : ''}`} onSubmit = {handleDeals} >
+            <form className={`organization-form ${modal ? 'show' : ''}`} onSubmit = {handleContacts} >
                 <div className='form-wrapper'>
                     <div className='form-header'>
-                        <div className='title'>Create Deals</div>
+                        <div className='title'>Create contacts</div>
                         <div className='icon' onClick={toggleModal} >
                             <i class="fa-solid fa-circle-xmark"></i>
                         </div>
@@ -417,48 +523,66 @@ const  Deals = ()=>{
                             <input type="text" id="title" value={title} onChange = {(e)=>setTitle(e.target.value)} required />
                             <label htmlFor="title">Title</label>
                         </div>
-                        <div className={`form-group ${contacts ? 'active' : ''}`}>
-                          
-                            <select value={contact} onChange={handleContactChange} multiple >
-                                <option value="">Contacts</option>
-                                <option value="1">Contacts2</option>
-                                <option value="2">Contacts3</option>
-                                {contacts.map(contact => (
-                                    <option key={contact.id} value={contact.id}>{contact.name}</option>
-                                ))}
-                            
+                        <div className={`form-group ${type ? 'active' : ''}`}>
+                            <select value={type} onChange={(e) => setType(e.target.value)}>
+                                <option value="CUSTOMER">Customer</option>
+                                <option value="LEAD">Lead</option>
+                                <option value="QUALIFIED LEAD">Qualified Lead</option>
+                                <option value="PARTNER">Partner</option>
+                                <option value="VENDOR">Vendor</option>
                             </select>
                         </div>
-                        
-                        <div className={`form-group ${stage ? 'active' : ''}`}>
-                          
-                            <select value={stage} onChange={(e) => setStage(e.target.value)} required>
-                                <option value="">Status</option>
-                                <option value="NEW">New</option>
-                                <option value="QUALIFICATION">Qualification</option>
-                                <option value="DISCOVERY">Discovery</option>
-                                <option value="PROPOSAL">Proposal</option>
-                                <option value="Negotiation">Negotiation</option>
-                                <option value="CLOSED WON">Closed Won</option>
-                                <option value="CLOSED LOST">Closed Lost</option>
-                               
-                            </select>
-                        </div>
-                        <div className={`form-group ${closeProbability ? 'active' : ''}`}>
-                        <select name="close_probability" value={closeProbability} onChange={(event)=>setCloseProbability(event.target.value)}>
-                                {Array.from({ length: 11 }, (_, i) => (i * 0.1)).map(prob => (
-                                    <option key={prob} value={prob}>{prob * 100}%</option>
+                        {availableAccounts.length > 0 ? (
+                            <div className={`form-group ${accounts ? 'active' : ''}`}>
+                            <select multiple value={accounts} onChange={handleAcountChange}>
+                                <option  value="">Accounts</option>
+                                {availableAccounts.map(account => (
+                                <option key={account.id} value={account.id}>{account.name}</option>
                                 ))}
                             </select>
                         </div>
-                        <div className={`form-group ${dealValue ? 'active' : ''}`}>
-                            <input type="text" id="deal-value" value={dealValue} onChange = {(e)=>setDealValue(e.target.value)} required />
-                            <label htmlFor="deal-value">Deal value</label>
+                        ):(
+                            ""
+                        )}
+
+                        {availableDeals.length > 0 ? (
+                            <div className={`form-group ${accounts ? 'active' : ''}`}>
+                            <select multiple value={deals} onChange={handleDealChange}>
+                                {availableDeals.map(deal => (
+                                <option key={deal.id} value={deal.id}>{deal.title}</option>
+                                ))}
+                            </select>
+                        </div>
+                        ):(
+                            ""
+                        )}
+                        
+                        <div className={`form-group ${priority ? 'active' : ''}`}>
+                          
+                            <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+                                <option value="">Priority</option>
+                                <option value="HIGH">High</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="LOW">Low</option>
+                            </select>
                         </div>
                         
-                        <div className={`form-group ${closeDate ? 'active' : ''}`}>
-                            <input type="date" id="close-date" value={closeDate} onChange = {(e)=>setCloseDate(e.target.value)} required />
-                            <label htmlFor="close-date">Close Date</label>
+                        <div className={`form-group ${name ? 'active' : ''}`}>
+                            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                            <label htmlFor="name">Name</label>
+                        </div>
+                        
+                        <div className={`form-group ${comments ? 'active' : ''}`}>
+                            <input type="text" value={comments} onChange={(e) => setComments(e.target.value)} />
+                            <label htmlFor="comment">Comments</label>
+                        </div>
+                        <div className={`form-group ${email ? 'active' : ''}`}>
+                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                            <label htmlFor="email">Email</label>
+                        </div>
+                        <div className={`form-group ${phone ? 'active' : ''}`}>
+                            <input type="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                            <label htmlFor="phone">Phone</label>
                         </div>
                         
                         
@@ -473,10 +597,10 @@ const  Deals = ()=>{
                     </div>
                 </div>
             </form>
-            <form className={`organization-form ${editModal ? 'show' : ''}`} onSubmit = {handleEditDeals} >
+            <form className={`organization-form ${editModal ? 'show' : ''}`} onSubmit = {handleEditContacts} >
                 <div className='form-wrapper'>
                     <div className='form-header'>
-                        <div className='title'>Edit Deals</div>
+                        <div className='title'>edit contacts</div>
                         <div className='icon' onClick={closeEditModal} >
                             <i class="fa-solid fa-circle-xmark"></i>
                         </div>
@@ -487,55 +611,74 @@ const  Deals = ()=>{
                             <input type="text" id="title" value={title} onChange = {(e)=>setTitle(e.target.value)} required />
                             <label htmlFor="title">Title</label>
                         </div>
-                        <div className={`form-group ${contacts ? 'active' : ''}`}>
-                          
-                            <select value={contact} onChange={handleContactChange} multiple >
-                                <option value="">Contacts</option>
-                                <option value="1">Contacts2</option>
-                                <option value="2">Contacts3</option>
-                                {contacts.map(contact => (
-                                    <option key={contact.id} value={contact.id}>{contact.name}</option>
-                                ))}
-                            
+                        <div className={`form-group ${type ? 'active' : ''}`}>
+                            <select value={type} onChange={(e) => setType(e.target.value)}>
+                                <option value="CUSTOMER">Customer</option>
+                                <option value="LEAD">Lead</option>
+                                <option value="QUALIFIED LEAD">Qualified Lead</option>
+                                <option value="PARTNER">Partner</option>
+                                <option value="VENDOR">Vendor</option>
                             </select>
                         </div>
-                        
-                        <div className={`form-group ${stage ? 'active' : ''}`}>
-                          
-                            <select value={stage} onChange={(e) => setStage(e.target.value)} required>
-                                <option value="">Status</option>
-                                <option value="NEW">New</option>
-                                <option value="QUALIFICATION">Qualification</option>
-                                <option value="DISCOVERY">Discovery</option>
-                                <option value="PROPOSAL">Proposal</option>
-                                <option value="Negotiation">Negotiation</option>
-                                <option value="CLOSED WON">Closed Won</option>
-                                <option value="CLOSED LOST">Closed Lost</option>
-                               
-                            </select>
-                        </div>
-                        <div className={`form-group ${closeProbability ? 'active' : ''}`}>
-                        <select name="close_probability" value={closeProbability} onChange={(event)=>setCloseProbability(event.target.value)}>
-                                {Array.from({ length: 11 }, (_, i) => (i * 0.1)).map(prob => (
-                                    <option key={prob} value={prob}>{prob * 100}%</option>
+                        {availableAccounts.length > 0 ? (
+                            <div className={`form-group ${accounts ? 'active' : ''}`}>
+                            <select multiple value={accounts} onChange={handleAcountChange}>
+                                <option  value="">Accounts</option>
+                                {availableAccounts.map(account => (
+                                <option key={account.id} value={account.id}>{account.name}</option>
                                 ))}
                             </select>
                         </div>
-                        <div className={`form-group ${dealValue ? 'active' : ''}`}>
-                            <input type="text" id="deal-value" value={dealValue} onChange = {(e)=>setDealValue(e.target.value)} required />
-                            <label htmlFor="deal-value">Deal value</label>
+                        ):(
+                            ""
+                        )}
+
+                        {availableDeals.length > 0 ? (
+                            <div className={`form-group ${accounts ? 'active' : ''}`}>
+                            <select multiple value={deals} onChange={handleDealChange}>
+                                {availableDeals.map(deal => (
+                                <option key={deal.id} value={deal.id}>{deal.title}</option>
+                                ))}
+                            </select>
+                        </div>
+                        ):(
+                            ""
+                        )}
+                        
+                        
+                        <div className={`form-group ${priority ? 'active' : ''}`}>
+                          
+                            <select value={priority} onChange={(e) => setPriority(e.target.value)}>
+                                <option value="">Priority</option>
+                                <option value="HIGH">High</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="LOW">Low</option>
+                            </select>
                         </div>
                         
-                        <div className={`form-group ${closeDate ? 'active' : ''}`}>
-                            <input type="date" id="close-date" value={closeDate} onChange = {(e)=>setCloseDate(e.target.value)} required />
-                            <label htmlFor="close-date">Close Date</label>
+                        <div className={`form-group ${name ? 'active' : ''}`}>
+                            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                            <label htmlFor="name">Name</label>
+                        </div>
+                        
+                        <div className={`form-group ${comments ? 'active' : ''}`}>
+                            <input type="text" value={comments} onChange={(e) => setComments(e.target.value)} />
+                            <label htmlFor="comment">Comments</label>
+                        </div>
+                        <div className={`form-group ${email ? 'active' : ''}`}>
+                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                            <label htmlFor="email">Email</label>
+                        </div>
+                        <div className={`form-group ${phone ? 'active' : ''}`}>
+                            <input type="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                            <label htmlFor="phone">Phone</label>
                         </div>
                         
                         
 
                         <div className='btn-wrapper'>
                             <button type="submit">
-                                Submit
+                            Create
                                 {isLoading ? <div className="loader"></div> : '' }
                                     
                             </button>
@@ -543,7 +686,6 @@ const  Deals = ()=>{
                     </div>
                 </div>
             </form>
-            
             {showSnackbar && (
                 <div className={` ${snackbarStatus==='success' ? 'snackbar-success' :'snackbar-danger'} `}>
                     {snackbarStatus === 'success' ? (
@@ -566,4 +708,4 @@ const  Deals = ()=>{
     );
 };
 
-export default Deals;
+export default Contacts;

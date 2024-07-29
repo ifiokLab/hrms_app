@@ -14,28 +14,28 @@ import DesktopLogout from './desktop-logout';
 import apiUrl from '../components/api-url';
 //import hero1 from '../styles/hero1.jpg';
 
-const LeadsDetail = ()=>{
+const ActivityDetail = ()=>{
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    const [leads, setLeads] = useState('');
+    const [activity, setActivity] = useState('');
     const { Id } = useParams();
     const user = useSelector(state => state.user.user);
 
-    const fetchLeads = async () => {
+    const fetchActivity = async () => {
         try {
             
-            const response = await axios.get(`${apiUrl}/leads/${Id}/`, {
+            const response = await axios.get(`${apiUrl}/activity/${Id}/detail/`, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
                 },
             });
           //console.log('response.data.all_leads:',response.data.leads);
-          setLeads(response.data.leads);
+          setActivity(response.data.all_activity);
           setLoading(false);
         } catch (error) {
           setLoading(false);
-          setLeads([]);
+          setActivity([]);
           console.error('Error fetching employees:', error.message);
         }
     };  
@@ -43,7 +43,7 @@ const LeadsDetail = ()=>{
     useEffect(() => {
            
 
-        fetchLeads();
+        fetchActivity();
     }, [user,navigate]);
 
     return(
@@ -91,38 +91,36 @@ const LeadsDetail = ()=>{
                 <div className = "container-2-wrapper">
                         <div className='author-container'>
                              <div className='profile-container'>
-                                <div className='caption'>Leads Detail</div>
+                                <div className='caption'>Activity Detail</div>
                                 {loading ? (
                                     <p>Loading...</p>
                                 ):(
                                     <>
-                                    <div className='lead-name initials-cap-x'>{leads.initials.toUpperCase()}</div>
+                                    <div className='lead-name initials-cap-x'>{activity.initials}</div>
                                     <div className='author-details'>
                                         <div className='name'>
-                                            {leads.name}
+                                            {activity.description}
                                             <Link className='profile-edit' to=''>
                                                
                                             </Link>
                                         </div>
                                         <div className='title'>
-                                            {leads.title} at {leads.company}
+                                           
                                         </div>
                                         <div className='phone'>
-                                            <i class="fa-solid fa-phone"></i>
-                                            {leads.phone}
+                                            Type:  {activity.activity_type}
+                                         
                                         </div>
                                         <div className='website'>
-                                            <i class="fa-solid fa-envelope"></i>
-                                           {leads.email}
+                                            Stage:  {activity.stage}
+                                           
                                         </div>
                                         <div className='website'>
-                                            <i class="fa-solid fa-signal"></i>
-                                           {leads.status}
+                                            End date:  {activity.end_date}
+                                           
                                         </div>
-                                        <div className='website'>
-                                            <i class="fa-solid fa-building"></i>
-                                           {leads.company}
-                                        </div>
+                                        
+                                        
                                     
                                         
                                     </div></>
@@ -136,4 +134,4 @@ const LeadsDetail = ()=>{
     );
 };
 
-export default LeadsDetail;
+export default ActivityDetail;

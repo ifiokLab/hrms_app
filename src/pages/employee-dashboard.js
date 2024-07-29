@@ -118,6 +118,7 @@ const EmployeeDashboard = ()=>{
                             <span className = 'title'>Your Courses</span>
                         </Link>
                         
+                        
                        
                         <Link to={`${employeeProfile.exist ? '/employee/profile/' : '/employee/profile/create'}`} className = 'card'>
                             <i className="fa-solid fa-gear"></i>
