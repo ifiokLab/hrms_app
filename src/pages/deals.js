@@ -374,7 +374,7 @@ const  Deals = ()=>{
                                     <div className='title-header'>{data.title}</div>
                                     <p>{data.deal_value} </p>
                                     <div className='employee-count'>
-                                        
+                                        p
                                     </div>
                                     
                                     
