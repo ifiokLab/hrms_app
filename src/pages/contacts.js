@@ -10,6 +10,8 @@ import '../styles/create-course.css';
 import '../styles/instructor.css';
 import Header from '../components/header';
 import DesktopLogout from './desktop-logout';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import apiUrl from '../components/api-url';
 //import hero1 from '../styles/hero1.jpg';
@@ -124,6 +126,7 @@ const  Contacts = ()=>{
                 setsnackbarStatus('success');
                 setShowSnackbar(true);
                 setTimeout(() => {
+                    setModal(false);
                     setIsLoading(isLoading);
                     setShowSnackbar(false);
                     fetchContacts();
@@ -197,6 +200,7 @@ const  Contacts = ()=>{
                 setShowSnackbar(true);
                 setTimeout(() => {
                     setIsLoading(isLoading);
+                    setEditModal(false);
                     fetchContacts();
                     setShowSnackbar(false);
                     setType('');
@@ -208,7 +212,7 @@ const  Contacts = ()=>{
                     setPhone('');
                     setAccounts('');
                     setDeals('');
-                    setEditModal(false);
+                    
                     //fetchDeals()
                    // fetchLeads();
              
@@ -263,7 +267,7 @@ const  Contacts = ()=>{
     };
     const handleDealDelete = async (event,id) => {
         event.preventDefault();
-        //etIsLoading(!isLoading);
+        setIsLoading(!isLoading);
        
         
         try {
@@ -309,7 +313,7 @@ const  Contacts = ()=>{
     };
     const handleContactDelete = async (event,id) => {
         event.preventDefault();
-        //etIsLoading(!isLoading);
+        setIsLoading(!isLoading);
        
         
         try {
@@ -357,7 +361,7 @@ const  Contacts = ()=>{
     
     const fetchContacts = async () => {
         try {
-            
+            setIsLoading(true);
             const response = await axios.get(`${apiUrl}/contacts/${Id}/contact-list/`, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -366,11 +370,11 @@ const  Contacts = ()=>{
             });
           //console.log('response.data.all_leads:',response.data.all_contacts);
           setContacts(response.data.all_contacts);
-          //setLoading(false);
+          setIsLoading(false);
         } catch (error) {
-          //setLoading(false);
-          setContacts([]);
-          console.error('Error fetching employees:', error.message);
+            setIsLoading(false);
+            setContacts([]);
+            console.error('Error fetching employees:', error.message);
         }
     }; 
     const fetchAccounts = async () => {
@@ -471,39 +475,47 @@ const  Contacts = ()=>{
                             <div className='create-btn' onClick={toggleModal}>create</div>
                         </div>
                         <div className='apps-container'>
-                            {contacts.map((data,index) => (
-                                <Link key={data.id} to={`/organization/${data.id}/contact-detail/`} className='cards organization-card'>
-                                <div className='icon hrms-icon initials-cap'>
-                                    {data.initials}
-                                </div>
-                                <div className='text-wrapper'>
-                                    <div className='title-header'>{data.title}</div>
-                                    <p>{data.type} </p>
-                                    <div className='employee-count'>
-                                        
-                                    </div>
-                                    
-                                    
-                                </div>
-                                <div className='chevron-card' onClick={(event) => handleEllipsisClick(event,index)}>
-                                    <i className="fa-solid fa-ellipsis-vertical"></i>
-                                </div>
-                                {openModalIndex === index && (
-                                    <div className='option-modal'>
-                                    {/* Users should be able to click on edit tab to edit the specific organization */}
-                                    <div className='option-card' onClick={(event) => toggleEditModal(event,data.id,data.type, data.priority, data.title, data.name, data.comments, data.email,data.phone)}>Edit</div>
-                                    <div className='option-card' onClick={(event) => handleContactDelete(event,data.id)} >Delete</div>
-                                
-                                    </div>
-                                )}
+                           {isLoading ? (
+                               <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                           ):(
+                                <>
+                                    {contacts.length === 0 ? (
+                                        <p>No data available.</p>
+                                    ):(
+                                        <>
+                                             {contacts.map((data,index) => (
+                                                <Link key={data.id} to={`/organization/${data.id}/contact-detail/`} className='cards organization-card'>
+                                                <div className='icon hrms-icon initials-cap'>
+                                                    {data.initials}
+                                                </div>
+                                                <div className='text-wrapper'>
+                                                    <div className='title-header'>{data.title}</div>
+                                                    <p>{data.type} </p>
+                                                    <div className='employee-count'>
+                                                        
+                                                    </div>
+                                                    
+                                                    
+                                                </div>
+                                                <div className='chevron-card' onClick={(event) => handleEllipsisClick(event,index)}>
+                                                    <i className="fa-solid fa-ellipsis-vertical"></i>
+                                                </div>
+                                                {openModalIndex === index && (
+                                                    <div className='option-modal'>
+                                                    {/* Users should be able to click on edit tab to edit the specific organization */}
+                                                    <div className='option-card' onClick={(event) => toggleEditModal(event,data.id,data.type, data.priority, data.title, data.name, data.comments, data.email,data.phone)}>Edit</div>
+                                                    <div className='option-card' onClick={(event) => handleContactDelete(event,data.id)} >Delete</div>
+                                                
+                                                    </div>
+                                                )}
+                                            
+                                                </Link>                
+                                            ))}
+                                        </>
+                                    )}
+                                </>
+                           )}
                             
-                             </Link>                
-                            ))}
-                           
-                            
-                           
-                           
-                           
                         </div>
                        
                     </div>
@@ -520,11 +532,12 @@ const  Contacts = ()=>{
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
                     <div className='form-body'>
                         <div className={`form-group ${title ? 'active' : ''}`}>
-                            <input type="text" id="title" value={title} onChange = {(e)=>setTitle(e.target.value)} required />
+                            <input type="text" id="title" value={title} onChange = {(e)=>setTitle(e.target.value)} required placeholder='e.g COO,CEO' />
                             <label htmlFor="title">Title</label>
                         </div>
                         <div className={`form-group ${type ? 'active' : ''}`}>
                             <select value={type} onChange={(e) => setType(e.target.value)}>
+                            <option value="">setType</option>
                                 <option value="CUSTOMER">Customer</option>
                                 <option value="LEAD">Lead</option>
                                 <option value="QUALIFIED LEAD">Qualified Lead</option>
@@ -568,7 +581,7 @@ const  Contacts = ()=>{
                         </div>
                         
                         <div className={`form-group ${name ? 'active' : ''}`}>
-                            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required placeholder='e.g John Smith' />
                             <label htmlFor="name">Name</label>
                         </div>
                         
@@ -608,7 +621,7 @@ const  Contacts = ()=>{
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
                     <div className='form-body'>
                         <div className={`form-group ${title ? 'active' : ''}`}>
-                            <input type="text" id="title" value={title} onChange = {(e)=>setTitle(e.target.value)} required />
+                            <input type="text" id="title" value={title} onChange = {(e)=>setTitle(e.target.value)} required placeholder='e.g COO,CEO' />
                             <label htmlFor="title">Title</label>
                         </div>
                         <div className={`form-group ${type ? 'active' : ''}`}>
@@ -657,7 +670,7 @@ const  Contacts = ()=>{
                         </div>
                         
                         <div className={`form-group ${name ? 'active' : ''}`}>
-                            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+                            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required placeholder='e.g John Doe' />
                             <label htmlFor="name">Name</label>
                         </div>
                         

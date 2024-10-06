@@ -10,6 +10,8 @@ import '../styles/create-course.css';
 import '../styles/instructor.css';
 import Header from '../components/header';
 import DesktopLogout from './desktop-logout';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import apiUrl from '../components/api-url';
 //import hero1 from '../styles/hero1.jpg';
@@ -93,7 +95,7 @@ const LeadsDetail = ()=>{
                              <div className='profile-container'>
                                 <div className='caption'>Leads Detail</div>
                                 {loading ? (
-                                    <p>Loading...</p>
+                                     <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
                                 ):(
                                     <>
                                     <div className='lead-name initials-cap-x'>{leads.initials.toUpperCase()}</div>

@@ -10,6 +10,8 @@ import '../styles/create-course.css';
 import '../styles/instructor.css';
 import Header from '../components/header';
 import DesktopLogout from './desktop-logout';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import apiUrl from '../components/api-url';
 //import hero1 from '../styles/hero1.jpg';
@@ -222,7 +224,7 @@ const  Activity = ()=>{
     };
     const handleDealDelete = async (event,id) => {
         event.preventDefault();
-        //etIsLoading(!isLoading);
+        setIsLoading(!isLoading);
        
         
         try {
@@ -239,6 +241,7 @@ const  Activity = ()=>{
                 setShowSnackbar(true);
                 setTimeout(() => {
                     setShowSnackbar(false);
+                    setIsLoading(isLoading);
                     fetchActivities();
                     setOpenModalIndex(null);
                 }, 2000);
@@ -308,7 +311,7 @@ const  Activity = ()=>{
     
     const fetchActivities = async () => {
         try {
-            
+            setIsLoading(!isLoading);
             const response = await axios.get(`${apiUrl}/activities/${Id}/activities-list/`, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -317,6 +320,7 @@ const  Activity = ()=>{
             });
           //console.log('response.data.all_leads:',response.data.all_contacts);
           setActivities(response.data.all_activities);
+          setIsLoading(isLoading);
           //setLoading(false);
         } catch (error) {
           //setLoading(false);
@@ -386,34 +390,47 @@ const  Activity = ()=>{
                             <div className='create-btn' onClick={toggleModal}>create</div>
                         </div>
                         <div className='apps-container'>
-                            {activities.map((data,index) => (
-                                <Link key={data.id} to={`/organization/${data.id}/activity-detail/`} className='cards organization-card'>
-                                <div className='icon hrms-icon initials-cap'>
-                                    {data.initials}
-                                </div>
-                                <div className='text-wrapper'>
-                                    <div className='title-header'>{data.activity_type}</div>
-                                    <p>{data.stage} </p>
-                                    <div className='employee-count'>
-                                        
-                                    </div>
-                                    
-                                    
-                                </div>
-                                <div className='chevron-card' onClick={(event) => handleEllipsisClick(event,index)}>
-                                    <i className="fa-solid fa-ellipsis-vertical"></i>
-                                </div>
-                                {openModalIndex === index && (
-                                    <div className='option-modal'>
-                                    {/* Users should be able to click on edit tab to edit the specific organization */}
-                                    <div className='option-card' onClick={(event) => toggleEditModal(event,data.id,data.activity_type, data.description,data.end_time, data.stage)}>Edit</div>
-                                    <div className='option-card' onClick={(event) => handleDealDelete(event,data.id)} >Delete</div>
-                                
-                                    </div>
-                                )}
+                            {isLoading ? (
+                                    <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                            ) : (
+                                <>
+                                    {activities.length === 0 ? (
+                                        <p>No data available.</p>
+                                    ) : (
+                                        <>
+                                            {activities.map((data,index) => (
+                                                <Link key={data.id} to={`/organization/${data.id}/activity-detail/`} className='cards organization-card'>
+                                                <div className='icon hrms-icon initials-cap'>
+                                                    {data.initials}
+                                                </div>
+                                                <div className='text-wrapper'>
+                                                    <div className='title-header'>{data.activity_type}</div>
+                                                    <p>{data.stage} </p>
+                                                    <div className='employee-count'>
+                                                        
+                                                    </div>
+                                                    
+                                                    
+                                                </div>
+                                                <div className='chevron-card' onClick={(event) => handleEllipsisClick(event,index)}>
+                                                    <i className="fa-solid fa-ellipsis-vertical"></i>
+                                                </div>
+                                                {openModalIndex === index && (
+                                                    <div className='option-modal'>
+                                                    {/* Users should be able to click on edit tab to edit the specific organization */}
+                                                    <div className='option-card' onClick={(event) => toggleEditModal(event,data.id,data.activity_type, data.description,data.end_time, data.stage)}>Edit</div>
+                                                    <div className='option-card' onClick={(event) => handleDealDelete(event,data.id)} >Delete</div>
+                                                
+                                                    </div>
+                                                )}
+                                            
+                                            </Link>                
+                                            ))}
+                                        </>
+                                    )}
+                                </>
+                            )}
                             
-                             </Link>                
-                            ))}
                            
                             
                            

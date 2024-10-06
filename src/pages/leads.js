@@ -10,6 +10,8 @@ import '../styles/create-course.css';
 import '../styles/instructor.css';
 import Header from '../components/header';
 import DesktopLogout from './desktop-logout';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import apiUrl from '../components/api-url';
 //import hero1 from '../styles/hero1.jpg';
@@ -40,7 +42,8 @@ const Leads = ()=>{
     const toggleModal = ()=>{
         setModal(!modal);
     };
-    const toggleEditModal = (id,name,email,title,company,phone,status,date)=>{
+    const toggleEditModal = (event,id,name,email,title,company,phone,status,date)=>{
+        event.preventDefault();
         setEditModal(!editModal);
         setLeadId(id);
         setName(name);
@@ -244,7 +247,7 @@ const Leads = ()=>{
     };
     const fetchLeads = async () => {
         try {
-            
+            setLoading(true);
             const response = await axios.get(`${apiUrl}/user/${Id}/leads/`, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -320,34 +323,48 @@ const Leads = ()=>{
                             <div className='create-btn' onClick={toggleModal}>create</div>
                         </div>
                         <div className='apps-container'>
-                            {Leads.map((data,index) => (
-                                <Link key={data.id} to={`/organization/${data.id}/leads-detail/`} className='cards organization-card'>
-                                <div className='icon hrms-icon initials-cap'>
-                                    {data.initials.toUpperCase()}
-                                </div>
-                                <div className='text-wrapper'>
-                                    <div className='title-header'>{data.name}</div>
-                                    <p>{data.title} at {data.company}</p>
-                                    <div className='employee-count'>
+                            {Loading ? (
+                                 <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                            ):(
+                                <>
+                                    {Leads.length === 0 ? (
+                                       <p>No data available.</p>
+                                    ):(
+                                        <>
+                                            {Leads.map((data,index) => (
+                                                <Link key={data.id} to={`/organization/${data.id}/leads-detail/`} className='cards organization-card'>
+                                                    <div className='icon hrms-icon initials-cap'>
+                                                        {data.initials.toUpperCase()}
+                                                    </div>
+                                                    <div className='text-wrapper'>
+                                                        <div className='title-header'>{data.name}</div>
+                                                        <p>{data.title} at {data.company}</p>
+                                                        <div className='employee-count'>
+                                                            
+                                                        </div>
+                                                        
+                                                        
+                                                    </div>
+                                                    <div className='chevron-card' onClick={(event) => handleEllipsisClick(event,index)}>
+                                                        <i className="fa-solid fa-ellipsis-vertical"></i>
+                                                    </div>
+                                                    {openModalIndex === index && (
+                                                        <div className='option-modal'>
+                                                        {/* Users should be able to click on edit tab to edit the specific organization */}
+                                                        <div className='option-card' onClick={(event) => toggleEditModal(event,data.id,data.name, data.email, data.title, data.company, data.phone, data.status, data.date)}>Edit</div>
+                                                        <div className='option-card' onClick={(event) => handleLeadDelete(event,data.id)} >Delete</div>
+                                                    
+                                                        </div>
+                                                    )}
+                                                
+                                                </Link>                
+                                            ))}
+                                        </>
                                         
-                                    </div>
-                                    
-                                    
-                                </div>
-                                <div className='chevron-card' onClick={(event) => handleEllipsisClick(event,index)}>
-                                    <i className="fa-solid fa-ellipsis-vertical"></i>
-                                </div>
-                                {openModalIndex === index && (
-                                    <div className='option-modal'>
-                                    {/* Users should be able to click on edit tab to edit the specific organization */}
-                                    <div className='option-card' onClick={() => toggleEditModal(data.id,data.name, data.email, data.title, data.company, data.phone, data.status, data.date)}>Edit</div>
-                                    <div className='option-card' onClick={(event) => handleLeadDelete(event,data.id)} >Delete</div>
-                                
-                                    </div>
-                                )}
+                                    )}
+                                </>
+                            )}
                             
-                             </Link>                
-                            ))}
                            
                             
                            
@@ -369,7 +386,7 @@ const Leads = ()=>{
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
                     <div className='form-body'>
                         <div className={`form-group ${name ? 'active' : ''}`}>
-                            <input type="text" id="name" value={name} onChange = {(e)=>setName(e.target.value)} required />
+                            <input type="text" id="name" value={name} onChange = {(e)=>setName(e.target.value)} required placeholder='e.g John Doe' />
                             <label htmlFor="name">Name</label>
                         </div>
                         <div className={`form-group ${status ? 'active' : ''}`}>
@@ -389,7 +406,7 @@ const Leads = ()=>{
                             <label htmlFor="email">Email</label>
                         </div>
                         <div className={`form-group ${title ? 'active' : ''}`}>
-                            <input type="text" id="title" value={title} onChange = {(e)=>setTitle(e.target.value)} required />
+                            <input type="text" id="title" value={title} onChange = {(e)=>setTitle(e.target.value)} required placeholder='e.g CEO, COO' />
                             <label htmlFor="title">Title</label>
                         </div>
                         

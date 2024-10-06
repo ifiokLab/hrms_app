@@ -71,7 +71,14 @@ const OrganizationDashboard = ()=>{
     const [loading4, setLoading4] = useState(true);
     const [loading5, setLoading5] = useState(true);
     const [loading6, setLoading6] = useState(true);
+    const [loading7, setLoading7] = useState(true);
     const [reportList,setReportList] = useState([]);
+    const [currentLocation,setCurrentLocation] = useState({lat:null,lng:null});
+    const [previousLocation,setPreviousLocation] = useState(null);
+    const [distance,setDistance] = useState(0);
+    const [tracking,setTracking] = useState(false);
+    const [watchId,setWatchId] = useState(null);
+    const [error,setError] = useState(null);
    
 
 
@@ -698,6 +705,20 @@ const OrganizationDashboard = ()=>{
             navigate('/');
             return; // Stop further execution of useEffect
         };
+
+        const savedDistance = localStorage.getItem('distance');
+        const savedTracking = localStorage.getItem('tracking');
+
+        if(savedDistance){
+            setDistance(parseFloat(savedDistance));
+        };
+        if(savedTracking === 'true'){
+            //starttracling();
+        };
+        localStorage.setItem('distance',distance.toString());
+        localStorage.setItem('tracking',tracking.toString());
+        
+
         const fetchOrganization = async () => {
             try {
               const response = await axios.get(`${apiUrl}/organization/${Id}/`);
@@ -779,7 +800,79 @@ const OrganizationDashboard = ()=>{
         
         
         
-    }, [Id,user,navigate]);
+    }, [Id,user,navigate,distance,tracking]);
+
+   
+    
+   
+
+    const saveDistanceToBackend = async () => {
+        if (navigator.geolocation) {
+            const id = navigator.geolocation.watchPosition(
+              (position) => {
+                const newLocation = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                };
+      
+                if (previousLocation) {
+                  const distanceTraveled = calculateDistance(previousLocation, newLocation);
+                  setDistance((prevDistance) => prevDistance + distanceTraveled);
+                }
+      
+                setPreviousLocation(newLocation);
+                setCurrentLocation(newLocation);
+              },
+              (error) => setError(error.message)
+            );
+            setWatchId(id);
+            setTracking(true);
+            console.log('watchId2:',watchId);
+          } else {
+            setError('Geolocation is not supported by this browser.');
+        }
+        if (watchId !== null) {
+            navigator.geolocation.clearWatch(watchId);
+            setWatchId(null);
+            setTracking(false);
+            //saveDistanceToBackend(distance);
+            try {
+                const formData = new FormData();
+                formData.append('distance', distance);
+                formData.append('organization', Id);
+                console.log('distance...',distance)
+                await axios.post(`${apiUrl}/api/distance/`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                    },
+                });
+               
+            } catch (error) {
+              console.error('Error saving distance to backend:', error);
+            }
+        }else{
+            console.log('null');
+        };
+        
+    };
+      
+    
+    const calculateDistance = (loc1, loc2) => {
+        const toRad = (value) => (value * Math.PI) / 180;
+    
+        const R = 6371; // Radius of the Earth in kilometers
+        const dLat = toRad(loc2.lat - loc1.lat);
+        const dLng = toRad(loc2.lng - loc1.lng);
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(toRad(loc1.lat)) * Math.cos(toRad(loc2.lat)) *
+          Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        console.log('R * c:',R * c);
+        return R * c;
+    };
+    
 
     const handleHourlyRateChange = async (employeeId, hourlyRate) => {
         try {
@@ -899,6 +992,7 @@ const OrganizationDashboard = ()=>{
                             <div className={`tabs ${openSlideSections === 0 ? 'active' :''}`} onClick={() => toggleSlider(0)}>Employees</div>
                            
                             <div className={`tabs ${openSlideSections === 2 ? 'active' :''}`} onClick={() => toggleSlider(2)}>Employee TimeSheet</div>
+                            <div className={`tabs ${openSlideSections === 7 ? 'active' :''}`} onClick={() => toggleSlider(7)}>GPS</div>
                             <div className={`tabs ${openSlideSections === 3 ? 'active' :''}`} onClick={() => toggleSlider(3)}>Requests</div>
                             <div className={`tabs ${openSlideSections === 6 ? 'active' :''}`} onClick={() => toggleSlider(6)}>Reportd</div>
                             <div className={`tabs ${openSlideSections === 4 ? 'active' :''}`} onClick={() => toggleSlider(4)}>Onboarding</div>
@@ -1364,6 +1458,31 @@ const OrganizationDashboard = ()=>{
                            )}
                                 </>
                             )}
+                           
+                         </div>
+                       )}
+                        {openSlideSections === 7 && (
+                         <div className='organization-body'>
+                            <div className = 'timesheet'>
+                                <div className='body-title'> GPS Distance Tracker.</div>
+                                <div className='time-btn'>
+                                    <button onClick={saveDistanceToBackend }>
+                                        {tracking ? 'Stop Tracking' : 'Start Tracking'}
+                                    </button>
+                                </div>
+                                
+                            </div>
+                            <div>
+                                {currentLocation.lat && currentLocation.lng ? (
+                                        <p>
+                                        Current Location - Latitude: {currentLocation.lat}, Longitude: {currentLocation.lng}
+                                        </p>
+                                    ) : (
+                                        <p>{error || 'Waiting for location...'}</p>
+                                )}
+                                <p>Total Distance Traveled: {distance.toFixed(2)} km</p>
+                            </div>
+                           
                            
                          </div>
                        )}

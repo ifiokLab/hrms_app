@@ -10,7 +10,8 @@ import '../styles/create-course.css';
 import '../styles/instructor.css';
 import Header from '../components/header';
 import DesktopLogout from './desktop-logout';
-
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import apiUrl from '../components/api-url';
 //import hero1 from '../styles/hero1.jpg';
 
@@ -287,7 +288,7 @@ const  Deals = ()=>{
     }; 
     const fetchDeals = async () => {
         try {
-            
+            setIsLoading(true);
             const response = await axios.get(`${apiUrl}/deals/${Id}/deals-list/`, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -296,9 +297,11 @@ const  Deals = ()=>{
             });
           //console.log('response.data.all_leads:',response.data.all_contacts);
           setDeals(response.data.all_deals);
+          setIsLoading(false);
           //setLoading(false);
         } catch (error) {
           //setLoading(false);
+          setIsLoading(false);
           setDeals([]);
           console.error('Error fetching employees:', error.message);
         }
@@ -364,35 +367,47 @@ const  Deals = ()=>{
                             <div className='create-btn' onClick={toggleModal}>create</div>
                         </div>
                         <div className='apps-container'>
-                           
-                            {deals.map((data,index) => (
-                                <Link key={data.id} to={`/organization/${data.id}/deals-detail/`} className='cards organization-card'>
-                                <div className='icon hrms-icon initials-cap'>
-                                    {data.initials.toUpperCase()}
-                                </div>
-                                <div className='text-wrapper'>
-                                    <div className='title-header'>{data.title}</div>
-                                    <p>{data.deal_value} </p>
-                                    <div className='employee-count'>
-                                        p
-                                    </div>
-                                    
-                                    
-                                </div>
-                                <div className='chevron-card' onClick={(event) => handleEllipsisClick(event,index)}>
-                                    <i className="fa-solid fa-ellipsis-vertical"></i>
-                                </div>
-                                {openModalIndex === index && (
-                                    <div className='option-modal'>
-                                    {/* Users should be able to click on edit tab to edit the specific organization */}
-                                    <div className='option-card' onClick={(event) => toggleEditModal(event,data.id,data.title, data.deal_value, data.close_probability, data.forecast_value, data.stage, data.close_date)}>Edit</div>
-                                    <div className='option-card' onClick={(event) => handleDealDelete(event,data.id)} >Delete</div>
-                                
-                                    </div>
-                                )}
-                            
-                             </Link>                
+                           {isLoading ? (
+                               <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                           ):(
+                                <>
+                                    {deals.length === 0 ? (
+                                        <p>No data available.</p>
+                                    ):(
+                                        <>
+                                            {deals.map((data,index) => (
+                                                <Link key={data.id} to={`/organization/${data.id}/deals-detail/`} className='cards organization-card'>
+                                                <div className='icon hrms-icon initials-cap'>
+                                                    {data.initials.toUpperCase()}
+                                                </div>
+                                                <div className='text-wrapper'>
+                                                    <div className='title-header'>{data.title}</div>
+                                                    <p>{data.deal_value} </p>
+                                                    <div className='employee-count'>
+                                                    
+                                                    </div>
+                                                    
+                                                    
+                                                </div>
+                                                <div className='chevron-card' onClick={(event) => handleEllipsisClick(event,index)}>
+                                                    <i className="fa-solid fa-ellipsis-vertical"></i>
+                                                </div>
+                                                {openModalIndex === index && (
+                                                    <div className='option-modal'>
+                                                    {/* Users should be able to click on edit tab to edit the specific organization */}
+                                                    <div className='option-card' onClick={(event) => toggleEditModal(event,data.id,data.title, data.deal_value, data.close_probability, data.forecast_value, data.stage, data.close_date)}>Edit</div>
+                                                    <div className='option-card' onClick={(event) => handleDealDelete(event,data.id)} >Delete</div>
+                                                
+                                                    </div>
+                                                )}
+                                            
+                                            </Link>                
                             ))}
+                                        </>
+                                    )}
+                                </>
+                           )}
+                            
                            
                             
                            
@@ -418,11 +433,9 @@ const  Deals = ()=>{
                             <label htmlFor="title">Title</label>
                         </div>
                         <div className={`form-group ${contacts ? 'active' : ''}`}>
-                          
+                            <label htmlFor="contact">contacts</label>
                             <select value={contact} onChange={handleContactChange} multiple >
-                                <option value="">Contacts</option>
-                                <option value="1">Contacts2</option>
-                                <option value="2">Contacts3</option>
+                                
                                 {contacts.map(contact => (
                                     <option key={contact.id} value={contact.id}>{contact.name}</option>
                                 ))}
@@ -445,7 +458,8 @@ const  Deals = ()=>{
                             </select>
                         </div>
                         <div className={`form-group ${closeProbability ? 'active' : ''}`}>
-                        <select name="close_probability" value={closeProbability} onChange={(event)=>setCloseProbability(event.target.value)}>
+                            <select name="close_probability" value={closeProbability} onChange={(event)=>setCloseProbability(event.target.value)}>
+                                <option value="">Close Probability</option>
                                 {Array.from({ length: 11 }, (_, i) => (i * 0.1)).map(prob => (
                                     <option key={prob} value={prob}>{prob * 100}%</option>
                                 ))}
@@ -484,15 +498,13 @@ const  Deals = ()=>{
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
                     <div className='form-body'>
                         <div className={`form-group ${title ? 'active' : ''}`}>
-                            <input type="text" id="title" value={title} onChange = {(e)=>setTitle(e.target.value)} required />
+                            <input type="text" id="title" value={title} onChange = {(e)=>setTitle(e.target.value)} required  />
                             <label htmlFor="title">Title</label>
                         </div>
                         <div className={`form-group ${contacts ? 'active' : ''}`}>
                           
                             <select value={contact} onChange={handleContactChange} multiple >
-                                <option value="">Contacts</option>
-                                <option value="1">Contacts2</option>
-                                <option value="2">Contacts3</option>
+                                <label htmlFor="contact">Contacts</label>
                                 {contacts.map(contact => (
                                     <option key={contact.id} value={contact.id}>{contact.name}</option>
                                 ))}
